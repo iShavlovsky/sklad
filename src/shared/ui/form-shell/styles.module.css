@@ -1,0 +1,30 @@
+.stickyActions {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  backdrop-filter: blur(12px);
+}
+
+.actionRail {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 0.375rem;
+  width: 100%;
+}
+
+.secondaryButton,
+.metaSlot,
+.primarySlot {
+  display: flex;
+  flex: 1 1 0;
+  align-items: stretch;
+  min-width: 0;
+}
+
+.metaSlot :global(.mantine-Button-root),
+.primarySlot :global(.mantine-Button-root),
+.secondaryButton :global(.mantine-Button-root) {
+  width: 100%;
+  white-space: nowrap;
+}

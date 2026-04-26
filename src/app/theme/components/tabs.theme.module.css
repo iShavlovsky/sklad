@@ -1,0 +1,6 @@
+.tab[data-active] {
+  border-color: var(--sl-accent-strong);
+  background-color: var(--sl-accent);
+  box-shadow: var(--mantine-shadow-md);
+  color: var(--sl-button-text);
+}

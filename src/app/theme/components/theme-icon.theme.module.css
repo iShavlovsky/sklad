@@ -1,0 +1,3 @@
+.root[data-variant='light'] {
+  background: var(--sl-accent-soft);
+}

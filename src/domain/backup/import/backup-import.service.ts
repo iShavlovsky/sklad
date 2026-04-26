@@ -1,0 +1,165 @@
+import type { ValidationIssue } from '@/domain/validation/validation-issue.ts';
+
+import {
+  APP_BACKUP_PAYLOAD_VERSION,
+  type AppBackupPayload,
+} from '../app-backup.payload.ts';
+
+import type {
+  BackupImportCounts,
+  BackupImportReport,
+} from './backup-import.report.ts';
+import type { BackupImportValidationResult } from './backup-import.result.ts';
+
+const BACKUP_GROUP_KEYS = [
+  'suppliers',
+  'categories',
+  'products',
+  'arrivals',
+  'departures',
+  'drafts',
+  'recordCodes',
+  'settings',
+  'favorites',
+  'profiles',
+  'backupCheckpoints',
+  'backupHistory',
+] as const;
+
+function isObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
+
+function isArray(value: unknown): value is unknown[] {
+  return Array.isArray(value);
+}
+
+function isBackupPayloadCandidate(value: unknown): value is AppBackupPayload {
+  if (!isObject(value)) {
+    return false;
+  }
+
+  return (
+    typeof value.exportedAt === 'string' &&
+    typeof value.version === 'number' &&
+    BACKUP_GROUP_KEYS.every((key) => isArray(value[key]))
+  );
+}
+
+function countRecords(payload: AppBackupPayload): BackupImportCounts {
+  return {
+    suppliers: payload.suppliers.length,
+    categories: payload.categories.length,
+    products: payload.products.length,
+    arrivals: payload.arrivals.length,
+    departures: payload.departures.length,
+    drafts: payload.drafts.length,
+    recordCodes: payload.recordCodes.length,
+    settings: payload.settings.length,
+    favorites: payload.favorites.length,
+    profiles: payload.profiles.length,
+    backupCheckpoints: payload.backupCheckpoints.length,
+    backupHistory: payload.backupHistory.length,
+  };
+}
+
+function createIssue(
+  path: string,
+  code: ValidationIssue['code'],
+  message: string
+): ValidationIssue {
+  return {
+    path,
+    code,
+    message,
+  };
+}
+
+function createErrorReport(
+  payloadVersion: number | null,
+  issues: ValidationIssue[]
+): BackupImportReport {
+  return {
+    action: 'import-dry-run',
+    status: 'error',
+    readyToCommit: false,
+    expectedVersion: APP_BACKUP_PAYLOAD_VERSION,
+    payloadVersion,
+    counts: null,
+    issues,
+    summary: issues.length
+      ? 'Backup payload failed validation'
+      : 'Backup payload could not be validated',
+    details: JSON.stringify({
+      payloadVersion,
+      expectedVersion: APP_BACKUP_PAYLOAD_VERSION,
+      issues,
+    }),
+  };
+}
+
+function createSuccessReport(
+  payload: AppBackupPayload,
+  counts: BackupImportCounts
+): BackupImportReport {
+  return {
+    action: 'import-dry-run',
+    status: 'success',
+    readyToCommit: true,
+    expectedVersion: APP_BACKUP_PAYLOAD_VERSION,
+    payloadVersion: payload.version,
+    counts,
+    issues: [],
+    summary: `Backup payload validated for version ${payload.version}`,
+    details: JSON.stringify({
+      payloadVersion: payload.version,
+      expectedVersion: APP_BACKUP_PAYLOAD_VERSION,
+      counts,
+    }),
+  };
+}
+
+export class BackupImportValidationService {
+  public execute(input: unknown): BackupImportValidationResult {
+    if (!isBackupPayloadCandidate(input)) {
+      return {
+        ok: false,
+        code: 'INVALID_PAYLOAD',
+        report: createErrorReport(
+          isObject(input) && typeof input.version === 'number'
+            ? input.version
+            : null,
+          [
+            createIssue(
+              '',
+              'invalid_type',
+              'Backup payload must be an object with the canonical groups'
+            ),
+          ]
+        ),
+      };
+    }
+
+    if (input.version !== APP_BACKUP_PAYLOAD_VERSION) {
+      return {
+        ok: false,
+        code: 'UNSUPPORTED_VERSION',
+        report: createErrorReport(input.version, [
+          createIssue(
+            'version',
+            'invalid_value',
+            `Unsupported backup payload version ${input.version}; expected ${APP_BACKUP_PAYLOAD_VERSION}`
+          ),
+        ]),
+      };
+    }
+
+    const counts = countRecords(input);
+
+    return {
+      ok: true,
+      payload: input,
+      report: createSuccessReport(input, counts),
+    };
+  }
+}

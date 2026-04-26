@@ -1,0 +1,33 @@
+.root:disabled,
+.root[data-disabled] {
+  border: 1px solid var(--sl-shell-border);
+  background: var(--sl-surface-subtle);
+  box-shadow: none;
+  color: var(--sl-muted-text);
+  transform: none;
+}
+
+.root[data-variant='filled'] {
+  box-shadow: var(--sl-shadow-raised);
+}
+
+.root[data-variant='light'],
+.root[data-variant='default'] {
+  box-shadow: var(--sl-control-shadow);
+}
+
+.root[data-variant='outline'],
+.root[data-variant='subtle'] {
+  box-shadow: none;
+}
+
+.root:hover,
+.root:focus-visible {
+  transform: translateY(-1px);
+}
+
+.section > * {
+  width: 1em;
+  height: 1em;
+  color: inherit;
+}

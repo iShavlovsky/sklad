@@ -1,0 +1,10 @@
+.remove:hover {
+  background-color: transparent;
+  opacity: 1;
+}
+
+.remove > * {
+  width: 0.9em;
+  height: 0.9em;
+  color: inherit;
+}

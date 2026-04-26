@@ -1,0 +1,48 @@
+.editor {
+  --image-crop-editor-gap: 0.5rem;
+  --image-crop-editor-controls-gap: 0.625rem;
+  --image-crop-editor-sliders-offset: 0.25rem;
+
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--image-crop-editor-gap);
+  height: 100%;
+  min-height: 0;
+}
+
+.cropper {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.controls {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--image-crop-editor-controls-gap);
+}
+
+.flipRow {
+  width: 100%;
+}
+
+.slidersBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--image-crop-editor-controls-gap);
+  margin-top: var(--image-crop-editor-sliders-offset);
+}
+
+.sliderRow {
+  align-items: center;
+}
+
+.slider {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+}

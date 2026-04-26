@@ -1,0 +1,5 @@
+.item[data-hovered],
+.item:hover {
+  background-color: var(--sl-accent-soft);
+  color: var(--sl-nav-active-text);
+}

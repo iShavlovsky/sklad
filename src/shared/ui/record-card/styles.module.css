@@ -1,0 +1,129 @@
+.card {
+  box-sizing: border-box;
+  position: relative;
+  container-type: inline-size;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 0.1875rem;
+  background: linear-gradient(
+    180deg,
+    var(--mantine-primary-color-4),
+    color-mix(in sRGB, var(--sl-app-info) 70%, transparent)
+  );
+}
+
+.cardHeader {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 0.375rem;
+  min-width: 0;
+}
+
+.cardHeader:has(.leadingSlot) {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.leadingSlot {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding-block-start: 0.125rem;
+}
+
+.heading {
+  min-width: 0;
+}
+
+.headerActions {
+  grid-column: -2 / -1;
+  justify-self: end;
+  min-width: 0;
+  max-width: 2rem;
+}
+
+.badge {
+  max-width: 100%;
+}
+
+.badge :global(.mantine-Badge-label) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.metrics {
+  container-type: inline-size;
+}
+
+.metric {
+  min-width: 0;
+  padding: 0.375rem;
+  overflow: hidden;
+  border: 1px solid color-mix(in sRGB, var(--sl-shell-border) 78%, transparent);
+  border-radius: var(--sl-control-radius);
+  background: color-mix(in sRGB, var(--sl-surface-raised) 72%, transparent);
+}
+
+.metricText {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.drawerBody {
+  max-height: min(72dvh, 36rem);
+  overflow-y: auto;
+}
+
+.drawerBody:global(.mantine-Drawer-body) {
+  padding-block-start: 1rem;
+}
+
+.drawerContent {
+  overflow: hidden;
+  border: 1px solid
+    color-mix(in sRGB, var(--sl-surface-glass-border) 86%, transparent);
+  background: linear-gradient(
+    180deg,
+    var(--sl-surface-glass-strong),
+    var(--sl-surface-glass)
+  );
+  box-shadow: var(--sl-glass-shadow);
+  backdrop-filter: blur(var(--sl-glass-blur)) saturate(1.16);
+}
+
+.drawerHeader {
+  background: transparent;
+  backdrop-filter: blur(var(--sl-glass-blur));
+  border-block-end: 1px solid
+    color-mix(in sRGB, var(--sl-surface-glass-border) 82%, transparent);
+}
+
+@container (width <= 18rem) {
+  .cardHeader {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cardHeader:has(.leadingSlot) {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .headerActions {
+    grid-column: 1;
+    align-items: flex-start;
+    justify-self: end;
+    max-width: 2rem;
+  }
+
+  .cardHeader:has(.leadingSlot) .headerActions {
+    grid-column: 2;
+  }
+}

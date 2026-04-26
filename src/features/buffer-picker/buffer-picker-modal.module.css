@@ -1,0 +1,73 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mantine-spacing-sm);
+}
+
+.itemCard {
+  border-radius: var(--sl-section-radius);
+}
+
+.footerRow {
+  flex: 0 0 auto;
+  align-items: center;
+  padding-block-start: var(--mantine-spacing-sm);
+  border-block-start: 1px solid
+    color-mix(in sRGB, var(--sl-surface-glass-border) 74%, transparent);
+}
+
+.drawerBody {
+  display: flex;
+  flex-direction: column;
+  height: calc(100dvh - 3.8125rem);
+  min-height: 0;
+  overflow: hidden;
+}
+
+.drawerBody:global(.mantine-Drawer-body) {
+  padding-block-start: var(--mantine-spacing-sm);
+}
+
+.drawerContent {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+  border: 1px solid
+    color-mix(in sRGB, var(--sl-surface-glass-border) 86%, transparent);
+  background: linear-gradient(
+    180deg,
+    var(--sl-surface-glass-strong),
+    var(--sl-surface-glass)
+  );
+  box-shadow: var(--sl-glass-shadow);
+  backdrop-filter: blur(var(--sl-glass-blur)) saturate(1.16);
+}
+
+.drawerHeader {
+  flex: 0 0 auto;
+  background: transparent;
+  backdrop-filter: blur(var(--sl-glass-blur));
+  border-block-end: 1px solid
+    color-mix(in sRGB, var(--sl-surface-glass-border) 82%, transparent);
+}
+
+.pickerLayout {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--mantine-spacing-sm);
+  height: 100%;
+  min-height: 0;
+}
+
+.listPane {
+  flex: 1 1 auto;
+  height: 100%;
+  min-height: 0;
+}
+
+.scrollArea {
+  height: 100%;
+}

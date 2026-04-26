@@ -1,0 +1,93 @@
+.grid {
+  --home-favorites-tile-min-height: 6.5rem;
+  --home-favorites-button-min-height: 5rem;
+  --home-favorites-drag-handle-width: 1.75rem;
+
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--mantine-spacing-sm);
+}
+
+.tile {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.tileSurface {
+  position: relative;
+  min-height: var(--home-favorites-tile-min-height);
+}
+
+.tile[data-dragging] {
+  z-index: 2;
+}
+
+.tile[data-dragging] .tileSurface {
+  box-shadow: var(--sl-shadow-raised);
+}
+
+.tileButton {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  min-height: var(--home-favorites-button-min-height);
+  padding-inline: calc(
+    var(--home-favorites-drag-handle-width) + var(--mantine-spacing-xs)
+  );
+  border-radius: inherit;
+}
+
+.tileContent {
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+}
+
+.tileLabel {
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.tileIcon {
+  background: var(--entity-icon-background);
+  color: var(--entity-icon-color);
+}
+
+.dragHandle {
+  display: flex;
+  position: absolute;
+  top: 50%;
+  right: var(--mantine-spacing-xs);
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--home-favorites-drag-handle-width);
+  min-height: var(--home-favorites-drag-handle-width);
+  border-radius: var(--sl-control-radius);
+  color: var(--sl-muted-text);
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  transform: translateY(-50%);
+
+  &[data-locked] {
+    opacity: 0.45;
+    cursor: default;
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  &[data-locked]:active {
+    cursor: default;
+  }
+}
+
+.dragHandle svg {
+  flex: 0 0 auto;
+}

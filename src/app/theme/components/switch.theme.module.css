@@ -1,0 +1,5 @@
+.input:focus + .track,
+.input:focus-visible + .track {
+  box-shadow: 0 0 0 var(--sl-focus-width)
+    color-mix(in sRGB, var(--sl-focus-outline) 18%, transparent);
+}

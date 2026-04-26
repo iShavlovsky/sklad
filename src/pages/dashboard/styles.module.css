@@ -1,0 +1,41 @@
+.telemetryRow {
+  --dashboard-telemetry-gap: 0.5rem;
+  --dashboard-telemetry-meta-gap: 0.375rem;
+  --dashboard-telemetry-label-size: 0.5625rem;
+  --dashboard-telemetry-value-min-width: 1.75rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--dashboard-telemetry-gap);
+}
+
+.telemetryRowMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--dashboard-telemetry-meta-gap);
+  min-width: 0;
+}
+
+.telemetryCardLabel {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--sl-muted-text);
+  font-size: var(--dashboard-telemetry-label-size);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.telemetryCardValue {
+  flex-shrink: 0;
+  min-width: var(--dashboard-telemetry-value-min-width);
+  color: var(--sl-text);
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 800;
+  line-height: 1.1;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}

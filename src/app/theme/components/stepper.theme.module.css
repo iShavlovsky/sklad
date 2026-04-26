@@ -1,0 +1,4 @@
+.stepIcon[data-progress],
+.stepIcon[data-completed] {
+  box-shadow: var(--sl-shadow-raised);
+}

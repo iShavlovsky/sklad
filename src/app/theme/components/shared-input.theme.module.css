@@ -1,0 +1,106 @@
+.comboboxOption[data-combobox-active],
+.comboboxOption[data-combobox-selected],
+.comboboxOption[data-checked],
+.comboboxOption:hover {
+  background-color: var(--sl-accent-soft);
+  color: var(--sl-nav-active-text);
+}
+
+.input::placeholder {
+  color: var(--sl-muted-text);
+}
+
+.input:focus,
+.input:focus-within {
+  background-color: var(--sl-surface-input-focus);
+  box-shadow: 0 0 0 var(--sl-focus-width)
+    color-mix(in sRGB, var(--sl-focus-outline) 18%, transparent);
+}
+
+.input[data-error],
+.input[data-invalid],
+.input[aria-invalid='true'],
+[data-error] .input,
+[data-invalid] .input,
+[aria-invalid='true'] .input {
+  border-color: var(--mantine-color-error);
+  background-color: color-mix(
+    in sRGB,
+    var(--sl-surface-input) 90%,
+    var(--mantine-color-error)
+  );
+}
+
+.input[data-error]:focus,
+.input[data-error]:focus-within,
+.input[data-invalid]:focus,
+.input[data-invalid]:focus-within,
+.input[aria-invalid='true']:focus,
+.input[aria-invalid='true']:focus-within,
+[data-error] .input:focus,
+[data-error] .input:focus-within,
+[data-invalid] .input:focus,
+[data-invalid] .input:focus-within,
+[aria-invalid='true'] .input:focus,
+[aria-invalid='true'] .input:focus-within {
+  box-shadow: 0 0 0 var(--sl-focus-width)
+    color-mix(in sRGB, var(--mantine-color-error) 18%, transparent);
+}
+
+.input[data-tone='success'],
+[data-tone='success'] .input {
+  border-color: var(--sl-app-success);
+  background-color: color-mix(
+    in sRGB,
+    var(--sl-surface-input) 90%,
+    var(--sl-app-success)
+  );
+}
+
+.input[data-tone='success']:focus,
+.input[data-tone='success']:focus-within,
+[data-tone='success'] .input:focus,
+[data-tone='success'] .input:focus-within {
+  box-shadow: 0 0 0 var(--sl-focus-width)
+    color-mix(in sRGB, var(--sl-app-success) 18%, transparent);
+}
+
+.input[data-tone='warning'],
+[data-tone='warning'] .input {
+  border-color: var(--sl-app-warning);
+  background-color: color-mix(
+    in sRGB,
+    var(--sl-surface-input) 90%,
+    var(--sl-app-warning)
+  );
+}
+
+.input[data-tone='warning']:focus,
+.input[data-tone='warning']:focus-within,
+[data-tone='warning'] .input:focus,
+[data-tone='warning'] .input:focus-within {
+  box-shadow: 0 0 0 var(--sl-focus-width)
+    color-mix(in sRGB, var(--sl-app-warning) 18%, transparent);
+}
+
+.input:disabled,
+.input[data-disabled] {
+  border-color: var(--sl-shell-border);
+  background-color: var(--sl-surface-subtle);
+  box-shadow: none;
+  opacity: 1;
+  color: var(--sl-muted-text);
+  cursor: not-allowed;
+}
+
+.inputSection > * {
+  width: 1em;
+  height: 1em;
+  color: inherit;
+}
+
+.nativeSelectInput option,
+.nativeSelectInput optgroup {
+  background-color: var(--sl-surface-card);
+  color: var(--sl-text);
+}

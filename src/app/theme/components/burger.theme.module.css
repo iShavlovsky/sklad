@@ -1,0 +1,5 @@
+.root:hover,
+.root:focus-visible {
+  box-shadow: var(--sl-panel-shadow);
+  transform: translateY(-1px);
+}

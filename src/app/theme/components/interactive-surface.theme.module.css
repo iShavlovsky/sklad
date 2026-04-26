@@ -1,0 +1,10 @@
+.root[data-interactive='true'] {
+  cursor: pointer;
+}
+
+.root[data-interactive='true']:hover,
+.root[data-interactive='true']:focus-within {
+  border-color: var(--sl-border-strong);
+  box-shadow: var(--sl-shadow-raised);
+  transform: translateY(-1px);
+}

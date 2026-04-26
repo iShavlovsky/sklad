@@ -1,0 +1,6 @@
+import type { FieldMetadata } from '../field-metadata/field-metadata.types.ts';
+
+export const DESCRIPTION_FIELD_METADATA: FieldMetadata = {
+  helpKey: 'field.description',
+  label: 'Описание записи',
+};

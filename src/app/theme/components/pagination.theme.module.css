@@ -1,0 +1,10 @@
+.control[data-active] {
+  box-shadow: var(--sl-shadow-raised);
+}
+
+.control:hover,
+.control:focus-visible {
+  background-color: var(--sl-accent-soft);
+  box-shadow: var(--sl-panel-shadow);
+  transform: translateY(-1px);
+}

@@ -1,0 +1,3 @@
+export const TAB_SWITCH_DEBOUNCE_MS = 180;
+export const LIVE_REFRESH_DEBOUNCE_MS = 700;
+export const LIVE_TOGGLE_THROTTLE_MS = 450;
