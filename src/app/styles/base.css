@@ -23,6 +23,8 @@ body,
 }
 
 body {
+  background: var(--sl-app-canvas-background);
+  background-size: 132% 132%;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;

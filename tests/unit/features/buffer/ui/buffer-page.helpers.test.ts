@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import type { BufferItem } from '../../../../../src/features/buffer-core/model/buffer-item.ts';
+import type { BufferItem } from '../../../../../src/features/buffer/core/model/buffer-item.ts';
 import { filterAndSortBufferItems } from '../../../../../src/pages/buffer/lib/buffer-page-mappers.ts';
 
 const ITEMS: BufferItem[] = [

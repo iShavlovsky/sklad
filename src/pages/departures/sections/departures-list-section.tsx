@@ -1,7 +1,7 @@
 import { type ReactElement, useState } from 'react';
 import { Box, Button, Group, Stack, Text } from '@mantine/core';
 
-import { useDeleteDeparture } from '@/features/departure-editor/hooks/use-delete-departure.ts';
+import { useDeleteDeparture } from '@/features/departures/editor/hooks/use-delete-departure.ts';
 import { useAppNavigate } from '@/router';
 import { useActionFeedback } from '@/shared/ui/action-feedback';
 import { CollectionSection } from '@/shared/ui/collection-section';
@@ -14,7 +14,7 @@ import {
 import {
   DepartureCard,
   DeparturePreviewContent,
-} from '../components/departure-card';
+} from '../components/departure-card/departure-card';
 import {
   DEPARTURES_SORT_OPTIONS,
   formatDepartureOccurredAt,
@@ -101,19 +101,25 @@ export function DeparturesListSection(): ReactElement {
         }
         filterMenu={filterMenu}
         footer={() => (
-          <Stack gap="xs">
-            <Text c="dimmed" size="xs">
+          <Group
+            data-testid="departures-list-footer"
+            gap="sm"
+            style={{ minWidth: 0, width: '100%' }}
+            wrap="nowrap"
+          >
+            <Text c="dimmed" size="xs" style={{ flex: '0 0 auto' }}>
               Найдено записей: {departures.length}
             </Text>
-            <Group justify="flex-end" wrap="wrap">
+            <Group grow style={{ flex: '1 1 auto', minWidth: 0 }} wrap="nowrap">
               <Button
                 data-testid="departures-create-button"
+                fullWidth
                 onClick={() => navigate.to('root.departures.create')}
               >
                 Создать
               </Button>
             </Group>
-          </Stack>
+          </Group>
         )}
         getItemId={(item) => item.id}
         items={departures}

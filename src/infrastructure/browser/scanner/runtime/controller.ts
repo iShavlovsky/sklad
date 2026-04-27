@@ -1,8 +1,11 @@
-import type { BufferControlController } from '../../../../features/buffer-core/model/buffer-control.types.ts';
-import type { BufferStore } from '../../../../features/buffer-core/model/buffer-store.types.ts';
+import type {
+  BufferControlController,
+  BufferStore,
+} from '@/features/buffer/core/buffer-core.public.ts';
+
 import type { OverlayArbitrationStore } from '../../../../features/navigation/model/overlay-arbitration.types.ts';
-import { createScannerRuntimeController } from '../../../../features/scanner-runtime/model/scanner-runtime-controller.ts';
-import type { ScannerSessionStore } from '../../../../features/scanner-runtime/model/scanner-session.types.ts';
+import { createScannerRuntimeController } from '../../../../features/scanner/runtime/model/scanner-runtime-controller.ts';
+import type { ScannerSessionStore } from '../../../../features/scanner/runtime/model/scanner-session.types.ts';
 import { createLiveScannerAdapter } from '../adapters/live.ts';
 import { createPhotoScannerAdapter } from '../adapters/photo.ts';
 

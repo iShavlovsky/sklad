@@ -1,18 +1,16 @@
 ﻿import type { PropsWithChildren, ReactElement, ReactNode } from 'react';
 import {
-  ActionIcon,
   Badge,
   Box,
   Card,
   type CardProps,
   Group,
-  Popover,
   Stack,
   Text,
   Title,
-  Tooltip,
 } from '@mantine/core';
-import { IconInfoCircle } from '@tabler/icons-react';
+
+import { InfoAction } from '@/shared/ui/info-action';
 
 interface PageSectionProps extends PropsWithChildren {
   badge?: string;
@@ -80,31 +78,16 @@ export function PageSection({
                   </Title>
                 )}
                 {help && (
-                  <Popover
+                  <InfoAction
+                    actionProps={{
+                      className: 'page-section__help-trigger',
+                    }}
+                    description={help}
+                    label="О разделе"
                     position="bottom-start"
-                    shadow="md"
+                    size={headerControlSize}
                     width="clamp(12rem, 50vw, 15rem)"
-                    withArrow
-                    withinPortal
-                  >
-                    <Popover.Target>
-                      <Tooltip label="О разделе">
-                        <ActionIcon
-                          aria-label="О разделе"
-                          className="page-section__help-trigger"
-                          color="gray"
-                          radius="xl"
-                          size={headerControlSize}
-                          variant="subtle"
-                        >
-                          <IconInfoCircle size={14} stroke={1.8} />
-                        </ActionIcon>
-                      </Tooltip>
-                    </Popover.Target>
-                    <Popover.Dropdown>
-                      <Text size="sm">{help}</Text>
-                    </Popover.Dropdown>
-                  </Popover>
+                  />
                 )}
               </Group>
             )}

@@ -310,6 +310,81 @@ test.describe('scanner modal UI', () => {
     });
   });
 
+  test('scanner header status pills keep readable width on mobile', async ({
+    page,
+  }) => {
+    await page.goto('/#/');
+    await page.waitForLoadState('networkidle');
+
+    await page
+      .getByRole('banner')
+      .getByRole('button', { name: 'Сканер' })
+      .click();
+
+    await expect(page.getByRole('dialog', { name: 'Сканер' })).toBeVisible();
+
+    const metrics = await page.evaluate(() => {
+      const header = document.querySelector<HTMLElement>(
+        '.scanner-modal__header'
+      );
+      const status = document.querySelector<HTMLElement>(
+        '.scanner-modal__header-status'
+      );
+      const pills = Array.from(
+        document.querySelectorAll<HTMLElement>('.scanner-modal__status-pill')
+      );
+      const labels = Array.from(
+        document.querySelectorAll<HTMLElement>(
+          '.scanner-modal__status-pill-label'
+        )
+      );
+      const headerStyles = header ? getComputedStyle(header) : null;
+
+      return {
+        headerWidth: header?.getBoundingClientRect().width ?? 0,
+        statusWidth: status?.getBoundingClientRect().width ?? 0,
+        pillWidths: pills.map((pill) => pill.getBoundingClientRect().width),
+        pillBackgrounds: pills.map((pill) => getComputedStyle(pill).background),
+        pillBorderColors: pills.map(
+          (pill) => getComputedStyle(pill).borderColor
+        ),
+        pillColors: pills.map((pill) => getComputedStyle(pill).color),
+        pillTones: pills.map((pill) => pill.dataset.tone ?? ''),
+        headerBackground: headerStyles?.background ?? '',
+        labelWidths: labels.map((label) => label.getBoundingClientRect().width),
+        labelColors: labels.map((label) => getComputedStyle(label).color),
+      };
+    });
+
+    expect(metrics.headerWidth).toBeGreaterThan(0);
+    expect(metrics.statusWidth).toBeGreaterThanOrEqual(
+      metrics.headerWidth - 90
+    );
+    expect(metrics.pillWidths).toHaveLength(2);
+    expect(metrics.labelWidths).toHaveLength(2);
+    expect(metrics.pillBackgrounds).toHaveLength(2);
+    expect(metrics.pillBorderColors).toHaveLength(2);
+    expect(metrics.pillColors).toHaveLength(2);
+    expect(metrics.pillTones).toHaveLength(2);
+    expect(metrics.labelColors).toHaveLength(2);
+
+    for (const width of metrics.pillWidths) {
+      expect(width).toBeGreaterThanOrEqual(metrics.statusWidth * 0.42);
+    }
+
+    for (const width of metrics.labelWidths) {
+      expect(width).toBeGreaterThanOrEqual(48);
+    }
+
+    for (const [index, tone] of metrics.pillTones.entries()) {
+      expect(tone).toBeTruthy();
+      expect(metrics.pillBackgrounds[index]).not.toBe('rgba(0, 0, 0, 0)');
+      expect(metrics.pillBackgrounds[index]).not.toBe(metrics.headerBackground);
+      expect(metrics.pillBorderColors[index]).not.toBe('rgba(0, 0, 0, 0)');
+      expect(metrics.labelColors[index]).toBe(metrics.pillColors[index]);
+    }
+  });
+
   test('photo tab decodes QR and writes it into buffer', async ({ page }) => {
     const expectedCode = 'ZXING-SCANNER-UI-001';
 

@@ -16,8 +16,8 @@ import {
 import { IconEye } from '@tabler/icons-react';
 
 import { getAppIconProps } from '@/app/theme/iconography/tokens.ts';
-import type { FieldVisualKey } from '@/features/form-fields/field-visuals';
-import { FieldToneIcon } from '@/features/form-fields/field-visuals';
+import type { FieldVisualKey } from '@/shared/ui/field-visuals';
+import { FieldToneIcon } from '@/shared/ui/field-visuals';
 
 import classes from './styles.module.css';
 

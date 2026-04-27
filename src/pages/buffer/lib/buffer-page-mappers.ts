@@ -1,4 +1,4 @@
-import type { BufferItem } from '@/features/buffer-core/model/buffer-item.ts';
+import type { BufferItem } from '@/features/buffer/core/buffer-core.public.ts';
 import { normalizeText } from '@/shared/utils/normalize-text.ts';
 
 export type BufferPageSortKey = 'capturedAt' | 'kind' | 'source' | 'value';

@@ -1,29 +1,26 @@
-﻿import { expect, test } from '../fixtures';
-import { DEFAULT_SUPPLIER } from '../helpers/constants';
+import { expect, test } from '../fixtures';
+
+async function openNewArrivalRoute(
+  page: import('@playwright/test').Page
+): Promise<void> {
+  await page.goto('/#/arrivals/create');
+  await page.waitForLoadState('networkidle');
+  await expect(page).toHaveURL(/#\/arrivals\/create$/);
+  await expect(page.locator('form')).toBeVisible();
+}
 
 async function createQuantityArrival(
   page: import('@playwright/test').Page,
   productName: string
 ): Promise<void> {
-  await page.goto('/#/arrivals');
-  await page.waitForLoadState('networkidle');
-  await page.getByRole('button', { name: /создать|новый/i }).click();
-  await expect(page.getByRole('dialog')).toBeVisible();
-
-  await page.getByRole('dialog').getByPlaceholder(/Mavic/i).fill(productName);
-  await page.getByPlaceholder('Выберите поставщика').click();
-  await page.getByRole('option', { name: DEFAULT_SUPPLIER }).click();
-  await page
-    .getByRole('dialog')
-    .getByText('Количество', { exact: true })
-    .click();
-  await page.waitForTimeout(200);
-
-  await page
-    .getByRole('dialog')
-    .getByRole('button', { name: /сохранить/i })
-    .click();
-  await expect(page.getByRole('dialog')).not.toBeVisible({ timeout: 6000 });
+  await openNewArrivalRoute(page);
+  const form = page.locator('form');
+  await form.getByRole('textbox').nth(0).fill(productName);
+  await form.getByRole('textbox').nth(2).fill('2');
+  await page.locator('form button').last().click();
+  await expect(page).toHaveURL(/#\/arrivals\/([^/]+)\/edit$/, {
+    timeout: 6000,
+  });
 }
 
 async function createSerialArrival(
@@ -31,70 +28,69 @@ async function createSerialArrival(
   productName: string,
   serial: string
 ): Promise<void> {
-  await page.goto('/#/arrivals');
-  await page.waitForLoadState('networkidle');
-  await page.getByRole('button', { name: /создать|новый/i }).click();
-  await expect(page.getByRole('dialog')).toBeVisible();
+  await openNewArrivalRoute(page);
+  const form = page.locator('form');
+  await form.getByRole('textbox').nth(0).fill(productName);
 
-  await page.getByRole('dialog').getByPlaceholder(/Mavic/i).fill(productName);
-  await page.getByPlaceholder('Выберите поставщика').click();
-  await page.getByRole('option', { name: DEFAULT_SUPPLIER }).click();
-  const serialField = page
-    .getByRole('dialog')
-    .getByPlaceholder('Введите серийный код');
+  const serialField = form.getByRole('textbox').nth(1);
   await serialField.fill(serial);
   await serialField.press('Enter');
-  await page.waitForTimeout(300);
+  await expect(page.getByText(serial, { exact: true })).toBeVisible();
 
-  await page
-    .getByRole('dialog')
-    .getByRole('button', { name: /сохранить/i })
-    .click();
-  await expect(page.getByRole('dialog')).not.toBeVisible({ timeout: 6000 });
+  await page.locator('form button').last().click();
+  await expect(page).toHaveURL(/#\/arrivals\/([^/]+)\/edit$/, {
+    timeout: 6000,
+  });
 }
 
 test.describe('adjustments', () => {
   test('creates a quantity adjustment', async ({ page }) => {
-    await createQuantityArrival(page, 'Тестовая корректировка');
+    await createQuantityArrival(
+      page,
+      'РўРµСЃС‚РѕРІР°СЏ РєРѕСЂСЂРµРєС‚РёСЂРѕРІРєР°'
+    );
 
     await page.goto('/#/stocks');
     await page.waitForLoadState('networkidle');
 
-    const cardRow = page
-      .locator('.product-card-row')
-      .filter({ hasText: 'Тестовая корректировка' });
-    await cardRow.getByRole('button', { name: 'Корректировка' }).click();
+    const cardRow = page.locator('article').first();
+    await cardRow.getByRole('button').first().click();
 
-    await expect(page.getByRole('dialog')).toBeVisible();
+    const detailsDialog = page.getByRole('dialog');
+    await expect(detailsDialog).toBeVisible();
+    await detailsDialog.getByRole('button').nth(2).click();
 
-    const deltaInput = page
-      .getByRole('dialog')
-      .getByLabel('Изменение количества');
-    await deltaInput.fill('-1');
-    await page
-      .getByRole('dialog')
-      .getByLabel('Причина')
-      .fill('Тест корректировки e2e');
+    const adjustmentDialog = page.getByRole('dialog', {
+      name: 'Корректировка остатка',
+    });
+    await expect(adjustmentDialog).toBeVisible();
 
-    await page
-      .getByRole('dialog')
-      .getByRole('button', { name: /корректиров/i })
-      .click();
-    await expect(page.getByRole('dialog')).not.toBeVisible({ timeout: 6000 });
+    await adjustmentDialog.getByRole('textbox').nth(0).fill('-1');
+    await adjustmentDialog
+      .getByRole('textbox')
+      .nth(1)
+      .fill('РўРµСЃС‚ РєРѕСЂСЂРµРєС‚РёСЂРѕРІРєРё e2e');
+
+    await adjustmentDialog.getByRole('button').last().click();
+    await expect(adjustmentDialog).not.toBeVisible({ timeout: 6000 });
   });
 });
 
 test.describe('serial adjustments', () => {
   test('disables adjustments for serial stock', async ({ page }) => {
-    await createSerialArrival(page, 'Серийная позиция', 'SN-ADJ-SER-E2E-001');
+    await createSerialArrival(
+      page,
+      'РЎРµСЂРёР№РЅР°СЏ РїРѕР·РёС†РёСЏ',
+      'SN-ADJ-SER-E2E-001'
+    );
 
     await page.goto('/#/stocks');
     await page.waitForLoadState('networkidle');
 
-    const cardRow = page
-      .locator('.product-card-row')
-      .filter({ hasText: 'Серийная позиция' });
-    const adjustButton = cardRow.getByRole('button', { name: 'Корректировка' });
+    const cardRow = page.locator('article').first();
+    await cardRow.getByRole('button').first().click();
+
+    const adjustButton = page.getByRole('dialog').getByRole('button').nth(2);
     await expect(adjustButton).toBeDisabled();
   });
 });

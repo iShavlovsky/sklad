@@ -2,6 +2,7 @@ import { type ReactElement } from 'react';
 import { IconCloudUpload, IconInfoCircle, IconUser } from '@tabler/icons-react';
 
 import { APP_ROUTES } from '@/shared/config/routes.ts';
+import { InfoAction } from '@/shared/ui/info-action';
 import {
   BottomSpacer,
   PageContainer,
@@ -21,7 +22,9 @@ export function SettingsPage(): ReactElement {
         <PageSection
           badge="Разделы"
           description="Быстрый переход к связанным системным экранам."
-          title="Системные разделы"
+          trailing={
+            <InfoAction description="Эти разделы ведут к профилю, backup-центру и сведениям о приложении. Они не меняют журналы сами по себе." />
+          }
         >
           <SettingsHubLink
             description="Профиль, имя, подпись и персональные параметры"

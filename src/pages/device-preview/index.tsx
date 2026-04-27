@@ -224,6 +224,9 @@ function DevicePreviewControls({
         >
           Открыть отдельно
         </Button>
+        <Button component="a" href={`/#${APP_ROUTES.uiKit}`} variant="default">
+          UI Kit
+        </Button>
       </Group>
     </Stack>
   );

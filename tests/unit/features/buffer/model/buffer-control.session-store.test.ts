@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { createBufferControlSessionStore } from '../../../../../src/features/buffer-core/model/buffer-control.session-store.ts';
+import { createBufferControlSessionStore } from '../../../../../src/features/buffer/core/model/buffer-control.session-store.ts';
 
 describe('createBufferControlSessionStore', () => {
   it('stores one machine-readable lease at a time', () => {

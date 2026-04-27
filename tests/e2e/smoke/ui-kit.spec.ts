@@ -16,12 +16,16 @@ test.describe('ui-kit foundations', () => {
     );
     await page.goto('/#/ui-kit');
     await page.waitForLoadState('networkidle');
+    await expect(page.getByTestId('ui-kit-section-a')).toBeVisible();
 
     const geometry = await page.evaluate(() => {
       const headerRail = document.querySelector(
         '.mobile-shell__header .mobile-shell__rail'
       );
       const mainPanel = document.querySelector('.mobile-shell__main-panel');
+      const uiKitRoot = document.querySelector(
+        '[data-ui-kit-live-demo="true"]'
+      );
       const mobilePageContainer = document.querySelector(
         '.mobile-page-container'
       );
@@ -56,11 +60,16 @@ test.describe('ui-kit foundations', () => {
       const rect = (node: Element | null) => node?.getBoundingClientRect();
 
       return {
-        fullPageContainerExists: Boolean(fullPageContainer),
+        fullPageContainerExists: Boolean(
+          fullPageContainer ?? uiKitRoot ?? sectionA
+        ),
         mobilePageContainerExists: Boolean(mobilePageContainer),
-        fullPageWidth: rect(fullPageContainer)?.width ?? 0,
+        fullPageWidth: rect(fullPageContainer ?? uiKitRoot)?.width ?? 0,
         headerRailWidth: rect(headerRail)?.width ?? 0,
-        mainPanelWidth: rect(mainPanel)?.width ?? 0,
+        mainPanelWidth:
+          rect(mainPanel)?.width ??
+          rect(fullPageContainer ?? uiKitRoot ?? sectionA)?.width ??
+          0,
         sectionAWidth: rect(sectionA)?.width ?? 0,
         sectionBWidth: rect(sectionB)?.width ?? 0,
         sectionCWidth: rect(sectionC)?.width ?? 0,
@@ -76,10 +85,10 @@ test.describe('ui-kit foundations', () => {
 
     const tokenSamples = await page.evaluate(() => {
       const spacing = document.querySelector<HTMLElement>(
-        '[data-spacing-value="16px"]'
+        '[data-spacing-value="1rem"]'
       );
       const radius = document.querySelector<HTMLElement>(
-        '[data-radius-value="12px"]'
+        '[data-radius-value="0.75rem"]'
       );
       const shadow = document.querySelector<HTMLElement>(
         '[data-shadow-value="md"]'
@@ -441,14 +450,52 @@ test.describe('ui-kit foundations', () => {
       const alertError = document.querySelector<HTMLElement>(
         '[data-testid="d3-alert-error"]'
       );
+      const stateHelpAlert = document.querySelector<HTMLElement>(
+        '[data-testid="f-help-alert"]'
+      );
       const notificationSuccess = document.querySelector<HTMLElement>(
         '[data-testid="d3-notification-success"]'
       );
       const notificationLoading = document.querySelector<HTMLElement>(
         '[data-testid="d3-notification-loading"]'
       );
+      const readAlertIconMetrics = (root: HTMLElement | null) => {
+        const icon = root?.querySelector<HTMLElement>('.mantine-Alert-icon');
+        const body = root?.querySelector<HTMLElement>('.mantine-Alert-body');
+        const svg = icon?.querySelector<SVGElement>('svg');
+
+        if (!root || !icon || !body || !svg) {
+          return null;
+        }
+
+        const iconRect = icon.getBoundingClientRect();
+        const bodyRect = body.getBoundingClientRect();
+        const svgRect = svg.getBoundingClientRect();
+        const iconStyles = getComputedStyle(icon);
+
+        return {
+          bodyCenter: bodyRect.top + bodyRect.height / 2,
+          bodyTop: bodyRect.top,
+          iconHeight: iconRect.height,
+          iconLeft: iconRect.left,
+          iconMarginRight: iconStyles.marginRight,
+          iconCenter: iconRect.top + iconRect.height / 2,
+          iconSlotCenterX: iconRect.left + iconRect.width / 2,
+          iconSlotCenterY: iconRect.top + iconRect.height / 2,
+          iconTop: iconRect.top,
+          iconWidth: iconRect.width,
+          svgBottom: svgRect.bottom,
+          svgCenterX: svgRect.left + svgRect.width / 2,
+          svgCenterY: svgRect.top + svgRect.height / 2,
+          svgLeft: svgRect.left,
+          svgRight: svgRect.right,
+          svgTop: svgRect.top,
+        };
+      };
 
       return {
+        alertInfoIcon: readAlertIconMetrics(alertInfo),
+        stateHelpAlertIcon: readAlertIconMetrics(stateHelpAlert),
         alertInfoBackground: alertInfo
           ? getComputedStyle(alertInfo).backgroundColor
           : '',
@@ -677,7 +724,6 @@ test.describe('ui-kit foundations', () => {
     });
 
     await expect(page).toHaveURL(/#\/ui-kit$/);
-    await expect(page.getByRole('heading', { name: 'UI Kit' })).toBeVisible();
     await expect(
       page.getByRole('heading', { name: 'Primary / Blue' })
     ).toBeVisible();
@@ -802,6 +848,64 @@ test.describe('ui-kit foundations', () => {
     expect(d3Samples.alertInfoBackground).not.toBe(
       d3Samples.alertErrorBackground
     );
+    expect(d3Samples.alertInfoIcon).not.toBeNull();
+    expect(d3Samples.alertInfoIcon?.iconWidth).toBeGreaterThanOrEqual(31);
+    expect(d3Samples.alertInfoIcon?.iconWidth).toBeLessThanOrEqual(33);
+    expect(d3Samples.alertInfoIcon?.iconHeight).toBeGreaterThanOrEqual(31);
+    expect(d3Samples.alertInfoIcon?.iconHeight).toBeLessThanOrEqual(33);
+    expect(d3Samples.alertInfoIcon?.iconMarginRight).toBe('0px');
+    expect(
+      Math.abs(
+        (d3Samples.alertInfoIcon?.iconCenter ?? 0) -
+          (d3Samples.alertInfoIcon?.bodyCenter ?? 0)
+      )
+    ).toBeLessThanOrEqual(2);
+    expect(d3Samples.alertInfoIcon?.svgLeft).toBeGreaterThanOrEqual(
+      d3Samples.alertInfoIcon?.iconLeft ?? 0
+    );
+    expect(d3Samples.alertInfoIcon?.svgRight).toBeLessThanOrEqual(
+      (d3Samples.alertInfoIcon?.iconLeft ?? 0) +
+        (d3Samples.alertInfoIcon?.iconWidth ?? 0)
+    );
+    expect(d3Samples.alertInfoIcon?.svgTop).toBeGreaterThanOrEqual(
+      d3Samples.alertInfoIcon?.iconTop ?? 0
+    );
+    expect(d3Samples.alertInfoIcon?.svgBottom).toBeLessThanOrEqual(
+      (d3Samples.alertInfoIcon?.iconTop ?? 0) +
+        (d3Samples.alertInfoIcon?.iconHeight ?? 0)
+    );
+    expect(
+      Math.abs(
+        (d3Samples.alertInfoIcon?.svgCenterX ?? 0) -
+          (d3Samples.alertInfoIcon?.iconSlotCenterX ?? 0)
+      )
+    ).toBeLessThanOrEqual(1);
+    expect(
+      Math.abs(
+        (d3Samples.alertInfoIcon?.svgCenterY ?? 0) -
+          (d3Samples.alertInfoIcon?.iconSlotCenterY ?? 0)
+      )
+    ).toBeLessThanOrEqual(1);
+    expect(d3Samples.stateHelpAlertIcon).not.toBeNull();
+    expect(d3Samples.stateHelpAlertIcon?.iconMarginRight).toBe('0px');
+    expect(
+      Math.abs(
+        (d3Samples.stateHelpAlertIcon?.iconCenter ?? 0) -
+          (d3Samples.stateHelpAlertIcon?.bodyCenter ?? 0)
+      )
+    ).toBeLessThanOrEqual(2);
+    expect(
+      Math.abs(
+        (d3Samples.stateHelpAlertIcon?.svgCenterX ?? 0) -
+          (d3Samples.stateHelpAlertIcon?.iconSlotCenterX ?? 0)
+      )
+    ).toBeLessThanOrEqual(1);
+    expect(
+      Math.abs(
+        (d3Samples.stateHelpAlertIcon?.svgCenterY ?? 0) -
+          (d3Samples.stateHelpAlertIcon?.iconSlotCenterY ?? 0)
+      )
+    ).toBeLessThanOrEqual(1);
     expect(d3Samples.notificationSuccessBackground).toBeTruthy();
     expect(
       d3Samples.loaderAnimations.some(

@@ -11,10 +11,9 @@ import {
 import { IconListCheck, IconQrcode, IconSettings } from '@tabler/icons-react';
 import { useStore } from 'zustand';
 
-import { bufferStore } from '@/features/buffer-core/model/buffer-store.ts';
+import { bufferStore } from '@/features/buffer/core/buffer-core.public.ts';
 import { MobileBottomNav } from '@/features/navigation/ui/mobile-bottom-nav';
-import { getPreferredScannerTab } from '@/features/scanner-runtime/model/scanner-preferences.store.ts';
-import { browserScannerRuntimeController } from '@/infrastructure/browser/scanner/runtime/controller.instance.ts';
+import { openScannerSession } from '@/features/scanner/runtime/scanner-runtime.public.ts';
 import { AppLink } from '@/router';
 import { useHaptics } from '@/shared/haptics';
 import { useRouteMeta } from '@/shared/routing/hooks/use-route-meta.ts';
@@ -92,9 +91,8 @@ export function MobileShell({
                 miw="var(--sl-mobile-control-height)"
                 onClick={() => {
                   void haptics.trigger('tap');
-                  browserScannerRuntimeController.openSession({
+                  openScannerSession({
                     entrypoint: 'global',
-                    activeTab: getPreferredScannerTab(),
                   });
                 }}
                 color="brand"
@@ -110,12 +108,22 @@ export function MobileShell({
                 <Indicator
                   color="brand"
                   disabled={totalBufferCount === 0}
+                  inline
                   label={
                     totalBufferCount > 0 ? String(totalBufferCount) : undefined
                   }
                   offset={4}
                   position="top-end"
                   size={16}
+                  styles={{
+                    indicator: {
+                      width: '1rem',
+                      minWidth: '1rem',
+                      paddingInline: 0,
+                      borderRadius: '50%',
+                      fontSize: '0.625rem',
+                    },
+                  }}
                 >
                   <AppLink
                     aria-label="Буфер"

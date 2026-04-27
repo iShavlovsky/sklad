@@ -1,7 +1,10 @@
-import { bufferControlController } from '../../../../features/buffer-core/model/buffer-control.controller.instance.ts';
-import { bufferStore } from '../../../../features/buffer-core/model/buffer-store.ts';
+import {
+  bufferControlController,
+  bufferStore,
+} from '@/features/buffer/core/buffer-core.public.ts';
+
 import { overlayArbitrationStore } from '../../../../features/navigation/model/overlay-arbitration.store.ts';
-import { scannerSessionStore } from '../../../../features/scanner-runtime/model/scanner-session.store.ts';
+import { scannerSessionStore } from '../../../../features/scanner/runtime/model/scanner-session.store.ts';
 
 import { createBrowserScannerRuntimeController } from './controller.ts';
 

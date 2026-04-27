@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 
-import { DraftEditor } from '@/features/draft-editor';
+import { DraftEditor } from '@/features/drafts/editor/form/draft-editor.form.tsx';
 import {
   BottomSpacer,
   PageContainer,

@@ -4,7 +4,7 @@ import {
   containsNormalizedText,
   normalizeSearch,
   paginate,
-} from '@/domain/common/query-helpers';
+} from '@/shared/utils/query';
 import type { ProductRecord } from '@/domain/directories/product.record.ts';
 import type {
   ProductListQuery,

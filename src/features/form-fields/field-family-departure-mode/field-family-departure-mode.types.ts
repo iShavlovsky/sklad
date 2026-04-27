@@ -2,7 +2,7 @@ import type { UseFormReturnType } from '@mantine/form';
 
 import type { FormPreferenceKey } from '@/features/form-preferences/model/form-preferences.types.ts';
 
-import type { FieldMetadata } from '../field-metadata/field-metadata.types.ts';
+import type { FieldMetadata } from '@/features/form-controls/support/field-metadata/field-metadata.types.ts';
 
 export interface DepartureModeFieldFamilyProps<TValues> {
   form: UseFormReturnType<TValues>;

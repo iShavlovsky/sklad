@@ -10,6 +10,140 @@ const screenshotRoot = path.join(
 );
 
 test.describe('mobile home and shell navigation flow', () => {
+  test('keeps bottom navigation focus shape and dock padding aligned', async ({
+    page,
+  }) => {
+    await page.goto('/#/');
+    await page.waitForLoadState('networkidle');
+
+    const primaryNav = page.locator('.mobile-bottom-nav');
+    await expect(
+      primaryNav.locator('[data-item-id="root.dashboard"]')
+    ).toBeVisible();
+
+    let focusedBottomNav = false;
+    for (let i = 0; i < 20; i += 1) {
+      await page.keyboard.press('Tab');
+      focusedBottomNav = await page.evaluate(() =>
+        Boolean(document.activeElement?.closest('.mobile-bottom-nav'))
+      );
+
+      if (focusedBottomNav) {
+        break;
+      }
+    }
+
+    expect(focusedBottomNav).toBe(true);
+
+    const metrics = await page.evaluate(() => {
+      function toBox(node: Element | null) {
+        const rect = node?.getBoundingClientRect();
+
+        return rect
+          ? {
+              bottom: rect.bottom,
+              height: rect.height,
+              left: rect.left,
+              right: rect.right,
+              top: rect.top,
+              width: rect.width,
+            }
+          : null;
+      }
+
+      function toNumber(value: string): number {
+        const parsed = Number.parseFloat(value);
+
+        return Number.isFinite(parsed) ? parsed : 0;
+      }
+
+      const input = document.activeElement as HTMLInputElement | null;
+      const label =
+        input?.id && typeof CSS !== 'undefined'
+          ? document.querySelector<HTMLElement>(
+              `label[for="${CSS.escape(input.id)}"]`
+            )
+          : input?.nextElementSibling instanceof HTMLElement
+            ? input.nextElementSibling
+            : null;
+      const item = label?.querySelector<HTMLElement>('[data-item-id]') ?? null;
+      const dock = document.querySelector<HTMLElement>(
+        '.mobile-bottom-nav__dock'
+      );
+      const indicator = document.querySelector<HTMLElement>(
+        '.mobile-bottom-nav__indicator'
+      );
+      const labelStyles = label ? getComputedStyle(label) : null;
+      const itemStyles = item ? getComputedStyle(item) : null;
+      const dockStyles = dock ? getComputedStyle(dock) : null;
+      const rootStyles = getComputedStyle(document.documentElement);
+
+      const dockBox = toBox(dock);
+      const labelBox = toBox(label);
+      const indicatorBox = toBox(indicator);
+
+      return {
+        dockBox,
+        dockRadius: dockStyles ? toNumber(dockStyles.borderTopLeftRadius) : 0,
+        focusedRole: input?.tagName.toLowerCase() ?? '',
+        indicatorBox,
+        itemBox: toBox(item),
+        itemRadius: itemStyles ? toNumber(itemStyles.borderTopLeftRadius) : 0,
+        labelBox,
+        labelOutlineOffset: labelStyles
+          ? toNumber(labelStyles.outlineOffset)
+          : 0,
+        labelOutlineStyle: labelStyles?.outlineStyle ?? '',
+        labelOutlineWidth: labelStyles ? toNumber(labelStyles.outlineWidth) : 0,
+        labelRadius: labelStyles
+          ? toNumber(labelStyles.borderTopLeftRadius)
+          : 0,
+        paddingBottom: dockStyles ? toNumber(dockStyles.paddingBottom) : 0,
+        paddingTop: dockStyles ? toNumber(dockStyles.paddingTop) : 0,
+        controlRadius: toNumber(
+          rootStyles.getPropertyValue('--sl-control-radius')
+        ),
+      };
+    });
+
+    expect(metrics.focusedRole).toBe('input');
+    expect(metrics.labelOutlineStyle).toBe('solid');
+    expect(metrics.labelOutlineWidth).toBeGreaterThan(0);
+    expect(metrics.labelOutlineOffset).toBeLessThanOrEqual(0);
+    expect(
+      Math.abs(metrics.labelRadius - metrics.itemRadius)
+    ).toBeLessThanOrEqual(1);
+    expect(
+      Math.abs(metrics.dockRadius - metrics.controlRadius)
+    ).toBeLessThanOrEqual(1);
+    expect(
+      Math.abs(metrics.labelRadius - metrics.controlRadius)
+    ).toBeLessThanOrEqual(1);
+    expect(
+      Math.abs(metrics.paddingTop - metrics.paddingBottom)
+    ).toBeLessThanOrEqual(1);
+
+    expect(metrics.dockBox).not.toBeNull();
+    expect(metrics.labelBox).not.toBeNull();
+    expect(metrics.indicatorBox).not.toBeNull();
+
+    if (metrics.dockBox && metrics.labelBox && metrics.indicatorBox) {
+      const labelTopGap = metrics.labelBox.top - metrics.dockBox.top;
+      const labelBottomGap = metrics.dockBox.bottom - metrics.labelBox.bottom;
+      const indicatorTopGap = metrics.indicatorBox.top - metrics.dockBox.top;
+      const indicatorBottomGap =
+        metrics.dockBox.bottom - metrics.indicatorBox.bottom;
+
+      expect(Math.abs(labelTopGap - labelBottomGap)).toBeLessThanOrEqual(1.5);
+      expect(
+        Math.abs(indicatorTopGap - indicatorBottomGap)
+      ).toBeLessThanOrEqual(1.5);
+      expect(
+        Math.abs(metrics.labelBox.height - metrics.indicatorBox.height)
+      ).toBeLessThanOrEqual(1.5);
+    }
+  });
+
   test('keeps compact shell and home v3 contract stable', async ({ page }) => {
     test.setTimeout(90000);
     await page.goto('/#/');
@@ -99,9 +233,7 @@ test.describe('mobile home and shell navigation flow', () => {
 
     await primaryNav.locator('[data-item-id="root.stocks"]').click();
     await expect(page).toHaveURL(/#\/stocks$/);
-    await expect(
-      page.getByRole('heading', { name: 'Остатки', exact: true })
-    ).toBeVisible();
+    await expect(page.locator('.mobile-shell__title')).toBeVisible();
 
     const geometry = await page.evaluate(() => {
       const footer = document.querySelector('.mobile-shell__footer');

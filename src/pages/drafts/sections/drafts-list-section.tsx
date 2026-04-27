@@ -1,7 +1,7 @@
 import { type ReactElement, useState } from 'react';
 import { Box, Button, Group, Stack, Text } from '@mantine/core';
 
-import { useDeleteDraft } from '@/features/drafts-data/hooks/use-delete-draft.ts';
+import { useDeleteDraft } from '@/features/drafts/data/hooks/use-delete-draft.ts';
 import { useAppNavigate } from '@/router';
 import { useActionFeedback } from '@/shared/ui/action-feedback';
 import { CollectionSection } from '@/shared/ui/collection-section';
@@ -11,7 +11,7 @@ import {
   RecordPreviewDrawer,
 } from '@/shared/ui/record-card';
 
-import { DraftCard, DraftPreviewContent } from '../components/draft-card';
+import { DraftCard, DraftPreviewContent } from '../components/draft-card/draft-card';
 import {
   DRAFTS_SORT_OPTIONS,
   formatDraftDate,

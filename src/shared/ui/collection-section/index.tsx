@@ -53,20 +53,9 @@ function buildFilterIndicator(
 function renderFilterItem(item: CollectionFilterMenuItem): ReactElement {
   if (item.submenu && item.submenu.length > 0) {
     return (
-      <Menu.Sub key={item.key}>
-        <Menu.Sub.Target>
-          <Menu.Sub.Item
-            disabled={item.disabled}
-            leftSection={buildFilterIndicator(item)}
-            rightSection={item.rightSection}
-          >
-            {item.label}
-          </Menu.Sub.Item>
-        </Menu.Sub.Target>
-        <Menu.Sub.Dropdown>
-          {item.submenu.map((subItem) => renderFilterItem(subItem))}
-        </Menu.Sub.Dropdown>
-      </Menu.Sub>
+      <Fragment key={item.key}>
+        {item.submenu.map((subItem) => renderFilterItem(subItem))}
+      </Fragment>
     );
   }
 
@@ -170,7 +159,7 @@ export function CollectionSection<TItem, TId extends string>({
 
     lastReportedSelectionKeyRef.current = selectionKey;
     selection?.onChange?.(selectedIds, selectedItems);
-  }, [selectedIds, selectedItems, selectionEnabled]);
+  }, [selectedIds, selectedItems, selection, selectionEnabled]);
 
   const footerContext: CollectionFooterContext<TItem, TId> = {
     allVisibleSelected,

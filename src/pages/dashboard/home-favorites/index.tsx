@@ -9,8 +9,7 @@ import {
   HOME_FAVORITE_SCANNER_TARGET,
   type HomeFavoriteItem,
 } from '@/features/dashboard/model/use-home-favorites.ts';
-import { getPreferredScannerTab } from '@/features/scanner-runtime/model/scanner-preferences.store.ts';
-import { browserScannerRuntimeController } from '@/infrastructure/browser/scanner/runtime/controller.instance.ts';
+import { openScannerSession } from '@/features/scanner/runtime/scanner-runtime.public.ts';
 
 import { useHomeFavoritesReorder } from './hooks/use-home-favorites-reorder';
 import { SortableFavoriteTile } from './sortable-favorite-tile';
@@ -37,8 +36,7 @@ export function HomeFavorites({
   const handleOpen = useCallback(
     (favorite: HomeFavoriteItem) => {
       if (favorite.target === HOME_FAVORITE_SCANNER_TARGET) {
-        browserScannerRuntimeController.openSession({
-          activeTab: getPreferredScannerTab(),
+        openScannerSession({
           entrypoint: 'global',
         });
         return;

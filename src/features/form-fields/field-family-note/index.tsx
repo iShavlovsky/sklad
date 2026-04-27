@@ -1,8 +1,9 @@
 import type { ReactElement } from 'react';
 import { Textarea } from '@mantine/core';
 
-import { FieldLabel } from '../field-info-trigger';
-import { FieldInlineIcon } from '../field-visuals';
+import { FieldInlineIcon } from '@/shared/ui/field-visuals';
+
+import { FieldLabel } from '@/features/form-controls/support/field-info-trigger';
 
 import { NOTE_FIELD_METADATA } from './field-family-note.constants.ts';
 import type { NoteFieldFamilyProps } from './field-family-note.types.ts';

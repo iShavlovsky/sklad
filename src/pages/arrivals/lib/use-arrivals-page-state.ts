@@ -1,9 +1,9 @@
 import { createElement, useMemo, useState } from 'react';
 
 import type { SubjectKind } from '@/domain/common/record-kinds.ts';
-import { useArrivalList } from '@/features/arrivals-data/hooks/use-arrival-list.ts';
-import { FieldToneIcon } from '@/features/form-fields/field-visuals';
+import { useArrivalList } from '@/features/arrivals/data/hooks/use-arrival-list.ts';
 import type { CollectionFilterMenuConfig } from '@/shared/ui/collection-section/types.ts';
+import { FieldToneIcon } from '@/shared/ui/field-visuals';
 
 import {
   ARRIVAL_SUBJECT_KIND_LABELS,

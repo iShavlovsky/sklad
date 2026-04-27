@@ -1,9 +1,9 @@
 import { createElement, useMemo, useState } from 'react';
 
 import type { RecordKind, SubjectKind } from '@/domain/common/record-kinds.ts';
-import { useDraftList } from '@/features/drafts-data/hooks/use-draft-list.ts';
-import { FieldToneIcon } from '@/features/form-fields/field-visuals';
+import { useDraftList } from '@/features/drafts/data/hooks/use-draft-list.ts';
 import type { CollectionFilterMenuConfig } from '@/shared/ui/collection-section/types.ts';
+import { FieldToneIcon } from '@/shared/ui/field-visuals';
 
 import {
   DRAFT_KIND_LABELS,

@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { ArrivalEditor } from '@/features/arrival-editor/arrival-editor.tsx';
+import { ArrivalEditor } from '@/features/arrivals/editor/arrival-editor.tsx';
 import {
   BottomSpacer,
   PageContainer,

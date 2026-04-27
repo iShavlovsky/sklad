@@ -16,7 +16,9 @@ import {
   Text,
   Tooltip,
 } from '@mantine/core';
-import { IconCheck, IconCopy, IconInfoCircle } from '@tabler/icons-react';
+import { IconCheck, IconCopy } from '@tabler/icons-react';
+
+import { InfoAction } from '@/shared/ui/info-action';
 
 interface SerialTokensInputProps {
   disabled?: boolean;
@@ -106,18 +108,11 @@ export function SerialTokensInput({
           Серийные коды
         </Text>
         <Group gap={4} wrap="nowrap">
-          <Tooltip
-            events={{ focus: true, hover: true, touch: true }}
-            label="Добавляйте коды через Enter или разделители. Коды копируются в форму и не удаляются из буфера."
-          >
-            <ActionIcon
-              aria-label="Подсказка по серийным кодам"
-              size="sm"
-              variant="subtle"
-            >
-              <IconInfoCircle size={14} />
-            </ActionIcon>
-          </Tooltip>
+          <InfoAction
+            description="Добавляйте коды через Enter или разделители. Коды копируются в форму и не удаляются из буфера."
+            label="Подсказка по серийным кодам"
+            size="sm"
+          />
           <CopyButton timeout={1200} value={tokens.join('\n')}>
             {({ copied, copy }) => (
               <Tooltip

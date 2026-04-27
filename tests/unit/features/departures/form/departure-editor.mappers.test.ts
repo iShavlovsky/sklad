@@ -5,9 +5,9 @@ import {
   applyLinkedArrivalToDepartureValues,
   buildCreateDepartureInput,
   createEmptyDepartureEditorValues,
-} from '../../../../../src/features/departure-editor/form/departure-editor.mappers.ts';
+} from '../../../../../src/features/departures/editor/form/model/departure-editor.form-mappers.ts';
 
-describe('departure-editor.mappers', () => {
+describe('departure-form.mappers', () => {
   it('builds create input from editor values', () => {
     const values = {
       ...createEmptyDepartureEditorValues(),
@@ -79,7 +79,7 @@ describe('departure-editor.mappers', () => {
         subjectKind: 'product',
         description: 'Описание прихода',
         amount: 2500,
-        currency: 'RUB',
+        currency: 'EUR',
         occurredAt: '2026-04-20T09:00:00.000Z',
         linkUrl: null,
         note: null,
@@ -106,7 +106,7 @@ describe('departure-editor.mappers', () => {
         subjectKind: 'product',
         description: 'Описание прихода',
         amount: '2500',
-        currency: 'RUB',
+        currency: 'EUR',
         supplier: {
           id: 'supplier-1',
           name: 'Поставщик',

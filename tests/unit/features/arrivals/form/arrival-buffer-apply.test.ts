@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { appendCopiedBufferValuesToArrivalCodes } from '../../../../../src/features/arrival-editor/form/arrival-buffer-apply.ts';
+import { appendCopiedBufferValuesToArrivalCodes } from '../../../../../src/features/arrivals/editor/form/model/arrival-editor.buffer-apply.ts';
 
 describe('appendCopiedBufferValuesToArrivalCodes', () => {
   it('appends copied buffer values to the arrival form codes', () => {

@@ -31,7 +31,7 @@ export function BottomNavigationItemContent({
     <Box
       aria-label={ariaLabel}
       aria-current={active ? 'page' : undefined}
-      className={styles.item}
+      className={`${styles.item} mobile-bottom-nav__item`}
       data-active={active || undefined}
       data-focus-visible={focusVisible || undefined}
       data-indicator={indicator || undefined}

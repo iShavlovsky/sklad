@@ -4,7 +4,7 @@ import type { StateStorage } from 'zustand/middleware';
 import {
   createBufferJSONStorage,
   createBufferStore,
-} from '../../../../../src/features/buffer-core/model/create-buffer-store.ts';
+} from '../../../../../src/features/buffer/core/model/create-buffer-store.ts';
 
 function createMemoryStateStorage(
   seed: Record<string, string> = {}

@@ -5,7 +5,7 @@ import {
   containsNormalizedText,
   normalizeSearch,
   paginate,
-} from '@/domain/common/query-helpers';
+} from '@/shared/utils/query';
 import type {
   RecordCodeDetails,
   RecordCodeDetailsQuery,

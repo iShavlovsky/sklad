@@ -1,15 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import type { StateStorage } from 'zustand/middleware';
 
-import { createBufferControlController } from '../../../../../src/features/buffer-core/model/buffer-control.controller.ts';
-import { createBufferControlSessionStore } from '../../../../../src/features/buffer-core/model/buffer-control.session-store.ts';
+import { createBufferControlController } from '../../../../../src/features/buffer/core/model/buffer-control.controller.ts';
+import { createBufferControlSessionStore } from '../../../../../src/features/buffer/core/model/buffer-control.session-store.ts';
 import {
   createBufferJSONStorage,
   createBufferStore,
-} from '../../../../../src/features/buffer-core/model/create-buffer-store.ts';
+} from '../../../../../src/features/buffer/core/model/create-buffer-store.ts';
 import { createOverlayArbitrationStore } from '../../../../../src/features/navigation/model/create-overlay-arbitration-store.ts';
-import { createScannerSessionStore } from '../../../../../src/features/scanner-runtime/model/create-scanner-session-store.ts';
-import { createScannerRuntimeController } from '../../../../../src/features/scanner-runtime/model/scanner-runtime-controller.ts';
+import { createScannerSessionStore } from '../../../../../src/features/scanner/runtime/model/create-scanner-session-store.ts';
+import { createScannerRuntimeController } from '../../../../../src/features/scanner/runtime/model/scanner-runtime-controller.ts';
 import type {
   LiveScannerAdapter,
   StartLiveScannerSessionInput,

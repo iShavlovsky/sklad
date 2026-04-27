@@ -14,7 +14,10 @@
   - default page rhythm is mobile-first and composed through shared page primitives over the shell-owned rail
 - `src/features/`
   - reusable business/workflow slices, not route-local page composition
-  - current touched examples: `arrival-editor`, `arrivals-data`, `departure-editor`, `departures-data`, `drafts-data`, `draft-publish`, `stocks-data`, `stock-adjustment`, `stock-departure-prefill`, `buffer-core`, `buffer-picker`, `scanner-runtime`
+  - current normalized owners include `arrivals/{editor,data}`, `departures/{editor,data}`, `drafts/{editor,data,publish}`, `buffer/{core,picker}`, `scanner/{runtime,modal}`, and `stocks/{data,adjustment,departure-prefill}`
+  - `form-controls/` owns UI-only reusable form controls and tightly scoped UI help/metadata support
+  - `form-fields/` remains a valid owner for query/preference-aware form seams and form layout support that should not move into UI-only controls
+  - `form-preferences/` owns second-data form preference state and stays separate from durable settings
   - `codes/` closes the current support-domain record-code hook surface
 - `src/domain/`
   - durable product truth and use-case contracts
@@ -33,6 +36,7 @@
 - `src/shared/`
   - generic utilities, generic UI, i18n, route helpers
   - canonical home for the shared gesture hook and shared haptics adapter seams
+  - `shared/utils/query` owns generic storage/domain-agnostic read-side helpers consumed by infrastructure queries
   - `shared/ui/collection-section` is the current generic mobile list-section owner for arrivals, departures, drafts, buffer, and stocks; route-local sections keep data/query meaning outside `shared/`
 - repo root reused from donor for now:
   - `package.json`, `vite.config.ts`, `tsconfig*`, public assets, Playwright config, and baseline tool wiring
@@ -132,7 +136,7 @@
   - list filter/sort/pagination contracts
 - does not belong:
   - Dexie implementation details
-  - generic storage-agnostic query helpers; current helper code lives in `src/domain/common/query-helpers/` and is accepted there as shared utility layer
+  - generic storage/domain-agnostic query helper implementations; current helper code lives in `src/shared/utils/query/`
 - target shape once the query family keeps growing:
   - group contracts by entity/area first, then keep a thin root barrel
   - prefer `arrival/`, `departure/`, `draft/`, `directory/`, `record-code/`, and `stock/` subfolders over an ever-growing flat root
@@ -275,6 +279,9 @@
 - owns the one global scanner modal surface, camera/file session control, scanner-related status UI, and contextual scanner entry handling
 - the scanner host is rendered through the root-layout overlay host rather than buried inside a route page
 - scanner is opened from multiple entrypoints, but those entrypoints do not own separate scanner instances
+- current public seam:
+  - `src/features/scanner/runtime/scanner-runtime.public.ts`
+- modal UI is locally split under `src/features/scanner/modal/sections` and related modal-local hooks/helpers; browser adapter logic remains in `src/infrastructure/browser/scanner`
 - scanner tactile policy should be consumed here through the shared haptics adapter, not reimplemented with raw browser calls inside modal sections
 - does not belong:
   - durable arrival/departure writes
@@ -303,6 +310,8 @@
 - owns the one shared buffer data owner plus its two UI surfaces:
   - the full buffer-management page
   - the contextual quick-access picker/apply surface
+- current public seam:
+  - `src/features/buffer/core/buffer-core.public.ts`
 - owns the non-UI apply session/controller seam that coordinates picker request/result payloads separately from overlay identity
 - owns the non-UI buffer control lease seam that coordinates exclusive interaction control separately from buffer data ownership
 - the buffer manage page now consumes the shared `CollectionSection` owner through the local page adapter while keeping selection/delete/clear/edit semantics feature-local
@@ -325,16 +334,16 @@
 
 ### Current second-data seam inventory
 
-- `features/buffer/model/buffer-store*`
+- `features/buffer/core/model/buffer-store*`
   - unique role: singleton buffer data owner, persistence policy, duplicate handling, overflow policy, and canonical item CRUD
-- `features/buffer/model/buffer-apply*`
+- `features/buffer/core/model/buffer-apply*`
   - unique role: non-UI request/result seam for contextual apply by copy; owns picker payload state, not overlay identity
-- `features/buffer/model/buffer-control*`
+- `features/buffer/core/model/buffer-control*`
   - unique role: exclusive interaction-control lease over the singleton buffer without changing buffer data ownership
   - current status: consumed by the buffer-page manage surface, by the current picker/controller flow, and by contextual scanner runtime entrypoints
-- `features/scanner/model/scanner-session*`
+- `features/scanner/runtime/model/scanner-session*`
   - unique role: scanner session state for entrypoint, tab, permission, decode/file status, and session lifecycle
-- `features/scanner/model/scanner-runtime-controller*`
+- `features/scanner/runtime/model/scanner-runtime-controller*`
   - unique role: scanner orchestration over scanner session, overlay arbitration, buffer submission, and browser scanner adapters
 - `features/navigation/model/overlay-arbitration*`
   - unique role: narrow global overlay identity arbitration only; no payload ownership
@@ -354,15 +363,28 @@
 
 ### `features/arrivals/*`, `features/departures/*`, `features/drafts/*`, `features/directories/*`, `features/stocks/*`
 
-- own form composition, page-level orchestration, and feature-local hooks
-- arrivals, departures, drafts, and stocks now also own route-local list adapters on top of the shared `CollectionSection` shell; search/filter/sort state and card/footer behavior stay here instead of moving into `shared/`
-- arrivals hooks explicitly cover list/details/create/update/delete and stay thin over the domain/infrastructure boundary
-- departures hooks explicitly cover list/details/create/update/delete and stay thin over the domain/infrastructure boundary
-- drafts hooks explicitly cover list/details/create/update/delete/publish and stay thin over the domain/infrastructure boundary
+- own reusable feature workflows and feature-local hooks; page-level cards, sections, dialogs, and page-state helpers stay under `src/pages/<route>/`
+- arrivals are split into `features/arrivals/data` for list/details reads and `features/arrivals/editor` for create/update/delete editor orchestration
+- departures are split into `features/departures/data` for list/details reads and `features/departures/editor` for create/update/delete editor orchestration
+- drafts are split into `features/drafts/data`, `features/drafts/editor`, and `features/drafts/publish`
+- stocks are split into `features/stocks/data`, `features/stocks/adjustment`, and `features/stocks/departure-prefill`; stocks remain a derived read model, not a durable table owner
 - directories hooks explicitly cover supplier/product/category list reads and stay thin over the domain/infrastructure boundary
 - do not belong:
   - raw camera lifecycle
   - direct Dexie access
+
+### `features/form-controls/*`, `features/form-fields/*`, `features/form-preferences/*`
+
+- `features/form-controls` owns reusable UI-only controls used by multiple editors:
+  - `codes/`
+  - `date-time/`
+  - `money/`
+  - `directory/`
+  - `support/field-info-trigger`
+  - `support/field-metadata`
+- `features/form-controls` must not own services, repositories, query hooks, Dexie/appDb access, scanner/buffer behavior, submit mappers, validation adapters, or form preference writes.
+- `features/form-fields` remains the owner for form layout/runtime seams that are not UI-only controls, including `form-section-accordion` and the query/preference-aware directory wrapper.
+- `features/form-preferences` owns second-data remembered form preference state and must not be mixed into durable settings without an explicit product decision.
 
 ### `features/settings/*`
 
@@ -467,7 +489,7 @@
 ## 4. Shared vs local
 
 - shared:
-  - generic formatting, dates, normalization primitives, route/path helpers, generic UI, i18n
+  - generic formatting, dates, normalization primitives, query helpers, route/path helpers, generic UI, i18n
 - module-local:
   - arrival/departure/draft-specific validation, mappers, publish helpers, code application logic
 - feature-local:

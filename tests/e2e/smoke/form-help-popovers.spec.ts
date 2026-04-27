@@ -52,7 +52,7 @@ async function assertHelpPopoverGeometry(
       `[data-help-trigger-key="${key}"]`
     ) as HTMLElement | null;
     const triggerButton = triggerRoot?.querySelector(
-      'button'
+      'button, [role="button"]'
     ) as HTMLElement | null;
     const boundary = triggerRoot?.closest(
       '[data-overlay-boundary], form'

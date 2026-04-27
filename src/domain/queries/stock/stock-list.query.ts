@@ -1,4 +1,4 @@
-import type { SortDirection } from '@/domain/common/query-helpers';
+import type { SortDirection } from '@/shared/utils/query';
 import type { SubjectKind } from '@/domain/common/record-kinds';
 
 export interface StockListFilters {

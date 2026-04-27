@@ -5,11 +5,11 @@ import type { ArrivalListQuery } from '@/domain/queries/arrival/arrival-list.que
 import type { DepartureListQuery } from '@/domain/queries/departure/departure-list.query.ts';
 import type { DraftListQuery } from '@/domain/queries/draft/draft-list.query.ts';
 import type { StockListQuery } from '@/domain/queries/stock/stock-list.query.ts';
-import { useArrivalList } from '@/features/arrivals-data/hooks/use-arrival-list.ts';
-import { bufferStore } from '@/features/buffer-core/model/buffer-store.ts';
-import { useDepartureList } from '@/features/departures-data/hooks/use-departure-list.ts';
-import { useDraftList } from '@/features/drafts-data/hooks/use-draft-list.ts';
-import { useStockList } from '@/features/stocks-data/hooks/use-stock-list.ts';
+import { useArrivalList } from '@/features/arrivals/data/hooks/use-arrival-list.ts';
+import { bufferStore } from '@/features/buffer/core/buffer-core.public.ts';
+import { useDepartureList } from '@/features/departures/data/hooks/use-departure-list.ts';
+import { useDraftList } from '@/features/drafts/data/hooks/use-draft-list.ts';
+import { useStockList } from '@/features/stocks/data/hooks/use-stock-list.ts';
 
 export type TelemetryIconKey =
   | 'arrivals'

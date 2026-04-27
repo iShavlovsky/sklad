@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
 
-import { BufferPickerModal } from '@/features/buffer-picker/buffer-picker-modal.tsx';
-import { ScannerModal } from '@/features/scanner-runtime/ui/scanner-modal';
+import { BufferPickerModal } from '@/features/buffer/picker/ui/buffer-picker-modal';
+import { ScannerModal } from '@/features/scanner/modal';
 
 export function AppOverlayHost(): ReactElement {
   return (

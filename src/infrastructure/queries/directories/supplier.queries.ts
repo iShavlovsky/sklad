@@ -4,7 +4,7 @@ import {
   containsNormalizedText,
   normalizeSearch,
   paginate,
-} from '@/domain/common/query-helpers';
+} from '@/shared/utils/query';
 import type { SupplierRecord } from '@/domain/directories/supplier.record.ts';
 import type {
   SupplierListQuery,

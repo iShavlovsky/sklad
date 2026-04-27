@@ -3,7 +3,7 @@ import { Box, Stack, Text } from '@mantine/core';
 
 import { CollectionSection } from '@/shared/ui/collection-section';
 
-import { BufferCard } from '../components/buffer-card';
+import { BufferCard } from '../components/buffer-card/buffer-card';
 import type { BufferPageState } from '../lib/use-buffer-page-state.ts';
 
 interface BufferListSectionProps {

@@ -6,7 +6,7 @@ import {
   matchesDateRange,
   normalizeSearch,
   paginate,
-} from '@/domain/common/query-helpers';
+} from '@/shared/utils/query';
 import type { DraftRecord } from '@/domain/drafts/draft.record.ts';
 import type {
   DraftDetails,

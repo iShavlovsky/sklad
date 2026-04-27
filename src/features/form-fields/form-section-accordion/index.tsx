@@ -3,7 +3,7 @@ import { Accordion, Group, Text } from '@mantine/core';
 
 import { getAccordionSizeStyle } from '@/app/theme/components/accordion.theme';
 
-import { FieldInfoTrigger } from '../field-info-trigger';
+import { FieldInfoTrigger } from '@/features/form-controls/support/field-info-trigger';
 
 import { FORM_SECTION_ACCORDION_TRANSITION_MS } from './form-section-accordion.constants.ts';
 import type { FormSectionAccordionProps } from './form-section-accordion.types.ts';

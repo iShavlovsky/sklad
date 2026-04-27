@@ -33,6 +33,9 @@
   - the overlay host currently renders the fullscreen scanner modal and the contextual buffer picker bottom drawer;
   - touched route pages now keep their route-local composition under `src/pages/<route>/`, with `sections/`, `dialogs/`, and `lib/` folders as the owning seams for semantic blocks, page-local overlays, and page-local state/helpers;
   - touched list routes for arrivals, departures, drafts, buffer, and stocks now share one generic `CollectionSection` list-shell owner, while each route keeps its own query/filter/sort semantics, card markup, route-local dialogs, and footer/action behavior in `pages/*` owners instead of `features/*`;
+  - reusable feature owners are normalized under `src/features/arrivals/{editor,data}`, `src/features/departures/{editor,data}`, `src/features/drafts/{editor,data,publish}`, `src/features/buffer/{core,picker}`, `src/features/scanner/{runtime,modal}`, and `src/features/stocks/{data,adjustment,departure-prefill}`;
+  - UI-only reusable form controls live under `src/features/form-controls`, while query/preference-aware form seams stay under `src/features/form-fields` and second-data form preferences stay under `src/features/form-preferences`;
+  - generic query helpers live under `src/shared/utils/query`; `src/domain/queries` owns DTO contracts and `src/infrastructure/queries` owns Dexie-backed read implementations;
   - settings include one fixed theme-mode selector with exactly two supported values: `light` and `dark`;
   - if no persisted theme choice exists yet, the app starts from the current OS light/dark preference through Mantine `useColorScheme()`;
   - the runtime theme layer does not include legacy preset compatibility.
@@ -68,18 +71,15 @@ Pages do not own durable business logic.
 
 Reusable business/workflow slices:
 
-- `arrival-editor`
-- `arrivals-data`
-- `departure-editor`
-- `departures-data`
-- `drafts-data`
-- `draft-publish`
-- `stocks-data`
-- `stock-adjustment`
-- `stock-departure-prefill`
-- `buffer-core`
-- `buffer-picker`
-- `scanner-runtime`
+- `arrivals/{editor,data}`
+- `departures/{editor,data}`
+- `drafts/{editor,data,publish}`
+- `stocks/{data,adjustment,departure-prefill}`
+- `buffer/{core,picker}`
+- `scanner/{runtime,modal}`
+- `form-controls` for UI-only reusable form controls and control help/metadata support
+- `form-fields` for deferred query/preference/layout form seams
+- `form-preferences` for second-data form preference state
 - plus existing settings, backup, codes, directories, dashboard, navigation, and PWA slices
 
 ### domain
@@ -113,6 +113,7 @@ A narrow layer for:
 - i18n
 - routing helpers
 - date/time and text normalization
+- generic storage/domain-agnostic query helpers under `src/shared/utils/query`
 - id generation
 - object/type utilities
 

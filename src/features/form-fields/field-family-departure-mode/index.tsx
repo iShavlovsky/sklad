@@ -2,9 +2,9 @@ import type { ReactElement } from 'react';
 import { Group, Radio } from '@mantine/core';
 
 import { formPreferencesStore } from '@/features/form-preferences/model/form-preferences.store.ts';
+import { FieldInlineIcon } from '@/shared/ui/field-visuals';
 
-import { FieldLabel } from '../field-info-trigger';
-import { FieldInlineIcon } from '../field-visuals';
+import { FieldLabel } from '@/features/form-controls/support/field-info-trigger';
 
 import {
   DEPARTURE_MODE_FIELD_METADATA,

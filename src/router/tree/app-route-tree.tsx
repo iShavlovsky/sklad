@@ -439,8 +439,8 @@ export const appRouteTree = {
 } as const satisfies AppRouteTree;
 
 if (import.meta.env.DEV) {
-  (appRouteTree.root.children as Record<string, AppRouteNode>).uiKit = {
-    path: 'ui-kit',
+  (appRouteTree as Record<string, AppRouteNode>).uiKit = {
+    path: '/ui-kit',
     lazy: async () => {
       const module = await import('@/pages/ui-kit');
       return { Component: module.UiKitPage };
@@ -459,7 +459,7 @@ if (import.meta.env.DEV) {
   };
 
   (appRouteTree as Record<string, AppRouteNode>).devicePreview = {
-    path: 'device-preview',
+    path: '/device-preview',
     lazy: async () => {
       const module = await import('@/pages/device-preview');
       return { Component: module.DevicePreviewPage };

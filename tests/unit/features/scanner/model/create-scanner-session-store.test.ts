@@ -1,6 +1,6 @@
 ﻿import { describe, expect, it } from 'vitest';
 
-import { createScannerSessionStore } from '../../../../../src/features/scanner-runtime/model/create-scanner-session-store.ts';
+import { createScannerSessionStore } from '../../../../../src/features/scanner/runtime/model/create-scanner-session-store.ts';
 
 describe('createScannerSessionStore', () => {
   it('starts from a closed idle session with deterministic defaults', () => {

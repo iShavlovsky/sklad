@@ -4,7 +4,7 @@ import {
   containsNormalizedText,
   normalizeSearch,
   paginate,
-} from '@/domain/common/query-helpers';
+} from '@/shared/utils/query';
 import type { CategoryRecord } from '@/domain/directories/category.record.ts';
 import type {
   CategoryListQuery,

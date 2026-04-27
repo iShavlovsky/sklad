@@ -7,6 +7,7 @@ import {
   THEME_PREFERENCE_OPTIONS,
   type ThemePreference,
 } from '@/shared/types/ui-settings';
+import { InfoAction } from '@/shared/ui/info-action';
 import { PageSection } from '@/shared/ui/page-section';
 
 export function ThemePreferenceSection(): ReactElement {
@@ -16,7 +17,9 @@ export function ThemePreferenceSection(): ReactElement {
     <PageSection
       badge="Тема"
       description="Выберите фиксированный светлый или тёмный режим интерфейса."
-      title="Оформление"
+      trailing={
+        <InfoAction description="Настройка переключает фиксированную светлую или темную тему. Выбор сохраняется как durable UI setting." />
+      }
     >
       <Stack gap="md">
         <Select

@@ -1,8 +1,8 @@
 import type { ReactElement } from 'react';
 import { Box, Stack, Text } from '@mantine/core';
 
-import type { StockDeparturePrefillState } from '@/features/stock-departure-prefill/stock-departure-prefill.ts';
-import { buildStockDeparturePrefill } from '@/features/stock-departure-prefill/stock-departure-prefill.ts';
+import type { StockDeparturePrefillState } from '@/features/stocks/departure-prefill/stock-departure-prefill.ts';
+import { buildStockDeparturePrefill } from '@/features/stocks/departure-prefill/stock-departure-prefill.ts';
 import { useAppNavigate } from '@/router';
 import { CollectionSection } from '@/shared/ui/collection-section';
 import {
@@ -10,7 +10,7 @@ import {
   RecordPreviewDrawer,
 } from '@/shared/ui/record-card';
 
-import { StockCard, StockPreviewContent } from '../components/stock-card';
+import { StockCard, StockPreviewContent } from '../components/stock-card/stock-card';
 import {
   formatStockDate,
   STOCKS_SORT_OPTIONS,

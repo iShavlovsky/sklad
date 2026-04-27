@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { createBufferApplySessionStore } from '../../../../../src/features/buffer-core/model/buffer-apply.session-store.ts';
+import { createBufferApplySessionStore } from '../../../../../src/features/buffer/core/model/buffer-apply.session-store.ts';
 
 describe('createBufferApplySessionStore', () => {
   it('opens a buffer-apply session with a machine-readable copy request', () => {

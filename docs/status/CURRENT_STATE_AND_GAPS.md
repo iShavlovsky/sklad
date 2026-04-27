@@ -15,8 +15,8 @@
   - important action outcomes now use one shared action-feedback hook over Mantine notifications plus the shared haptics adapter for create/save/update/delete/publish/apply/clear, stock adjustment, and scanner-buffer failure surfaces, while navigation, sorting, filters, and preview-drawer opens stay silent;
   - compact mobile-first route pages through shared page primitives and a shell-owned rail layout;
   - route-local semantic sections, dialogs, and page-state helpers for arrivals, departures, drafts, buffer, and stocks now live under `src/pages/<route>/`, while `shared/ui/collection-section` stays the one generic list-shell primitive;
-  - reusable feature slices are now decomposed by business/workflow role instead of route-shaped list ownership, including `arrival-editor`, `arrivals-data`, `departure-editor`, `departures-data`, `drafts-data`, `draft-publish`, `stocks-data`, `stock-adjustment`, `stock-departure-prefill`, `buffer-core`, `buffer-picker`, and `scanner-runtime`;
-  - arrival, departure, and draft editors now share a feature-local polymorphic form-field foundation under `src/features/form-fields/*`, with editor roots reduced toward orchestration plus section composition, one always-visible main section above the fold, accordion-owned secondary groups, popover help triggers instead of inline helper copy, and second-data remembered defaults for touched select/checkbox controls under `src/features/form-preferences/model`;
+  - the architecture hardening wave is complete through `AR-0806`: feature owners are normalized under `src/features/arrivals/{editor,data}`, `src/features/departures/{editor,data}`, `src/features/drafts/{editor,data,publish}`, `src/features/buffer/{core,picker}`, `src/features/scanner/{runtime,modal}`, and `src/features/stocks/{data,adjustment,departure-prefill}`;
+  - arrival, departure, and draft editors now share a feature-local form system: UI-only reusable controls live under `src/features/form-controls/*`, query/preference-aware or layout form seams remain under `src/features/form-fields/*`, and second-data remembered defaults stay under `src/features/form-preferences/model`;
   - IndexedDB schema for the intended durable tables;
   - base repositories and two real durable write slices (`create-arrival`, `update-arrival`);
   - two real read slices (`arrival list`, `arrival details`);
@@ -59,6 +59,13 @@
   - route-owned surfaces: arrivals, departures, drafts, buffer page, settings pages
   - global overlay surface: scanner modal rendered from the root overlay host
   - contextual overlay surface: buffer picker bottom drawer rendered from the root overlay host for an active requester
+- Current architecture hardening truth is explicit in code:
+  - scanner and buffer expose public runtime seams at `src/features/scanner/runtime/scanner-runtime.public.ts` and `src/features/buffer/core/buffer-core.public.ts`;
+  - reusable form controls are extracted into `src/features/form-controls/{codes,date-time,money,directory}` with UI-only help/metadata support under `src/features/form-controls/support`;
+  - deferred form surfaces remain separate by design: `src/features/form-fields/form-section-accordion`, the query/preference-aware directory wrapper under `src/features/form-fields/field-family-directory`, and `src/features/form-preferences`;
+  - generic storage/domain-agnostic query helpers live in `src/shared/utils/query`, while `src/domain/queries` owns read-model DTO contracts and `src/infrastructure/queries` owns Dexie-backed implementations;
+  - scanner modal and backup workflow were split locally for readability without changing scanner, buffer, backup, export, import, or restore semantics;
+  - selected workflow/card entrypoints are named files instead of component-folder `index.tsx`: backup workflow plus arrivals, departures, drafts, stocks, and buffer page cards.
 - Current list-surface truth on touched routes is now explicit:
   - `arrivals`, `departures`, `drafts`, `buffer`, and `stocks` each render route-local semantic sections from `src/pages/<route>/sections/*` over the shared `CollectionSection` owner;
   - `shared/ui/collection-section` stays UI-only and generic over item type;
@@ -110,10 +117,10 @@
   - `src/features/navigation/ui/mobile-shell/network-status` now uses Mantine composition props for popover/telemetry layout, leaving `mobile-shell/styles.module.css` focused on shell header/main/footer geometry.
   - `src/pages/dashboard` and `src/pages/stocks` now also keep their touched local CSS mostly for layout rhythm, metric typography, and route-owned hover selectors; repeated surface fill/border/radius/padding rules have been pushed into Mantine `Paper` composition and shared theme defaults.
 - scanner visual ownership is now partially localized:
-  - `src/features/scanner/ui/scanner-modal.module.css` owns scanner modal geometry and tab/footer states;
+  - `src/features/scanner/modal/styles.module.css` owns scanner modal geometry and tab/footer states;
   - `src/shared/ui/file-dropzone.module.css`, `image-crop-editor.module.css`, and `horizontal-slider.module.css` own their visual layout locally;
   - legacy class names are still preserved in DOM output for existing selectors/tests while the CSS source moves local.
-  - `src/features/scanner/ui/scanner-modal` now also uses Mantine `Paper` for reader/status/placeholder surfaces and relies on shared `Button`/`Tabs`/`Badge` defaults for more of its chrome; remaining local CSS is primarily fullscreen geometry, media positioning, and exceptional selectors.
+  - `src/features/scanner/modal` now also uses Mantine `Paper` for reader/status/placeholder surfaces and relies on shared `Button`/`Tabs`/`Badge` defaults for more of its chrome; remaining local CSS is primarily fullscreen geometry, media positioning, and exceptional selectors.
   - `src/shared/ui/image-crop-editor` now uses Mantine `Paper` for cropper/controls surfaces and shared `ActionIcon` defaults for its control row; remaining local CSS is primarily cropper geometry.
   - `src/shared/ui/file-dropzone` now keeps local CSS mainly for dropzone layout/transition, while active/inactive chrome is pushed into owner props; `src/shared/ui/horizontal-slider` remains the current intentional custom-geometry exception in the scanner photo path.
 - The current durable schema already defines:
@@ -176,8 +183,8 @@
 - `src/infrastructure/services` is now closed at the bounded-area level; only the public root remains.
 - `src/infrastructure/restore-core/restore-core.ts` now owns the reusable restore-core helpers for merge/rebase/diff planning.
 - The full backup subsystem is functionally closed for V1, and backup-specific restore wiring has now passed the final stabilization audit.
-- `src/features/departures/hooks` is now closure-grade for the current first-data departure workflow: list, details, create, update, and delete are all routed through thin feature hooks.
-- `src/features/drafts/hooks` is now closure-grade for the current first-data draft workflow: list, details, create, update, delete, and publish are all routed through thin feature hooks.
+- `src/features/departures/{data,editor}` is now closure-grade for the current first-data departure workflow: list, details, create, update, and delete are all routed through thin feature hooks.
+- `src/features/drafts/{data,editor,publish}` is now closure-grade for the current first-data draft workflow: list, details, create, update, delete, and publish are all routed through thin feature hooks.
 - `src/features/settings/hooks` is now closure-grade for the current first-data personalization workflow: settings, favorites, and profiles are all routed through thin feature hooks with honest save/delete semantics for settings and thin list/detail/save/delete adapters for favorites and profiles.
 - `src/features/codes/hooks` is now closure-grade for the current record-code read surface: list, details, and lookup are all routed through thin feature hooks over the existing query boundary.
 - `src/features/directories/hooks` is now closure-grade for the current directory read surface: supplier, product, and category list reads are all routed through thin feature hooks over the existing query boundary.
@@ -189,10 +196,10 @@
 - Public first-data service/query/hook surfaces are now documentation-frozen enough to leave alone with the current architecture.
 - UI should consume the existing first-data hooks/handles; reopening first data is no longer an active workstream and should happen only for new product scope or bugfix scope.
 - The second-data scanner/buffer foundation now exists as explicit non-UI seams:
-  - `src/features/buffer/model` owns the shared localStorage-backed buffer store with normalization, duplicate detection, FIFO overflow eviction, and machine-readable add/update/delete results;
-  - `src/features/buffer/model` now also owns the non-UI buffer-apply session/controller seam for contextual picker request/result coordination with explicit copy-not-delete semantics;
-  - `src/features/buffer/model` now also owns the non-UI buffer-control lease seam that distinguishes singleton buffer data ownership from exclusive interaction-control ownership;
-  - `src/features/scanner/model` owns the scanner session store and controller seam for open/close, tab switching, permission/file/decode status reporting, and decoded-value submission into the shared buffer;
+  - `src/features/buffer/core/model` owns the shared localStorage-backed buffer store with normalization, duplicate detection, FIFO overflow eviction, and machine-readable add/update/delete results;
+  - `src/features/buffer/core/model` now also owns the non-UI buffer-apply session/controller seam for contextual picker request/result coordination with explicit copy-not-delete semantics;
+  - `src/features/buffer/core/model` now also owns the non-UI buffer-control lease seam that distinguishes singleton buffer data ownership from exclusive interaction-control ownership;
+  - `src/features/scanner/runtime/model` owns the scanner session store and controller seam for open/close, tab switching, permission/file/decode status reporting, and decoded-value submission into the shared buffer;
   - `src/features/navigation/model` owns single-overlay arbitration for scanner session, buffer picker, and settings overlays;
   - `src/infrastructure/browser/scanner` now owns the browser scanner adapter seam for live-camera and photo-file capabilities, lifecycle, machine-readable decode/failure results, and concrete ZXing-backed adapter implementations.
 - These second-data seams now have both unit coverage at the pure/store/controller-contract level and targeted mobile-shaped Playwright coverage for the current non-camera flows.
@@ -205,7 +212,7 @@
 - `second-data closure-grade: yes`
 - Further second-data work should now default to consumer expansion or runtime hardening only:
   - do not add new scanner/buffer orchestration seams unless a real new ownership problem appears;
-  - `src/features/stocks/hooks` remains optional only if that derived read layer is still intended later.
+  - stocks work should continue through `src/features/stocks/{data,adjustment,departure-prefill}` rather than a new durable stock owner.
 - Storage-tier policy is now explicitly fixed in docs:
   - IndexedDB is first data and the source of truth for durable entities and durable metadata;
   - zustand/localStorage are second data only and may hold transient, runtime, session, or view state;
@@ -315,11 +322,12 @@
   - repeated namespace words have been pushed into folders instead of long basenames;
   - `src/infrastructure/browser/scanner/` is now split into `adapters/`, `contracts/`, `runtime/`, and `zxing/`;
   - `src/infrastructure/browser/file/adapter.ts` is the canonical browser-file adapter owner.
-- The current scanner/browser implementation is ZXing-backed, but runtime readiness is still unverified:
+- The current scanner/browser implementation is ZXing-backed, and its modal/runtime lifecycle has targeted runtime evidence:
   - browser adapter behavior is covered at the pure-helper level in unit tests;
   - scanner modal open/close, photo decode into buffer, oversized-file handling, arrival/departure picker apply, buffer-page manage actions, and scanner-to-picker overlay handoff are now observed in mobile-shaped Playwright runs;
   - the current scanner modal live surface now auto-starts live scanning on the live tab and uses the preview area itself as the manual pause/resume tap target instead of a separate play/pause icon button;
-  - live camera and real-device decode still need targeted browser/runtime verification before any robustness claim.
+  - AR-0601B verified a real headed Chromium `MediaStream` on an integrated camera: preview `srcObject` was a `MediaStream`, a live video track was present, live-to-photo and modal close released the stream, and reopen restored a functional live stream;
+  - barcode decode success is still not verified as a product/runtime claim.
 - The outdated donor-era scanner photo/decode smoke specs are no longer part of the active verification surface; the maintained browser evidence now follows the current ZXing-backed scanner modal flow.
 - Local code-quality verification now has one canonical repo-wide command:
   - `npm run verify:all`
@@ -352,15 +360,16 @@
   - shared page primitives and shell/navigation foundation owners are now being normalized into component folders;
   - shared theme component defaults now also cover elevated surfaces, filled inputs, pills, file input, checkbox defaults, and related control rhythm so touched pages rely less on page-local visual CSS.
 - `src/infrastructure/services/index.ts` no longer contains personalization-specific, arrival-specific, departure-specific, or draft-specific composition logic.
-- `src/features/arrivals/hooks` now owns the arrival feature-hook surface for list, details, create, update, and delete.
-- `src/features/departures/hooks` now owns the departure feature-hook surface for list, details, create, update, and delete.
-- `src/features/drafts/hooks` now owns the draft feature-hook surface for list, details, create, update, delete, and publish.
-- Remaining first-data hook gaps: none that block leaving first data. `src/features/stocks/hooks` remains optional only if that derived read layer is still intended later.
+- `src/features/arrivals/{data,editor}` now owns the arrival feature-hook surface for list, details, create, update, and delete.
+- `src/features/departures/{data,editor}` now owns the departure feature-hook surface for list, details, create, update, and delete.
+- `src/features/drafts/{data,editor,publish}` now owns the draft feature-hook surface for list, details, create, update, delete, and publish.
+- `src/features/stocks/data` owns the current derived stock read hook; `src/features/stocks/adjustment` and `src/features/stocks/departure-prefill` own the route-consumed stock workflows.
 - `home` is not tracked as a first-data hook target.
-- There are factual code-level restoration gaps inside `src/`:
-- generic query helpers now live in `src/domain/common/query-helpers/` and are intentionally outside `domain/queries/*`;
+- Current post-hardening structural truth:
+  - generic storage/domain-agnostic query helpers now live in `src/shared/utils/query/`; `domain/queries/*` owns DTO contracts only, `infrastructure/queries/*` consumes the shared helpers, and no generic helper implementation remains under `src/domain/common/query-helpers/`;
+  - `matchesDateRange` uses a structural generic range shape instead of importing domain `DateRange`, while `DateRange` remains a domain/common value object for product/domain contracts that need it;
 - validation message keys now derive from `src/domain/validation/validation-error-codes.ts`, and localized catalogs stay outside the domain validation boundary;
-  - `features/arrivals/hooks/use-arrival-list.ts` now points to the concrete `infrastructure/queries/journals/arrival.queries.ts` implementation and remains a thin read adapter;
+  - `src/features/arrivals/data/hooks/use-arrival-list.ts` now points to the concrete `infrastructure/queries/journals/arrival.queries.ts` implementation and remains a thin read adapter;
   - `pages/dashboard/dashboard-page.tsx` still references an `inventory-queries` path that does not exist in the new snapshot;
   - route scaffolding is now restored to the canonical arrival/departure/draft/settings subtree shape, but several route families beyond the touched list surfaces still remain partial; arrivals/departures list routes plus buffer/stocks list shells are now real working surfaces instead of placeholder-only route probes.
 - Arrival read contracts are now explicit; the remaining read-side gap is feature UI composition, not the infrastructure contract itself.
@@ -379,6 +388,9 @@
 
 3. **Derived-stock consistency risk**
    Because stocks are in the first usable milestone, arrival/departure journals and code linkage must be implemented coherently before stock projection is declared done.
+
+4. **Post-hardening verification risk**
+   The current worktree remains dirty and unstaged from the hardening wave. Barcode decode success and valid import restore commit against an isolated fixture are still not verified; destructive restore must not be claimed from the AR-0803 smoke. `form-preferences`, the directory wrapper, and first-data `*.ports.ts` naming debt remain intentionally deferred.
 
 ## 5. Confirmed completed work
 

@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import type { StateStorage } from 'zustand/middleware';
 
-import { createBufferControlController } from '../../../../../src/features/buffer-core/model/buffer-control.controller.ts';
-import { createBufferControlSessionStore } from '../../../../../src/features/buffer-core/model/buffer-control.session-store.ts';
+import { createBufferControlController } from '../../../../../src/features/buffer/core/model/buffer-control.controller.ts';
+import { createBufferControlSessionStore } from '../../../../../src/features/buffer/core/model/buffer-control.session-store.ts';
 import {
   createBufferJSONStorage,
   createBufferStore,
-} from '../../../../../src/features/buffer-core/model/create-buffer-store.ts';
+} from '../../../../../src/features/buffer/core/model/create-buffer-store.ts';
 
 function createMemoryStateStorage(
   seed: Record<string, string> = {}

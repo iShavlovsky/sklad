@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import type { StateStorage } from 'zustand/middleware';
 
-import { createBufferApplyController } from '../../../../../src/features/buffer-core/model/buffer-apply.controller.ts';
-import { createBufferApplySessionStore } from '../../../../../src/features/buffer-core/model/buffer-apply.session-store.ts';
-import { createBufferControlController } from '../../../../../src/features/buffer-core/model/buffer-control.controller.ts';
-import { createBufferControlSessionStore } from '../../../../../src/features/buffer-core/model/buffer-control.session-store.ts';
+import { createBufferApplyController } from '../../../../../src/features/buffer/core/model/buffer-apply.controller.ts';
+import { createBufferApplySessionStore } from '../../../../../src/features/buffer/core/model/buffer-apply.session-store.ts';
+import { createBufferControlController } from '../../../../../src/features/buffer/core/model/buffer-control.controller.ts';
+import { createBufferControlSessionStore } from '../../../../../src/features/buffer/core/model/buffer-control.session-store.ts';
 import {
   createBufferJSONStorage,
   createBufferStore,
-} from '../../../../../src/features/buffer-core/model/create-buffer-store.ts';
+} from '../../../../../src/features/buffer/core/model/create-buffer-store.ts';
 import { createOverlayArbitrationStore } from '../../../../../src/features/navigation/model/create-overlay-arbitration-store.ts';
 
 function createMemoryStateStorage(

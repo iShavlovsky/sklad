@@ -1,4 +1,4 @@
-import type { FieldMetadata } from '../field-metadata/field-metadata.types.ts';
+import type { FieldMetadata } from '@/features/form-controls/support/field-metadata/field-metadata.types.ts';
 
 export const TITLE_FIELD_METADATA: FieldMetadata = {
   helpKey: 'field.title',

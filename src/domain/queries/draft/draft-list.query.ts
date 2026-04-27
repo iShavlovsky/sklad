@@ -1,4 +1,4 @@
-import type { SortDirection } from '@/domain/common/query-helpers';
+import type { SortDirection } from '@/shared/utils/query';
 import type { RecordKind, SubjectKind } from '@/domain/common/record-kinds.ts';
 import type { DateRange } from '@/domain/common/value-objects.ts';
 

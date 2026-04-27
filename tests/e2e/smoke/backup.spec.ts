@@ -28,7 +28,7 @@ function writeTempBackupFile(payload: object): string {
 }
 
 test.describe('backup route smoke', () => {
-  test('settings backup route exposes export, import, restore, checkpoint and history surfaces', async ({
+  test('settings backup route exposes separated backup and checkpoint surfaces', async ({
     page,
   }) => {
     await page.goto('/#/settings/backup');
@@ -37,7 +37,7 @@ test.describe('backup route smoke', () => {
     await expect(
       page.getByRole('banner').getByText('Резервные копии', { exact: true })
     ).toBeVisible();
-    await expect(page.getByText('Экспорт и восстановление')).toBeVisible();
+    await expect(page.getByText('Экспорт и восстановление')).toHaveCount(0);
     await expect(
       page.getByRole('button', { name: 'Скачать backup JSON' })
     ).toBeVisible();
@@ -49,24 +49,39 @@ test.describe('backup route smoke', () => {
     await expect(
       page.getByRole('button', { name: 'Сохранить checkpoint' })
     ).toBeVisible();
-    await expect(page.getByText('Журнал backup')).toBeVisible();
-    await expect(page.getByText('Последние checkpoints')).toBeVisible();
+    await expect(page.getByText('Журнал backup')).toHaveCount(0);
+    await expect(page.getByText('Последние checkpoints')).toHaveCount(0);
+    await expect(page.getByText('Операции backup')).toBeVisible();
+    await expect(page.getByText('Общий timeline')).toBeVisible();
   });
 
-  test('checkpoint create saves current first-data snapshot', async ({
+  test('checkpoint create saves current first-data snapshot as activity only', async ({
     page,
   }) => {
     await page.goto('/#/settings/backup');
     await page.waitForLoadState('networkidle');
 
-    await page.getByLabel('Название').fill('Тест-чекпойнт');
+    await page.getByLabel('Название').fill('Тест-checkpoint');
     await page.getByRole('button', { name: 'Сохранить checkpoint' }).click();
 
     await expect(page.getByText('Checkpoint создан')).toBeVisible({
       timeout: 5000,
     });
+    await expect(page.getByTestId('backup-activity-timeline')).toBeVisible();
     await expect(
-      page.getByText('Тест-чекпойнт', { exact: true })
+      page.getByTestId('backup-activity-timeline').getByText('Тест-checkpoint')
+    ).toBeVisible();
+    await expect(page.getByTestId('backup-operations-timeline')).toHaveCount(0);
+
+    const downloadPromise = page.waitForEvent('download');
+    await page.getByRole('button', { name: 'Скачать backup JSON' }).click();
+    await downloadPromise;
+
+    await expect(
+      page.getByTestId('backup-operations-timeline').getByText('Экспорт')
+    ).toBeVisible();
+    await expect(
+      page.getByTestId('backup-activity-timeline').getByText('Экспорт')
     ).toBeVisible();
   });
 
@@ -86,14 +101,12 @@ test.describe('backup route smoke', () => {
     await expect(
       page.getByRole('button', { name: 'Восстановить из backup' })
     ).toBeEnabled();
-    await expect(
-      page.getByText('История backup операций пока пуста.')
-    ).toBeVisible();
+    await expect(page.getByText('Операций backup пока нет.')).toBeVisible();
 
     fs.unlinkSync(backupFile);
   });
 
-  test('restore commits validated backup and writes history', async ({
+  test('restore commits validated backup and writes backup timeline history', async ({
     page,
   }) => {
     await page.goto('/#/settings/backup');
@@ -111,12 +124,17 @@ test.describe('backup route smoke', () => {
     await expect(page.getByText('Восстановление выполнено')).toBeVisible({
       timeout: 8000,
     });
-    await expect(page.getByText('restore', { exact: true })).toBeVisible();
+    await expect(
+      page.getByTestId('backup-operations-timeline').getByText('Восстановление')
+    ).toBeVisible();
+    await expect(
+      page.getByTestId('backup-activity-timeline').getByText('Восстановление')
+    ).toBeVisible();
 
     fs.unlinkSync(backupFile);
   });
 
-  test('export button triggers JSON download and excludes transient buffer', async ({
+  test('export button triggers JSON download and writes backup-only timeline', async ({
     page,
   }) => {
     await page.goto('/#/settings/backup');
@@ -145,5 +163,11 @@ test.describe('backup route smoke', () => {
     expect(JSON.parse(jsonText)).toMatchObject({
       version: 1,
     });
+    await expect(
+      page.getByTestId('backup-operations-timeline').getByText('Экспорт')
+    ).toBeVisible();
+    await expect(
+      page.getByTestId('backup-activity-timeline').getByText('Экспорт')
+    ).toBeVisible();
   });
 });

@@ -31,6 +31,19 @@ export function BottomNavigation({
           label: styles.segmentedLabel,
           root: styles.segmentedRoot,
         }}
+        styles={{
+          indicator: {
+            borderRadius: 'var(--bottom-nav-item-radius)',
+          },
+          label: {
+            borderRadius: 'var(--bottom-nav-item-radius)',
+            padding: 0,
+          },
+          root: {
+            borderRadius: 'var(--bottom-nav-dock-radius)',
+            padding: 'var(--bottom-nav-dock-padding)',
+          },
+        }}
         data={items.map((item) => ({
           disabled: item.disabled,
           label: (

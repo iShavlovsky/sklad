@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { appendCopiedBufferValuesToDepartureCodes } from '../../../../../src/features/departure-editor/form/departure-buffer-apply.ts';
+import { appendCopiedBufferValuesToDepartureCodes } from '../../../../../src/features/departures/editor/form/model/departure-editor.buffer-apply.ts';
 
 describe('appendCopiedBufferValuesToDepartureCodes', () => {
   it('appends copied buffer values to the departure form codes', () => {

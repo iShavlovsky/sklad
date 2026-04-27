@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import { useParams } from 'react-router-dom';
 import { Badge, Button, Group, Text } from '@mantine/core';
 
-import { useStockList } from '@/features/stocks-data/hooks/use-stock-list.ts';
+import { useStockList } from '@/features/stocks/data/hooks/use-stock-list.ts';
 import { useAppNavigate } from '@/router';
 import {
   BottomSpacer,
@@ -13,7 +13,7 @@ import {
 import { PageSection } from '@/shared/ui/page-section';
 import { PreviewMetricGrid } from '@/shared/ui/record-card';
 
-import { StockPreviewContent } from './components/stock-card';
+import { StockPreviewContent } from './components/stock-card/stock-card';
 import {
   formatStockDate,
   STOCK_SUBJECT_KIND_LABELS,

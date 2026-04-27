@@ -34,19 +34,34 @@ export const alertTheme: MantineThemeComponents['Alert'] = {
     },
     body: {
       color: 'var(--sl-text)',
+      gap: '0.125rem',
+      minWidth: 0,
+    },
+    wrapper: {
+      alignItems: 'center',
+      gap: 'var(--mantine-spacing-sm)',
     },
     icon: {
-      alignSelf: 'flex-start',
+      alignSelf: 'center',
+      alignItems: 'center',
       backgroundColor:
         'color-mix(in srgb, var(--alert-color) 14%, transparent)',
       borderRadius: 'var(--sl-control-radius)',
       color: 'var(--alert-color)',
       display: 'grid',
-      minHeight: '2rem',
-      minWidth: '2rem',
+      flex: '0 0 2rem',
+      width: '2rem',
+      height: '2rem',
+      lineHeight: 0,
+      margin: 0,
       placeItems: 'center',
+      justifyContent: 'center',
       '& > svg': {
         display: 'block',
+        flex: '0 0 auto',
+        margin: 0,
+        width: '1rem',
+        height: '1rem',
       },
     },
     closeButton: {

@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import { useParams } from 'react-router-dom';
 import { Badge, Button, Group, Stack, Text } from '@mantine/core';
 
-import { useArrivalDetails } from '@/features/arrivals-data/hooks/use-arrival-details.ts';
+import { useArrivalDetails } from '@/features/arrivals/data/hooks/use-arrival-details.ts';
 import { useAppNavigate } from '@/router';
 import {
   BottomSpacer,

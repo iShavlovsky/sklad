@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 
-import { ArrivalEditor } from '@/features/arrival-editor/arrival-editor.tsx';
+import { ArrivalEditor } from '@/features/arrivals/editor/arrival-editor.tsx';
 import {
   BottomSpacer,
   PageContainer,

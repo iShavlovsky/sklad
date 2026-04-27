@@ -286,19 +286,26 @@ src/
 
   features/
     arrivals/
-      hooks/
-      components/
-      forms/
+      data/
+        hooks/
+      editor/
+        form/
+        hooks/
 
     departures/
-      hooks/
-      components/
-      forms/
+      data/
+        hooks/
+      editor/
+        form/
+        hooks/
 
     drafts/
-      hooks/
-      components/
-      forms/
+      data/
+        hooks/
+      editor/
+        form/
+      publish/
+        hooks/
 
     settings/
       hooks/
@@ -306,8 +313,36 @@ src/
       forms/
 
     backup/
+      hooks/
+      ui/
+
     scanner/
+      runtime/
+      modal/
+
     buffer/
+      core/
+      picker/
+
+    stocks/
+      data/
+      adjustment/
+      departure-prefill/
+
+    form-controls/
+      codes/
+      date-time/
+      money/
+      directory/
+      support/
+        field-info-trigger/
+        field-metadata/
+
+    form-fields/
+      field-family-directory/
+      form-section-accordion/
+
+    form-preferences/
 
   shared/
     i18n/
@@ -669,9 +704,9 @@ Use direct, explicit DTOs.
 
 `domain/queries` contains only contracts.
 It must not contain generic query helper functions.
-Storage-agnostic query helpers currently live in `src/domain/common/query-helpers/`.
-That placement is acceptable for now because the helpers are storage-agnostic, shared by domain and infrastructure query modules, and remain outside the `domain/queries` DTO boundary.
-Dexie-backed query implementations live in `infrastructure/queries/`.
+Generic storage/domain-agnostic query helpers live in `src/shared/utils/query/`.
+Dexie-backed query implementations live in `infrastructure/queries/` and consume those shared helpers.
+No generic query helper implementation remains under `src/domain/common/query-helpers/`.
 
 ### Target shape
 
@@ -912,13 +947,28 @@ They must use:
 
 ### Current hook coverage
 
-* `src/features/arrivals/hooks` is closure-grade for the current first-data arrival flow and stays thin over the domain/infrastructure boundary.
-* `src/features/departures/hooks` is closure-grade for the current first-data departure flow and stays thin over the domain/infrastructure boundary.
-* `src/features/drafts/hooks` is closure-grade for the current first-data draft flow and stays thin over the domain/infrastructure boundary.
+* `src/features/arrivals/{data,editor}` is closure-grade for the current first-data arrival flow and stays thin over the domain/infrastructure boundary.
+* `src/features/departures/{data,editor}` is closure-grade for the current first-data departure flow and stays thin over the domain/infrastructure boundary.
+* `src/features/drafts/{data,editor,publish}` is closure-grade for the current first-data draft flow and stays thin over the domain/infrastructure boundary.
 * `src/features/settings/hooks` is closure-grade for the current first-data personalization flow and stays thin over the domain/infrastructure boundary.
 * `src/features/codes/hooks` is closure-grade for the current record-code read surface and stays thin over the existing query boundary.
 * `src/features/directories/hooks` is closure-grade for the current directory read surface and stays thin over the existing query boundary.
 * `src/features/backup/hooks` is closure-grade for the current backup surface and stays thin over the existing service/query/browser-adapter boundary.
+* `src/features/stocks/data` owns the derived stock read hook; `src/features/stocks/adjustment` and `src/features/stocks/departure-prefill` own the current stock workflow adapters.
+* `src/features/buffer/core/buffer-core.public.ts` and `src/features/scanner/runtime/scanner-runtime.public.ts` are the current explicit second-data public seams.
+
+### Current form-control ownership
+
+* `src/features/form-controls` contains UI-only reusable form controls and narrow UI help/metadata support:
+  * `codes/`
+  * `date-time/`
+  * `money/`
+  * `directory/`
+  * `support/field-info-trigger`
+  * `support/field-metadata`
+* `src/features/form-controls` must not absorb query loading, form preference writes, submit mapping, scanner/buffer behavior, or durable services/repositories.
+* `src/features/form-fields` remains the owner for deferred non-UI-only form seams such as `form-section-accordion` and the query/preference-aware directory wrapper.
+* `src/features/form-preferences` remains separate second-data preference state.
 
 ---
 
@@ -951,6 +1001,8 @@ This folder contains generic read-side helper functions such as:
 * compare helpers
 
 These helpers are storage-agnostic and do not belong in `domain/queries`.
+`matchesDateRange` uses a local structural range shape, not the domain `DateRange` type. `DateRange` remains a
+`domain/common` value object for product/domain contracts that need it.
 
 ---
 
@@ -1126,7 +1178,7 @@ The implementation order should be:
 
 1. Finish durable `src/domain` + `src/infrastructure` entity-management surfaces first.
 2. `src/infrastructure/services` is now bounded-area complete; keep the public root thin and re-export only composed facades, including the backup export, import validation, checkpoint, and restore services.
-3. Move on to scanner/buffer/UI cleanup. `src/features/stocks/hooks` remains optional only if that derived read layer is still intended later.
+3. Move on to scanner/buffer/UI cleanup on top of `src/features/scanner/{runtime,modal}`, `src/features/buffer/{core,picker}`, and `src/features/stocks/{data,adjustment,departure-prefill}`.
 4. Keep any optional stocks work separate from the scanner/buffer/UI cleanup track.
 5. Then restore the deferred feature/page slices against the finished contracts.
 

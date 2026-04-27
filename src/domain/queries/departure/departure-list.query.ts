@@ -1,4 +1,4 @@
-import type { SortDirection } from '@/domain/common/query-helpers';
+import type { SortDirection } from '@/shared/utils/query';
 import type {
   DepartureMode,
   RecordOriginKind,

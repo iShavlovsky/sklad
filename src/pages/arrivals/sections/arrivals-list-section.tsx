@@ -1,7 +1,7 @@
 import { type ReactElement, useState } from 'react';
 import { Box, Button, Group, Stack, Text } from '@mantine/core';
 
-import { useDeleteArrival } from '@/features/arrival-editor/hooks/use-delete-arrival.ts';
+import { useDeleteArrival } from '@/features/arrivals/editor/hooks/use-delete-arrival.ts';
 import { useAppNavigate } from '@/router';
 import { useActionFeedback } from '@/shared/ui/action-feedback';
 import { CollectionSection } from '@/shared/ui/collection-section';
@@ -11,7 +11,10 @@ import {
   RecordPreviewDrawer,
 } from '@/shared/ui/record-card';
 
-import { ArrivalCard, ArrivalPreviewContent } from '../components/arrival-card';
+import {
+  ArrivalCard,
+  ArrivalPreviewContent,
+} from '../components/arrival-card/arrival-card';
 import {
   ARRIVALS_SORT_OPTIONS,
   formatArrivalOccurredAt,
@@ -98,16 +101,25 @@ export function ArrivalsListSection(): ReactElement {
         }
         filterMenu={filterMenu}
         footer={() => (
-          <Stack gap="xs">
-            <Text c="dimmed" size="xs">
+          <Group
+            data-testid="arrivals-list-footer"
+            gap="sm"
+            style={{ minWidth: 0, width: '100%' }}
+            wrap="nowrap"
+          >
+            <Text c="dimmed" size="xs" style={{ flex: '0 0 auto' }}>
               Найдено записей: {arrivals.length}
             </Text>
-            <Group justify="flex-end" wrap="wrap">
-              <Button onClick={() => navigate.to('root.arrivals.create')}>
+            <Group grow style={{ flex: '1 1 auto', minWidth: 0 }} wrap="nowrap">
+              <Button
+                data-testid="arrivals-create-button"
+                fullWidth
+                onClick={() => navigate.to('root.arrivals.create')}
+              >
                 Создать
               </Button>
             </Group>
-          </Stack>
+          </Group>
         )}
         getItemId={(item) => item.id}
         items={arrivals}

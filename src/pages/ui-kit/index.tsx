@@ -4,6 +4,7 @@ import {
   ActionIcon,
   Affix,
   Box,
+  Button,
   Code,
   Group,
   Paper,
@@ -50,6 +51,7 @@ import { UiKitD4NavigationDisplayContent } from '@/pages/ui-kit/d4-navigation-di
 import { UiKitFStateMatrixContent } from '@/pages/ui-kit/f-state-matrix-content';
 import { UiKitGIconographyContent } from '@/pages/ui-kit/g-iconography-content';
 import classes from '@/pages/ui-kit/styles.module.css';
+import { APP_ROUTES } from '@/shared/config/routes';
 import {
   BottomSpacer,
   FullPageContainer,
@@ -1338,6 +1340,16 @@ export function UiKitPage(): ReactElement {
             testId="ui-kit-section-a"
             title="A. Цветовая система"
           >
+            <Group justify="flex-start">
+              <Button
+                component="a"
+                href={`/#${APP_ROUTES.devicePreview}?target=${APP_ROUTES.uiKit}`}
+                variant="default"
+              >
+                Device Preview
+              </Button>
+            </Group>
+
             <SimpleGrid cols={{ base: 1, md: 2, xl: 3 }} spacing="md">
               <PaletteScale
                 description="Каноническая brand palette для акцента, CTA и активных состояний."

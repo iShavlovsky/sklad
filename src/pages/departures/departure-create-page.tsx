@@ -2,8 +2,8 @@ import { type ReactElement } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import type { DepartureRecord } from '@/domain/entries/departure.record.ts';
-import { DepartureEditorForm } from '@/features/departure-editor/form/departure-editor-form.tsx';
-import type { StockDeparturePrefillState } from '@/features/stock-departure-prefill/stock-departure-prefill.ts';
+import { DepartureEditorForm } from '@/features/departures/editor/form/departure-editor.form.tsx';
+import type { StockDeparturePrefillState } from '@/features/stocks/departure-prefill/stock-departure-prefill.ts';
 import { useAppNavigate } from '@/router';
 import {
   BottomSpacer,

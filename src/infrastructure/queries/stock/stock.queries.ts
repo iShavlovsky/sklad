@@ -6,7 +6,7 @@ import {
   containsNormalizedText,
   normalizeSearch,
   paginate,
-} from '@/domain/common/query-helpers';
+} from '@/shared/utils/query';
 import type { RecordCodeOwnerKind } from '@/domain/common/record-kinds.ts';
 import type { ArrivalRecord } from '@/domain/entries/arrival/arrival.record.ts';
 import type { DepartureRecord } from '@/domain/entries/departure.record.ts';

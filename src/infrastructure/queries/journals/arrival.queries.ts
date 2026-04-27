@@ -7,7 +7,7 @@ import {
   matchesDateRange,
   normalizeSearch,
   paginate,
-} from '@/domain/common/query-helpers';
+} from '@/shared/utils/query';
 import type { ArrivalRecord } from '@/domain/entries/arrival/arrival.record.ts';
 import type {
   ArrivalDetails,
