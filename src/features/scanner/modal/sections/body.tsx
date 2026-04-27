@@ -12,6 +12,7 @@ import type {
   ScannerLatestBufferItem,
   ScannerModalViewState,
 } from '../view-state.ts';
+
 import { ScannerModalInlineState } from './inline-state.tsx';
 import { ScannerModalTabs } from './tabs.tsx';
 

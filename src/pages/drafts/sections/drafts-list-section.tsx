@@ -11,7 +11,10 @@ import {
   RecordPreviewDrawer,
 } from '@/shared/ui/record-card';
 
-import { DraftCard, DraftPreviewContent } from '../components/draft-card/draft-card';
+import {
+  DraftCard,
+  DraftPreviewContent,
+} from '../components/draft-card/draft-card';
 import {
   DRAFTS_SORT_OPTIONS,
   formatDraftDate,

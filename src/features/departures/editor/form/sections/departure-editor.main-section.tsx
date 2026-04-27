@@ -7,10 +7,10 @@ import { CodesFieldFamily } from '@/features/form-controls/codes';
 import type { CodesFieldAction } from '@/features/form-controls/codes/field-family-codes.types.ts';
 import { OccurredAtFieldFamily } from '@/features/form-controls/date-time';
 import { MoneyFieldFamily } from '@/features/form-controls/money';
+import { FieldInfoTrigger } from '@/features/form-controls/support/field-info-trigger';
 import { DepartureModeFieldFamily } from '@/features/form-fields/field-family-departure-mode';
 import { SubjectKindFieldFamily } from '@/features/form-fields/field-family-subject-kind';
 import { TitleFieldFamily } from '@/features/form-fields/field-family-title';
-import { FieldInfoTrigger } from '@/features/form-controls/support/field-info-trigger';
 import { FormSectionCard } from '@/shared/ui/form-shell';
 
 import { DEPARTURE_FORM_PREFERENCE_KEYS } from '../model/departure-editor.form-constants.ts';

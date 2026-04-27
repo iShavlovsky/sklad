@@ -5,10 +5,10 @@ import type { UseFormReturnType } from '@mantine/form';
 import { CodesFieldFamily } from '@/features/form-controls/codes';
 import { OccurredAtFieldFamily } from '@/features/form-controls/date-time';
 import { MoneyFieldFamily } from '@/features/form-controls/money';
+import { FieldInfoTrigger } from '@/features/form-controls/support/field-info-trigger';
 import { DepartureModeFieldFamily } from '@/features/form-fields/field-family-departure-mode';
 import { SubjectKindFieldFamily } from '@/features/form-fields/field-family-subject-kind';
 import { TitleFieldFamily } from '@/features/form-fields/field-family-title';
-import { FieldInfoTrigger } from '@/features/form-controls/support/field-info-trigger';
 import { FormSectionCard } from '@/shared/ui/form-shell';
 
 import { DraftKindField } from '../fields/draft-editor.kind-field.tsx';

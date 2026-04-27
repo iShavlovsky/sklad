@@ -1,6 +1,6 @@
-import type { SortDirection } from '@/shared/utils/query';
 import type { RecordKind, SubjectKind } from '@/domain/common/record-kinds.ts';
 import type { DateRange } from '@/domain/common/value-objects.ts';
+import type { SortDirection } from '@/shared/utils/query';
 
 export interface DraftListFilters {
   search: string;

@@ -1,10 +1,9 @@
 import type { ReactElement } from 'react';
 import { TextInput } from '@mantine/core';
 
-import { FieldInlineIcon } from '@/shared/ui/field-visuals';
-
 import { FieldLabel } from '@/features/form-controls/support/field-info-trigger';
 import { getFieldPlaceholder } from '@/features/form-controls/support/field-metadata/field-metadata.helpers.ts';
+import { FieldInlineIcon } from '@/shared/ui/field-visuals';
 
 import { DIRECTION_FIELD_METADATA } from './field-family-direction.constants.ts';
 import type { DirectionFieldFamilyProps } from './field-family-direction.types.ts';

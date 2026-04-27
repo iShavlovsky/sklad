@@ -9,11 +9,14 @@ import {
   TextInput,
 } from '@mantine/core';
 
-import { FieldInfoTrigger, FieldLabel } from '@/features/form-controls/support/field-info-trigger';
+import {
+  FieldInfoTrigger,
+  FieldLabel,
+} from '@/features/form-controls/support/field-info-trigger';
 import type { FormInfoContentKey } from '@/features/form-controls/support/field-metadata/field-info-content.ts';
 
-import { DIRECTORY_FIELD_METADATA } from './field-family-directory.constants.ts';
 import type { DirectoryFieldControlProps } from './directory-field.types.ts';
+import { DIRECTORY_FIELD_METADATA } from './field-family-directory.constants.ts';
 
 const CREATE_TOGGLE_HELP_KEYS: Record<
   keyof typeof DIRECTORY_FIELD_METADATA,

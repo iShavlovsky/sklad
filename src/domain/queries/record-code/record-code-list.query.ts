@@ -1,8 +1,8 @@
-import type { SortDirection } from '@/shared/utils/query';
 import type {
   RecordCodeKind,
   RecordCodeOwnerKind,
 } from '@/domain/common/record-kinds';
+import type { SortDirection } from '@/shared/utils/query';
 
 export interface RecordCodeListFilters {
   search: string;

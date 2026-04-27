@@ -1,7 +1,7 @@
 {
   "name": "sklad-next",
   "private": true,
-  "version": "0.1.0-beta.1",
+  "version": "0.1.0-beta.2",
   "author": "Igor Shavlovsky <https://github.com/iShavlovsky>",
   "type": "module",
   "scripts": {
@@ -12,7 +12,7 @@
     "build": "npm run check:text-integrity && tsc -b && vite build",
     "check:text-integrity": "node scripts/check-text-integrity.mjs",
     "dev:mobile": "concurrently \"npm run dev:lan\" \"npm run dev:ngrok\"",
-    "build:gh-pages": "tsc -b && vite build --mode gh-pages",
+    "build:gh-pages": "npm run check:text-integrity && tsc -b && vite build --mode gh-pages",
     "lint": "eslint . && stylelint \"src/**/*.css\"",
     "lint:fix": "eslint . --fix && stylelint \"src/**/*.css\" --fix",
     "lint:report": "eslint . --format json --output-file eslint-report.json || true",

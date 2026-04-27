@@ -1,13 +1,4 @@
 import type { RecordCodeRecord } from '@/domain/codes/record-code.record.ts';
-import {
-  compareIsoDate,
-  compareNullableNumber,
-  compareNullableString,
-  containsNormalizedText,
-  matchesDateRange,
-  normalizeSearch,
-  paginate,
-} from '@/shared/utils/query';
 import type { ArrivalRecord } from '@/domain/entries/arrival/arrival.record.ts';
 import type {
   ArrivalDetails,
@@ -20,6 +11,15 @@ import type {
   ArrivalListSort,
 } from '@/domain/queries/arrival/arrival-list.query.ts';
 import type { AppDb } from '@/infrastructure/db/app-db';
+import {
+  compareIsoDate,
+  compareNullableNumber,
+  compareNullableString,
+  containsNormalizedText,
+  matchesDateRange,
+  normalizeSearch,
+  paginate,
+} from '@/shared/utils/query';
 
 type ArrivalListFilterInput = ArrivalListQuery['filters'];
 

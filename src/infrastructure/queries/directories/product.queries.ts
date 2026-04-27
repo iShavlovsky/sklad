@@ -1,3 +1,9 @@
+import type { ProductRecord } from '@/domain/directories/product.record.ts';
+import type {
+  ProductListQuery,
+  ProductListSort,
+} from '@/domain/queries/directory/product-list.query.ts';
+import type { ProductRepository } from '@/infrastructure/repositories/directories/product.repository.ts';
 import {
   compareIsoDate,
   compareNullableString,
@@ -5,12 +11,6 @@ import {
   normalizeSearch,
   paginate,
 } from '@/shared/utils/query';
-import type { ProductRecord } from '@/domain/directories/product.record.ts';
-import type {
-  ProductListQuery,
-  ProductListSort,
-} from '@/domain/queries/directory/product-list.query.ts';
-import type { ProductRepository } from '@/infrastructure/repositories/directories/product.repository.ts';
 
 type ProductListFilterInput = ProductListQuery['filters'];
 

@@ -1,13 +1,4 @@
 import type { RecordCodeRecord } from '@/domain/codes/record-code.record.ts';
-import {
-  compareIsoDate,
-  compareNullableNumber,
-  compareNullableString,
-  containsNormalizedText,
-  matchesDateRange,
-  normalizeSearch,
-  paginate,
-} from '@/shared/utils/query';
 import type { DepartureRecord } from '@/domain/entries/departure.record.ts';
 import type {
   DepartureDetails,
@@ -20,6 +11,15 @@ import type {
   DepartureListSort,
 } from '@/domain/queries/departure/departure-list.query.ts';
 import type { AppDb } from '@/infrastructure/db/app-db';
+import {
+  compareIsoDate,
+  compareNullableNumber,
+  compareNullableString,
+  containsNormalizedText,
+  matchesDateRange,
+  normalizeSearch,
+  paginate,
+} from '@/shared/utils/query';
 
 type DepartureListFilterInput = DepartureListQuery['filters'];
 

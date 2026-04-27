@@ -2,14 +2,35 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
+import { defineConfig, type Plugin } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
+
+import { currentReleaseNotes } from './src/shared/config/release-notes';
 
 const packageJson = JSON.parse(
   readFileSync(resolve(__dirname, './package.json'), 'utf-8')
 ) as {
   version: string;
 };
+
+if (currentReleaseNotes.version !== packageJson.version) {
+  throw new Error(
+    `Release notes version ${currentReleaseNotes.version} does not match package version ${packageJson.version}`
+  );
+}
+
+function releaseNotesAssetPlugin(): Plugin {
+  return {
+    generateBundle() {
+      this.emitFile({
+        fileName: 'release-notes.json',
+        source: `${JSON.stringify(currentReleaseNotes, null, 2)}\n`,
+        type: 'asset',
+      });
+    },
+    name: 'sklad-release-notes-asset',
+  };
+}
 
 function resolveManualChunk(id: string): string | undefined {
   if (!id.includes('node_modules')) {
@@ -87,6 +108,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     plugins: [
+      releaseNotesAssetPlugin(),
       react(),
       VitePWA({
         injectRegister: 'auto',

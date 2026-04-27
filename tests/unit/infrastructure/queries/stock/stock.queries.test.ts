@@ -27,16 +27,16 @@ const baseQuery: StockListQuery = {
 function createArrival(
   overrides: Partial<ArrivalRecord> & Pick<ArrivalRecord, 'id' | 'title'>
 ): ArrivalRecord {
-  const { title } = overrides;
+  const { id, title, ...restOverrides } = overrides;
 
-  return {
+  const record: ArrivalRecord = {
     amount: 1,
     categoryId: null,
     categoryName: null,
     createdAt: '2026-01-01T00:00:00.000Z',
     currency: null,
     description: null,
-    id: overrides.id,
+    id,
     kind: 'arrival',
     linkUrl: null,
     normalizedCategoryName: null,
@@ -54,16 +54,17 @@ function createArrival(
     supplierName: null,
     title,
     updatedAt: '2026-01-01T00:00:00.000Z',
-    ...overrides,
   };
+
+  return Object.assign(record, restOverrides, { id, title });
 }
 
 function createDeparture(
   overrides: Partial<DepartureRecord> & Pick<DepartureRecord, 'id' | 'title'>
 ): DepartureRecord {
-  const { title } = overrides;
+  const { id, title, ...restOverrides } = overrides;
 
-  return {
+  const record: DepartureRecord = {
     amount: 1,
     basedOnArrivalId: null,
     categoryId: null,
@@ -72,7 +73,7 @@ function createDeparture(
     currency: null,
     description: null,
     direction: null,
-    id: overrides.id,
+    id,
     kind: 'departure',
     mode: 'loss',
     normalizedCategoryName: null,
@@ -90,8 +91,9 @@ function createDeparture(
     supplierName: null,
     title,
     updatedAt: '2026-01-01T00:00:00.000Z',
-    ...overrides,
   };
+
+  return Object.assign(record, restOverrides, { id, title });
 }
 
 function createCode(

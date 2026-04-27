@@ -1,9 +1,9 @@
-import type { SortDirection } from '@/shared/utils/query';
 import type {
   RecordOriginKind,
   SubjectKind,
 } from '@/domain/common/record-kinds.ts';
 import type { DateRange } from '@/domain/common/value-objects.ts';
+import type { SortDirection } from '@/shared/utils/query';
 
 /**
  * Filter contract for the arrival list read model.

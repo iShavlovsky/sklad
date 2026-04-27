@@ -1,11 +1,4 @@
 import type { RecordCodeRecord } from '@/domain/codes/record-code.record.ts';
-import {
-  compareIsoDate,
-  compareNullableString,
-  containsNormalizedText,
-  normalizeSearch,
-  paginate,
-} from '@/shared/utils/query';
 import type {
   RecordCodeDetails,
   RecordCodeDetailsQuery,
@@ -15,6 +8,13 @@ import type {
   RecordCodeLookupResult,
 } from '@/domain/queries/record-code';
 import type { AppDb } from '@/infrastructure/db/app-db';
+import {
+  compareIsoDate,
+  compareNullableString,
+  containsNormalizedText,
+  normalizeSearch,
+  paginate,
+} from '@/shared/utils/query';
 
 type RecordCodeListFilterInput = RecordCodeListQuery['filters'];
 

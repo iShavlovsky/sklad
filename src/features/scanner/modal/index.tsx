@@ -11,9 +11,9 @@ import { useStore } from 'zustand';
 
 import { bufferStore } from '@/features/buffer/core/buffer-core.public.ts';
 import { overlayArbitrationStore } from '@/features/navigation/model/overlay-arbitration.store.ts';
-import type { ScannerSessionTab } from '@/features/scanner/runtime/model/scanner-session.types.ts';
 import { scannerPreferencesStore } from '@/features/scanner/runtime/model/scanner-preferences.store.ts';
 import { scannerSessionStore } from '@/features/scanner/runtime/model/scanner-session.store.ts';
+import type { ScannerSessionTab } from '@/features/scanner/runtime/model/scanner-session.types.ts';
 import { scannerRuntimeController } from '@/features/scanner/runtime/scanner-runtime.public.ts';
 
 import { resolveSelectedCameraId } from './helpers/resolve-selected-camera-id.ts';

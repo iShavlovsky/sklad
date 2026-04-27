@@ -49,7 +49,8 @@ function getMoneyInputProps(values: MoneyTestValues): {
   });
 
   const controls = Children.toArray(
-    (element as ReactElement<{ children: unknown }>).props.children
+    (element as ReactElement<{ children?: ReactElement[] | ReactElement }>)
+      .props.children
   ).filter(isValidElement) as Array<ReactElement<InputProps>>;
 
   const [amountInput, currencyInput] = controls.map((control) => control.props);

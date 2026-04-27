@@ -10,7 +10,10 @@ import {
   RecordPreviewDrawer,
 } from '@/shared/ui/record-card';
 
-import { StockCard, StockPreviewContent } from '../components/stock-card/stock-card';
+import {
+  StockCard,
+  StockPreviewContent,
+} from '../components/stock-card/stock-card';
 import {
   formatStockDate,
   STOCKS_SORT_OPTIONS,

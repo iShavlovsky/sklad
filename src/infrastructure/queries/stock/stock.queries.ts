@@ -1,12 +1,4 @@
 import type { RecordCodeRecord } from '@/domain/codes/record-code.record.ts';
-import {
-  compareIsoDate,
-  compareNullableNumber,
-  compareNullableString,
-  containsNormalizedText,
-  normalizeSearch,
-  paginate,
-} from '@/shared/utils/query';
 import type { RecordCodeOwnerKind } from '@/domain/common/record-kinds.ts';
 import type { ArrivalRecord } from '@/domain/entries/arrival/arrival.record.ts';
 import type { DepartureRecord } from '@/domain/entries/departure.record.ts';
@@ -16,6 +8,14 @@ import type {
   StockListSort,
 } from '@/domain/queries/stock/stock-list.query.ts';
 import type { AppDb } from '@/infrastructure/db/app-db';
+import {
+  compareIsoDate,
+  compareNullableNumber,
+  compareNullableString,
+  containsNormalizedText,
+  normalizeSearch,
+  paginate,
+} from '@/shared/utils/query';
 
 interface StockMovement {
   id: string;

@@ -41,8 +41,12 @@ describe('query helpers', () => {
   describe('compareIsoDate', () => {
     it('compares ISO date strings by lexical date order and sort direction', () => {
       expect(compareIsoDate('2026-01-01', '2026-01-02', 'asc')).toBeLessThan(0);
-      expect(compareIsoDate('2026-01-02', '2026-01-01', 'asc')).toBeGreaterThan(0);
-      expect(compareIsoDate('2026-01-01', '2026-01-02', 'desc')).toBeGreaterThan(0);
+      expect(compareIsoDate('2026-01-02', '2026-01-01', 'asc')).toBeGreaterThan(
+        0
+      );
+      expect(
+        compareIsoDate('2026-01-01', '2026-01-02', 'desc')
+      ).toBeGreaterThan(0);
       expect(compareIsoDate('2026-01-01', '2026-01-01', 'desc')).toBe(0);
     });
   });

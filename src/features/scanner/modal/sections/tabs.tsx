@@ -10,6 +10,7 @@ import type {
 import type { PhotoEditorState } from '../photo-editor.state.ts';
 import type { ScannerCapabilityState } from '../types.ts';
 import type { ScannerModalViewState } from '../view-state.ts';
+
 import { ScannerLivePanel } from './live-panel.tsx';
 import { ScannerPhotoPanel } from './photo-panel.tsx';
 

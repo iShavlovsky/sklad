@@ -1,10 +1,9 @@
 import type { ReactElement } from 'react';
 import { Select } from '@mantine/core';
 
+import { FieldLabel } from '@/features/form-controls/support/field-info-trigger';
 import { formPreferencesStore } from '@/features/form-preferences/model/form-preferences.store.ts';
 import { FieldInlineIcon } from '@/shared/ui/field-visuals';
-
-import { FieldLabel } from '@/features/form-controls/support/field-info-trigger';
 
 import {
   SUBJECT_KIND_FIELD_METADATA,
