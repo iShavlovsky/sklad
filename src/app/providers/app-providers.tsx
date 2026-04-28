@@ -4,6 +4,7 @@ import { MantineProvider } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 
 import { createAppTheme, createThemeCssVariablesResolver } from '@/app/theme';
+import { GoogleAccountConnectionProvider } from '@/features/google/ui/google-account-connection-provider';
 import { PwaStatusBanner } from '@/features/pwa/ui/pwa-status-banner';
 import { useUiSettings } from '@/features/settings/model/use-ui-settings';
 import { appRouter } from '@/router';
@@ -35,15 +36,17 @@ export function AppProviders(): ReactElement {
         theme={appTheme}
         cssVariablesResolver={themeResolver}
       >
-        <Notifications
-          classNames={{
-            root: styles.notificationsRoot,
-          }}
-          containerWidth="min(clamp(18rem, calc(50vw - 0.75rem), calc(26.75rem - 1.5rem)), calc(100vw - 1.5rem))"
-          position="top-right"
-        />
-        <RouterProvider router={appRouter} />
-        <PwaStatusBanner />
+        <GoogleAccountConnectionProvider>
+          <Notifications
+            classNames={{
+              root: styles.notificationsRoot,
+            }}
+            containerWidth="min(clamp(18rem, calc(50vw - 0.75rem), calc(26.75rem - 1.5rem)), calc(100vw - 1.5rem))"
+            position="top-right"
+          />
+          <RouterProvider router={appRouter} />
+          <PwaStatusBanner />
+        </GoogleAccountConnectionProvider>
       </MantineProvider>
     </HapticsProvider>
   );

@@ -22,6 +22,7 @@
   - directories (supplier/product/category) as an optional enhancement layer, not mandatory structure;
   - settings in IndexedDB;
   - JSON export/import baseline;
+  - optional user-triggered Google Drive backup over the same canonical JSON backup payload;
   - mobile-first shell with future room for home/favorites direction.
 - Not required for initial V1:
   - favorites/home customization as a finished product layer;
@@ -30,7 +31,6 @@
 - Explicitly out of scope for V1:
   - cloud sync;
   - multi-user collaboration;
-  - Google auth / Drive backup;
   - advanced conflict resolution UX;
   - fully automated product lookup as a mandatory capture flow.
 
@@ -49,6 +49,7 @@
   - browser app on React + TypeScript + Mantine.
 - Offline/online assumptions:
   - core product is local-first and must remain useful without network.
+  - Google Drive backup is an optional online-only export/import channel, not background sync and not a backend dependency.
 - Performance constraints:
   - scanner and form actions must stay responsive on mobile-shaped devices.
 - Device/browser constraints:

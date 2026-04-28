@@ -5,6 +5,7 @@
 - Estimated readiness: **~20–25% of the first usable milestone**
 - What already works:
   - app bootstrap, theme provider, notifications, and AppShell-based mobile-first shell foundation;
+  - optional Google account connection provider that degrades to configured-missing UI when `VITE_GOOGLE_CLIENT_ID` is absent;
   - typed route system with route metadata and hash-router wiring;
   - explicit route-first subtree for arrivals, departures, products, drafts, buffer, and settings;
   - explicit settings subtree for `/settings`, `/settings/profile`, `/settings/backup`, and `/settings/about`;
@@ -339,7 +340,7 @@
   - it should not grow into broader scanner/buffer/form orchestration before the remaining non-UI closure work is judged complete.
 - The current route-first IA is ahead of full workflow rollout:
   - arrivals/departures/drafts/settings route subtrees are explicit in the route tree;
-  - settings hub/profile/about pages are compact route-owned surfaces, while `/settings/backup` now exposes working export/import validation/restore/checkpoint/history controls over the existing backup hooks;
+  - settings hub/profile/about pages are compact route-owned surfaces, while `/settings/profile` now owns Google account connection state and `/settings/backup` exposes local export/import validation/restore/checkpoint/history plus optional Google Drive backup controls over the existing backup payload boundary;
   - route ownership is current truth, but full business content is not.
 - A verification-only fullscreen `/device-preview` route now exists as current truth for desktop inspection of mobile positioning:
   - it lives outside `RootLayout` and outside the main app shell, so the iframe preview does not duplicate the product shell around itself;

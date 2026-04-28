@@ -12,7 +12,8 @@
   - file upload APIs;
   - ZXing-based scanner adapter for live and photo decode as the intended direction;
   - browser/device haptics APIs through one shared capability-aware adapter as the intended direction for tactile feedback;
-  - JSON import/export through browser file APIs.
+  - JSON import/export through browser file APIs;
+  - optional Google Identity Services + Google Drive REST for user-triggered backup storage.
 - Main user-visible surfaces:
   - home/favorites page;
   - route-owned arrivals subtree;
@@ -81,6 +82,7 @@ Reusable business/workflow slices:
 - `form-fields` for deferred query/preference/layout form seams
 - `form-preferences` for second-data form preference state
 - plus existing settings, backup, codes, directories, dashboard, navigation, and PWA slices
+- `google` for Google account connection and Drive backup access state
 
 ### domain
 
@@ -152,10 +154,13 @@ A narrow layer for:
 
 ### Backup/import/export
 
-`settings/backup feature → backup service → JSON engine → browser file adapter → Dexie tables`
+`settings/backup feature → backup service → JSON engine → browser file adapter | Google Drive adapter → Dexie tables`
 
 - backup/import/export reads and writes first data only unless a future spec explicitly promotes a transient surface to durable user data;
 - the backup service produces/consumes validated payloads and machine-readable reports; browser file APIs only serialize, pick, or download bytes after that boundary;
+- Google Drive backup is an optional online-only transport after the same export/import validation boundary, not a separate payload format and not cloud sync;
+- Google account metadata and Drive preferences live in durable settings, while OAuth access tokens stay in runtime memory only;
+- the Drive adapter uses appDataFolder by default and visible `SKLAD Backups` folder access only through the narrower Drive file scope;
 - the restore orchestrator first derives a machine-readable commit plan and conflict report, then executes the selected restore mode;
 - the JSON engine is a pure canonical payload serializer/deserializer and does not perform browser I/O;
 - restore/commit is an IndexedDB transaction boundary and uses explicit `overwrite`, `merge`, or `rebase` strategy selection;

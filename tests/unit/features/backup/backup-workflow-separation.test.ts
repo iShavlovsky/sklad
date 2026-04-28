@@ -109,6 +109,13 @@ vi.mock(
   })
 );
 
+vi.mock(
+  '../../../../src/features/backup/ui/google-drive-backup-section',
+  () => ({
+    GoogleDriveBackupSection: passthrough,
+  })
+);
+
 import { BackupWorkflow } from '../../../../src/features/backup/ui/backup-workflow/backup-workflow.tsx';
 
 describe('BackupWorkflow timeline separation', () => {

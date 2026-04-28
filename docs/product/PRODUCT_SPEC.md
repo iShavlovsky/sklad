@@ -134,6 +134,8 @@
   - buffer limit
   - favorites entries
   - profile display name
+  - optional Google account metadata for Drive backup, without persisted access tokens
+  - optional Google Drive backup storage preference and recent file metadata
 - lifecycle notes:
   - stored in IndexedDB;
   - included in backup/import;
@@ -167,9 +169,11 @@
   - domain/infrastructure backup export service prepares the validated payload and metadata/report;
   - the JSON engine is a reusable serialization role that serializes the canonical payload after the export service boundary;
   - browser file serialization/download is handled by a reusable infrastructure-local browser adapter after the JSON engine boundary;
+  - optional Google Drive upload uses the same exported JSON text after the backup export service boundary;
   - file naming, blob creation, and save-dialog behavior stay out of the payload contract.
 - Import boundary:
   - import first validates envelope shape and version;
+  - Google Drive downloads are treated as downloaded JSON text and must pass the same import validation before restore can be enabled;
   - import normalizes legacy arrival/departure/draft payloads that still carry only `amount` into the newer quantity/cost fields without dropping the legacy value;
   - if validation passes, restore orchestration produces a machine-readable report and commit plan before commit;
   - no write happens until the caller explicitly chooses the supported commit mode.
@@ -190,6 +194,11 @@
 - Backup-specific contracts:
   - keep `AppBackupPayload`, export/import/restore inputs, reports, results, and checkpoint/history contracts in `domain/backup`;
   - keep planner/connector semantics there as well, but treat JSON/file/diff/merge/rebase mechanics as reusable infrastructure roles.
+- Google Drive backup contract:
+  - Google account connection is a feature owner, not shared infrastructure;
+  - Drive REST calls are isolated behind a typed browser adapter;
+  - access tokens are runtime-only and must not be stored in IndexedDB or backup payloads;
+  - Drive backup is user-triggered only and must not become background cloud sync.
 - Typed report model:
   - invalid payload
   - unsupported version
@@ -217,6 +226,7 @@
 - Draft payload may be incomplete; publish payload may not.
 - Directory fields support both existing selection and manual input.
 - Durable settings live in IndexedDB and are treated as user data.
+- Google Drive backup metadata may live in durable settings, but Google access tokens are runtime-only.
 - Derived states such as stock/balance/statistics are projections, not durable source of truth.
 - Gesture and haptic behavior is shared UI infrastructure, not page-local business logic.
 - Haptics are progressive enhancement only; they must never be the only success, warning, error, or confirmation signal.
@@ -293,6 +303,7 @@
 - import/export includes first data only unless a future spec explicitly promotes a transient surface to durable user data.
 - backup/import/export never treats zustand/localStorage as source of truth for durable entities.
 - browser file API boundaries remain external to the domain payload contract.
+- Google Drive backup uses the existing backup payload and validation boundary; downloading from Drive never restores directly.
 - User-visible error:
   - camera permission denied;
   - image file too large;
@@ -309,7 +320,7 @@
 ## 8. Out of scope
 - backend sync
 - multi-user collaboration
-- Google auth / Google Drive
+- background Google Drive sync or broad Google Drive file access
 - smart external product lookup by code or URL
 - advanced merge conflict UX
 - heavy analytics

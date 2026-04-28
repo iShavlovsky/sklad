@@ -41,7 +41,7 @@ const subpageCases: SettingsSubpageCase[] = [
   },
   {
     route: '/#/settings/backup',
-    expectedSectionCount: 4,
+    expectedSectionCount: 5,
     screenshotPrefix: 'settings-backup',
   },
   {

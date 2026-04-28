@@ -11,7 +11,7 @@ import { restoreModes, summarizeValidation } from './backup-workflow.model.ts';
 
 type BackupWorkflowExportRestoreSectionProps = {
   isRestoreDisabled: boolean;
-  pendingAction: string | null;
+  pendingActions: ReadonlySet<string>;
   restoreMode: BackupRestoreMode;
   selectedFile: File | null;
   validationResult: BackupImportValidationResult | null;
@@ -23,7 +23,7 @@ type BackupWorkflowExportRestoreSectionProps = {
 
 export function BackupWorkflowExportRestoreSection({
   isRestoreDisabled,
-  pendingAction,
+  pendingActions,
   restoreMode,
   selectedFile,
   validationResult,
@@ -38,7 +38,7 @@ export function BackupWorkflowExportRestoreSection({
         <Stack gap="xs">
           <Button
             fullWidth
-            loading={pendingAction === 'export'}
+            loading={pendingActions.has('export')}
             onClick={onExport}
           >
             Скачать backup JSON
@@ -87,7 +87,7 @@ export function BackupWorkflowExportRestoreSection({
             color="red"
             disabled={isRestoreDisabled}
             fullWidth
-            loading={pendingAction === 'restore'}
+            loading={pendingActions.has('restore')}
             onClick={onRestore}
           >
             Восстановить из backup

@@ -1,4 +1,5 @@
 import { type ReactElement, useMemo, useState } from 'react';
+import { useSet } from '@mantine/hooks';
 
 import type {
   AppBackupPayload,
@@ -15,6 +16,7 @@ import { useBackupHistoryList } from '../../hooks/use-backup-history-list.ts';
 import { useBackupImportValidation } from '../../hooks/use-backup-import-validation.ts';
 import { useBackupRestore } from '../../hooks/use-backup-restore.ts';
 import { useCreateBackupCheckpoint } from '../../hooks/use-create-backup-checkpoint.ts';
+import { GoogleDriveBackupSection } from '../google-drive-backup-section';
 
 import {
   type BackupActivityEntry,
@@ -97,7 +99,7 @@ export function BackupWorkflow(): ReactElement {
   const [restoreMode, setRestoreMode] =
     useState<BackupRestoreMode>('overwrite');
   const [checkpointLabel, setCheckpointLabel] = useState('Ручной checkpoint');
-  const [pendingAction, setPendingAction] = useState<string | null>(null);
+  const pendingActions = useSet<string>();
 
   const backupOperationHistory = useMemo(
     () =>
@@ -112,7 +114,7 @@ export function BackupWorkflow(): ReactElement {
   );
 
   async function handleExport(): Promise<void> {
-    setPendingAction('export');
+    pendingActions.add('export');
 
     try {
       const result = await backupExport.saveToFile();
@@ -132,7 +134,7 @@ export function BackupWorkflow(): ReactElement {
         message: `Файл ${result.fileResult.fileName} содержит first data и не включает sklad-buffer.`,
       });
     } finally {
-      setPendingAction(null);
+      pendingActions.delete('export');
     }
   }
 
@@ -148,7 +150,7 @@ export function BackupWorkflow(): ReactElement {
       return;
     }
 
-    setPendingAction('checkpoint');
+    pendingActions.add('checkpoint');
 
     try {
       const exportResult = await backupExport.execute();
@@ -182,7 +184,7 @@ export function BackupWorkflow(): ReactElement {
         message: checkpointResult.report.summary,
       });
     } finally {
-      setPendingAction(null);
+      pendingActions.delete('checkpoint');
     }
   }
 
@@ -195,7 +197,7 @@ export function BackupWorkflow(): ReactElement {
       return;
     }
 
-    setPendingAction('validate');
+    pendingActions.add('validate');
 
     try {
       const result = await importValidation.validateFromFile(file);
@@ -227,7 +229,7 @@ export function BackupWorkflow(): ReactElement {
         message: summarizeValidation(result.validationResult),
       });
     } finally {
-      setPendingAction(null);
+      pendingActions.delete('validate');
     }
   }
 
@@ -241,7 +243,7 @@ export function BackupWorkflow(): ReactElement {
       return;
     }
 
-    setPendingAction('restore');
+    pendingActions.add('restore');
 
     try {
       const result = await backupRestore.execute({
@@ -269,7 +271,7 @@ export function BackupWorkflow(): ReactElement {
         message: `${result.report.summary}. Перед восстановлением создан checkpoint.`,
       });
     } finally {
-      setPendingAction(null);
+      pendingActions.delete('restore');
     }
   }
 
@@ -277,7 +279,7 @@ export function BackupWorkflow(): ReactElement {
     <>
       <BackupWorkflowExportRestoreSection
         isRestoreDisabled={validatedPayload === null}
-        pendingAction={pendingAction}
+        pendingActions={pendingActions}
         restoreMode={restoreMode}
         selectedFile={selectedFile}
         validationResult={validationResult}
@@ -293,9 +295,18 @@ export function BackupWorkflow(): ReactElement {
         }}
       />
 
+      <GoogleDriveBackupSection
+        pendingActions={pendingActions}
+        onValidatedPayload={(payload, validation) => {
+          setValidatedPayload(payload);
+          setValidationResult(validation);
+          setSelectedFile(null);
+        }}
+      />
+
       <BackupWorkflowCheckpointSection
         checkpointLabel={checkpointLabel}
-        isCreating={pendingAction === 'checkpoint'}
+        isCreating={pendingActions.has('checkpoint')}
         onCheckpointLabelChange={setCheckpointLabel}
         onCreateCheckpoint={() => {
           void handleCreateCheckpoint();

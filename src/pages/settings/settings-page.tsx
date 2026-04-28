@@ -28,11 +28,11 @@ export function SettingsPage(): ReactElement {
           badge="Разделы"
           description="Быстрый переход к связанным системным экранам."
           trailing={
-            <InfoAction description="Эти разделы ведут к профилю, backup-центру, справочнику товаров и сведениям о приложении. Они не меняют журналы сами по себе." />
+            <InfoAction description="Эти разделы ведут к Google-профилю, backup-центру, справочнику товаров и сведениям о приложении. Они не меняют журналы сами по себе." />
           }
         >
           <SettingsHubLink
-            description="Профиль, имя, подпись и персональные параметры"
+            description="Подключение Google-аккаунта и режим хранения backup в Drive"
             icon={<IconUser size={16} />}
             label="Профиль"
             to={APP_ROUTES.settingsProfile}
