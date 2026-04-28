@@ -26,7 +26,6 @@ export const ARRIVAL_EDITOR_COPY = {
     costInvalid: 'Стоимость должна быть числом.',
     occurredAtRequired: 'Укажите дату и время прихода.',
     quantityInvalid: 'Количество должно быть числом.',
-    titleRequired: 'Укажите название прихода.',
   },
 } as const;
 

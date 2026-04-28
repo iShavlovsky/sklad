@@ -39,6 +39,35 @@ function normalizeOccurredAtValue(raw: string): string {
   return Number.isNaN(parsed.getTime()) ? trimmed : parsed.toISOString();
 }
 
+function formatAutoTitleDate(normalizedOccurredAt: string): string | null {
+  if (normalizedOccurredAt.trim() === '') {
+    return null;
+  }
+
+  const parsed = new Date(normalizedOccurredAt);
+  return Number.isNaN(parsed.getTime())
+    ? null
+    : new Intl.DateTimeFormat('ru-RU').format(parsed);
+}
+
+function resolveAutoDepartureTitle(
+  values: DepartureEditorFormValues,
+  normalizedOccurredAt: string
+): string {
+  const explicitTitle = normalizeString(values.title);
+  if (explicitTitle !== null) {
+    return explicitTitle;
+  }
+
+  const subjectName =
+    normalizeString(values.product.name) ??
+    normalizeString(values.supplier.name) ??
+    normalizeString(values.category.name);
+  const date = formatAutoTitleDate(normalizedOccurredAt);
+
+  return ['Отгрузка', subjectName, date].filter(Boolean).join(' · ');
+}
+
 function buildDirectoryInput(field: DepartureEditorDirectoryValue) {
   return {
     createIfMissing: field.createIfMissing,
@@ -148,6 +177,7 @@ function buildCommonDepartureInput(values: DepartureEditorFormValues) {
   const quantity = parseDepartureDecimal(values.quantity);
   const totalCost = parseDepartureDecimal(values.totalCost);
   const unitCost = parseDepartureDecimal(values.unitCost);
+  const occurredAt = normalizeOccurredAtValue(values.occurredAt);
 
   return {
     basedOnArrivalId: normalizeString(values.basedOnArrivalId),
@@ -169,11 +199,11 @@ function buildCommonDepartureInput(values: DepartureEditorFormValues) {
       unitCost,
     },
     note: normalizeString(values.note),
-    occurredAt: normalizeOccurredAtValue(values.occurredAt),
+    occurredAt,
     product: buildDirectoryInput(values.product),
     subjectKind: values.subjectKind,
     supplier: buildDirectoryInput(values.supplier),
-    title: values.title.trim(),
+    title: resolveAutoDepartureTitle(values, occurredAt),
   };
 }
 

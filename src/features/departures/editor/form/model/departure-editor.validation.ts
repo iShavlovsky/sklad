@@ -25,9 +25,5 @@ export function validateDepartureForm(
       values.occurredAt.trim() === ''
         ? DEPARTURE_EDITOR_COPY.validation.occurredAtRequired
         : null,
-    title:
-      values.title.trim() === ''
-        ? DEPARTURE_EDITOR_COPY.validation.titleRequired
-        : null,
   };
 }

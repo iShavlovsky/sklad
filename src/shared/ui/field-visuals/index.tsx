@@ -6,6 +6,7 @@ import {
   IconBarcode,
   IconBox,
   IconCalendarTime,
+  IconCalculator,
   IconCategory,
   IconCurrencyRubel,
   IconFileText,
@@ -13,8 +14,10 @@ import {
   IconLink,
   IconListCheck,
   IconMapPin,
+  IconNumbers,
   IconPackage,
   IconPencil,
+  IconReceipt,
   IconTag,
   IconTruckDelivery,
   IconWallet,
@@ -42,10 +45,13 @@ export type FieldVisualKey =
   | 'note'
   | 'occurredAt'
   | 'product'
+  | 'quantity'
   | 'source'
   | 'subjectKind'
   | 'supplier'
   | 'title'
+  | 'totalCost'
+  | 'unitCost'
   | 'updatedAt';
 
 interface FieldVisualDefinition {
@@ -125,6 +131,11 @@ const FIELD_VISUALS: Record<FieldVisualKey, FieldVisualDefinition> = {
     icon: IconPackage,
     label: 'Товар',
   },
+  quantity: {
+    color: 'cyan',
+    icon: IconNumbers,
+    label: 'Количество',
+  },
   source: {
     color: 'blue',
     icon: IconArrowDown,
@@ -144,6 +155,16 @@ const FIELD_VISUALS: Record<FieldVisualKey, FieldVisualDefinition> = {
     color: 'blue',
     icon: IconHash,
     label: 'Название',
+  },
+  totalCost: {
+    color: 'teal',
+    icon: IconReceipt,
+    label: 'Общая стоимость',
+  },
+  unitCost: {
+    color: 'lime',
+    icon: IconCalculator,
+    label: 'Цена за единицу',
   },
   updatedAt: {
     color: 'gray',

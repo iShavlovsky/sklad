@@ -1,8 +1,14 @@
 import type { ReactElement } from 'react';
-import { Group, NumberInput, TextInput } from '@mantine/core';
+import { NumberInput, Select, SimpleGrid } from '@mantine/core';
 import type { UseFormReturnType } from '@mantine/form';
 
 import { FieldInlineIcon } from '@/shared/ui/field-visuals';
+
+const CURRENCY_OPTIONS = [
+  { label: '₽ Рубли', value: 'RUB' },
+  { label: '$ Доллары', value: 'USD' },
+  { label: '€ Евро', value: 'EUR' },
+] as const;
 
 export interface QuantityCostFieldFamilyProps<TValues> {
   currencyPath: string;
@@ -32,13 +38,13 @@ export function QuantityCostFieldFamily<TValues>({
   const values = form.getValues() as Record<string, unknown>;
 
   return (
-    <Group align="flex-start" grow wrap="wrap">
+    <SimpleGrid cols={{ base: 2, xs: 4 }} spacing="xs" verticalSpacing="xs">
       <NumberInput
         decimalScale={3}
         error={form.errors[quantityPath]}
         hideControls
         label="Количество"
-        leftSection={<FieldInlineIcon field="amount" />}
+        leftSection={<FieldInlineIcon field="quantity" />}
         onChange={(value) => onQuantityChange(stringifyNumberInput(value))}
         placeholder="1"
         value={values[quantityPath] as string | number | undefined}
@@ -48,7 +54,7 @@ export function QuantityCostFieldFamily<TValues>({
         error={form.errors[totalCostPath]}
         hideControls
         label="Общая стоимость"
-        leftSection={<FieldInlineIcon field="amount" />}
+        leftSection={<FieldInlineIcon field="totalCost" />}
         onChange={(value) => onTotalCostChange(stringifyNumberInput(value))}
         placeholder="0"
         value={values[totalCostPath] as string | number | undefined}
@@ -58,18 +64,20 @@ export function QuantityCostFieldFamily<TValues>({
         error={form.errors[unitCostPath]}
         hideControls
         label="Цена за единицу"
-        leftSection={<FieldInlineIcon field="amount" />}
+        leftSection={<FieldInlineIcon field="unitCost" />}
         onChange={(value) => onUnitCostChange(stringifyNumberInput(value))}
         placeholder="0"
         value={values[unitCostPath] as string | number | undefined}
       />
-      <TextInput
+      <Select
+        allowDeselect={false}
+        data={CURRENCY_OPTIONS}
         key={form.key(currencyPath)}
         label="Валюта"
         leftSection={<FieldInlineIcon field="currency" />}
         placeholder="RUB"
         {...form.getInputProps(currencyPath)}
       />
-    </Group>
+    </SimpleGrid>
   );
 }

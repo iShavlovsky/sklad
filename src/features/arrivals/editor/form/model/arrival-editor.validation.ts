@@ -25,9 +25,5 @@ export function validateArrivalForm(
       values.occurredAt.trim() === ''
         ? ARRIVAL_EDITOR_COPY.validation.occurredAtRequired
         : null,
-    title:
-      values.title.trim() === ''
-        ? ARRIVAL_EDITOR_COPY.validation.titleRequired
-        : null,
   };
 }

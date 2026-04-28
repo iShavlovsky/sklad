@@ -16,7 +16,6 @@ export const DEPARTURE_EDITOR_COPY = {
     costInvalid: 'Стоимость должна быть числом.',
     occurredAtRequired: 'Укажите дату и время отгрузки.',
     quantityInvalid: 'Количество должно быть числом.',
-    titleRequired: 'Укажите название отгрузки.',
   },
 } as const;
 

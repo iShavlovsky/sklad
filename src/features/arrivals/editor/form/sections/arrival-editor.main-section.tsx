@@ -11,7 +11,6 @@ import { OccurredAtFieldFamily } from '@/features/form-controls/date-time';
 import { QuantityCostFieldFamily } from '@/features/form-controls/quantity-cost';
 import { FieldInfoTrigger } from '@/features/form-controls/support/field-info-trigger';
 import { SubjectKindFieldFamily } from '@/features/form-fields/field-family-subject-kind';
-import { TitleFieldFamily } from '@/features/form-fields/field-family-title';
 import { FormSectionCard } from '@/shared/ui/form-shell';
 
 import {
@@ -100,7 +99,6 @@ export function ArrivalMainSection({
       }
     >
       <Stack gap="xs">
-        <TitleFieldFamily form={form} path="title" />
         <CodesFieldFamily
           actions={codeActions}
           codeKindPath="codeKind"

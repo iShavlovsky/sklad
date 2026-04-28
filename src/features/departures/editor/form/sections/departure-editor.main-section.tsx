@@ -10,7 +10,6 @@ import { QuantityCostFieldFamily } from '@/features/form-controls/quantity-cost'
 import { FieldInfoTrigger } from '@/features/form-controls/support/field-info-trigger';
 import { DepartureModeFieldFamily } from '@/features/form-fields/field-family-departure-mode';
 import { SubjectKindFieldFamily } from '@/features/form-fields/field-family-subject-kind';
-import { TitleFieldFamily } from '@/features/form-fields/field-family-title';
 import { FormSectionCard } from '@/shared/ui/form-shell';
 
 import { DEPARTURE_FORM_PREFERENCE_KEYS } from '../model/departure-editor.form-constants.ts';
@@ -112,7 +111,6 @@ export function DepartureMainSection({
       }
     >
       <Stack gap="xs">
-        <TitleFieldFamily form={form} path="title" />
         <CodesFieldFamily
           actions={codeActions}
           codeKindPath="codeKind"
