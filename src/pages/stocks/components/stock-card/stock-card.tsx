@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+﻿import type { ReactElement } from 'react';
 import { Progress, Stack, Text } from '@mantine/core';
 
 import type { StockListItem } from '@/domain/queries/stock/stock-list.item.ts';
@@ -22,7 +22,7 @@ export function buildStockMetrics(item: StockListItem): RecordMetric[] {
       value: item.availableCodes.length,
     },
     { field: 'source', label: 'Приходов', value: item.arrivalCount },
-    { field: 'departureMode', label: 'Расходов', value: item.departureCount },
+    { field: 'departureMode', label: 'Отгрузок', value: item.departureCount },
   ];
 }
 

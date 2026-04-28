@@ -61,7 +61,10 @@ export function ArrivalDetailsPage(): ReactElement {
                       label: 'Сумма',
                       value: formatArrivalAmount(
                         arrival.amount,
-                        arrival.currency
+                        arrival.currency,
+                        arrival.quantity,
+                        arrival.totalCost,
+                        arrival.unitCost
                       ),
                     },
                     {

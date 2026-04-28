@@ -13,6 +13,12 @@ const moneyValueSchema = z.object({
   currency: z.string().trim().min(1).nullable(),
 });
 
+const quantityCostValueSchema = z.object({
+  quantity: z.number().nullable(),
+  totalCost: z.number().nullable(),
+  unitCost: z.number().nullable(),
+});
+
 export const updateArrivalInputSchema = z.object({
   id: z.string().trim().min(1),
   title: z.string().trim().min(1),
@@ -28,6 +34,7 @@ export const updateArrivalInputSchema = z.object({
   occurredAt: z.string().trim().min(1),
 
   money: moneyValueSchema,
+  quantityCost: quantityCostValueSchema,
   linkUrl: z.string().trim().nullable(),
   note: z.string().trim().nullable(),
 

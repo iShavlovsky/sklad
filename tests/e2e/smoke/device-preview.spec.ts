@@ -11,10 +11,11 @@ test.describe('device preview route', () => {
     await expect(
       page.getByRole('heading', { name: 'Device Preview' })
     ).toBeVisible();
-    await expect(page.getByLabel('Пресет телефона')).toHaveValue(
-      'samsung-galaxy-s21-s24'
-    );
-    await expect(page.getByLabel('DPR')).toHaveValue('3');
+    const presetSelect = page.getByRole('combobox', {
+      name: 'Пресет телефона',
+    });
+    await expect(presetSelect).toHaveValue('Samsung Galaxy S21-S24');
+    await expect(page.getByLabel('DPR')).toHaveValue('1');
 
     const iframe = page.getByTestId('device-preview-iframe');
     await expect(iframe).toHaveAttribute('src', '/#/settings');
@@ -25,10 +26,10 @@ test.describe('device preview route', () => {
     expect(iframeBox?.width ?? 0).toBeCloseTo(360, 0);
     expect(iframeBox?.height ?? 0).toBeCloseTo(800, 0);
 
-    await page.getByLabel('Пресет телефона').click();
+    await presetSelect.click();
     await page.getByRole('option', { name: 'iPhone 14 Pro' }).click();
 
-    await expect(page.getByLabel('DPR')).toHaveValue('3');
+    await expect(page.getByLabel('DPR')).toHaveValue('1');
 
     const resizedIframeBox = await iframe.boundingBox();
     expect(resizedIframeBox).not.toBeNull();
@@ -39,7 +40,9 @@ test.describe('device preview route', () => {
       '[data-testid="device-preview-iframe"]'
     );
     await expect(
-      previewApp.getByRole('heading', { name: 'Настройки', exact: true })
+      previewApp.locator('.mobile-shell__title').getByText('Настройки', {
+        exact: true,
+      })
     ).toBeVisible();
   });
 });

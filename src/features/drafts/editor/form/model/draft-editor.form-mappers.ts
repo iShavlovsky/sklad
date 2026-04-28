@@ -118,6 +118,11 @@ export function mapDraftDetailsToValues(
 }
 
 export function buildDraftPayload(values: DraftEditorFormValues): DraftPayload {
+  const amount = normalizeAmount(values.amount);
+  const currency =
+    values.currency.trim() === '' ? null : values.currency.trim();
+  const hasCurrency = currency !== null;
+
   const basePayload = {
     category: {
       id: values.categoryId.trim() === '' ? null : values.categoryId.trim(),
@@ -131,8 +136,13 @@ export function buildDraftPayload(values: DraftEditorFormValues): DraftPayload {
     description:
       values.description.trim() === '' ? null : values.description.trim(),
     money: {
-      amount: normalizeAmount(values.amount),
-      currency: values.currency.trim() === '' ? null : values.currency.trim(),
+      amount,
+      currency,
+    },
+    quantityCost: {
+      quantity: !hasCurrency ? amount : null,
+      totalCost: hasCurrency ? amount : null,
+      unitCost: null,
     },
     note: values.note.trim() === '' ? null : values.note.trim(),
     occurredAt: normalizeOccurredAt(values.occurredAt),

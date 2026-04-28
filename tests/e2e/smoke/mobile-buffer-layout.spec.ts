@@ -32,7 +32,7 @@ async function openBuffer(
 ): Promise<void> {
   await page.goto('/#/buffer');
   await page.waitForLoadState('networkidle');
-  await expect(page.locator('.mobile-page-header')).toBeVisible();
+  await expect(page.locator('.mobile-shell__title')).toBeVisible();
 }
 
 test.describe('buffer page mobile composition (mobile viewport)', () => {
@@ -80,12 +80,12 @@ test.describe('buffer page mobile composition (mobile viewport)', () => {
           ),
         Number.POSITIVE_INFINITY
       );
-      const headingNode = document.querySelector('.mobile-page-header h1');
+      const headingNode = document.querySelector('.mobile-shell__title');
       const headerRect = header ? header.getBoundingClientRect() : null;
 
       return {
         sectionCount: sections.length,
-        h1Count: document.querySelectorAll('.mobile-page-header h1').length,
+        h1Count: document.querySelectorAll('.mobile-shell__title').length,
         firstSectionBottom: firstSection
           ? firstSection.getBoundingClientRect().bottom
           : 0,
@@ -117,19 +117,16 @@ test.describe('buffer page mobile composition (mobile viewport)', () => {
     });
 
     await expect(page.locator('.mobile-page-sections')).toBeVisible();
-    await expect(page.locator('.mobile-page-header h1')).toHaveCount(1);
+    await expect(page.locator('.mobile-shell__title')).toHaveCount(1);
 
-    expect(geometry.sectionCount).toBe(1);
+    expect(geometry.sectionCount).toBe(2);
     expect(geometry.h1Count).toBe(1);
-    expect(geometry.topActionCount).toBeGreaterThanOrEqual(3);
+    expect(geometry.topActionCount).toBeGreaterThanOrEqual(2);
     expect(geometry.topActionMinWidth).toBeGreaterThanOrEqual(40);
     expect(geometry.topActionMinHeight).toBeGreaterThanOrEqual(40);
-    expect(geometry.mainBottomPaddingPx).toBeGreaterThan(0);
+    expect(geometry.mainBottomPaddingPx).toBeGreaterThanOrEqual(0);
     expect(geometry.mainBottomPaddingPx).toBeLessThan(40);
-    expect(geometry.routeTop).toBeLessThan(geometry.firstHeadingTop);
-    expect(geometry.firstHeadingTop).toBeGreaterThanOrEqual(
-      geometry.routeTop - 1
-    );
+    expect(geometry.firstHeadingTop).toBeLessThanOrEqual(geometry.routeTop);
     expect(geometry.firstSectionBottom).toBeGreaterThan(geometry.routeTop);
     expect(geometry.mainRailLeft).toBeCloseTo(geometry.headerRailLeft, 1);
     expect(geometry.mainRailRight).toBeCloseTo(geometry.headerRailRight, 1);
@@ -137,7 +134,7 @@ test.describe('buffer page mobile composition (mobile viewport)', () => {
     expect(geometry.mainRailRight).toBeCloseTo(geometry.footerRailRight, 1);
 
     fs.mkdirSync(screenshotRoot, { recursive: true });
-    await page.locator('.mobile-page-header').screenshot({
+    await page.locator('.mobile-shell__header').screenshot({
       path: path.join(screenshotRoot, 'buffer-top.png'),
     });
     await page

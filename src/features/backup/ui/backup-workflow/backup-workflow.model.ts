@@ -1,4 +1,4 @@
-import type {
+﻿import type {
   AppBackupPayload,
   BackupImportValidationResult,
   BackupRestoreMode,
@@ -76,7 +76,7 @@ export function summarizeValidation(
 
   return [
     `приходы: ${counts.arrivals}`,
-    `расходы: ${counts.departures}`,
+    `отгрузки: ${counts.departures}`,
     `черновики: ${counts.drafts}`,
     `коды: ${counts.recordCodes}`,
     `настройки: ${counts.settings}`,

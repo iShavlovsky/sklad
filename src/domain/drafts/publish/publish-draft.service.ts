@@ -26,6 +26,33 @@ import { publishDraftInputSchema } from './publish-draft.schema.ts';
 type ArrivalCreateFailure = Exclude<CreateArrivalResult, { ok: true }>;
 type DepartureCreateFailure = Exclude<CreateDepartureResult, { ok: true }>;
 
+function normalizePayloadQuantityCost(payload: {
+  money: { amount: number | null; currency: string | null };
+  quantityCost?: {
+    quantity: number | null;
+    totalCost: number | null;
+    unitCost: number | null;
+  };
+}) {
+  if (payload.quantityCost) {
+    return payload.quantityCost;
+  }
+
+  const hasCurrency =
+    payload.money.currency !== null && payload.money.currency.trim() !== '';
+  const quantity = !hasCurrency ? payload.money.amount : null;
+  const totalCost = hasCurrency ? payload.money.amount : null;
+
+  return {
+    quantity,
+    totalCost,
+    unitCost:
+      quantity !== null && quantity > 0 && totalCost !== null
+        ? totalCost / quantity
+        : null,
+  };
+}
+
 function mapDraftDirectoryInput(snapshot: DirectoryRefSnapshot): {
   id: string | null;
   name: string | null;
@@ -135,6 +162,7 @@ export class PublishDraftService {
       description: payload.description,
       occurredAt: payload.occurredAt ?? '',
       money: payload.money,
+      quantityCost: normalizePayloadQuantityCost(payload),
       linkUrl: payload.linkUrl,
       note: payload.note,
       supplier: mapDraftDirectoryInput(payload.supplier),
@@ -176,6 +204,7 @@ export class PublishDraftService {
       description: payload.description,
       occurredAt: payload.occurredAt ?? '',
       money: payload.money,
+      quantityCost: normalizePayloadQuantityCost(payload),
       note: payload.note,
       direction: payload.direction,
       supplier: mapDraftDirectoryInput(payload.supplier),

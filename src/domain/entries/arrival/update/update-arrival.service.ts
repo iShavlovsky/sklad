@@ -108,6 +108,7 @@ export class UpdateArrivalService {
         description: data.description,
         occurredAt: data.occurredAt,
         money: data.money,
+        quantityCost: data.quantityCost,
         linkUrl: data.linkUrl,
         note: data.note,
         supplier: {

@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+﻿import type { ReactElement } from 'react';
 import { useState } from 'react';
 import {
   ActionIcon,
@@ -64,7 +64,7 @@ export function DashboardPage(): ReactElement {
       <SectionStack>
         <PageSection
           badge="Телеметрия"
-          help="Краткий срез текущего состояния приходов, расходов, черновиков, остатков и буфера."
+          help="Краткий срез текущего состояния приходов, отгрузок, черновиков, остатков и буфера."
         >
           <SimpleGrid cols={2} spacing={6} verticalSpacing={6}>
             {telemetry.map((item) => {

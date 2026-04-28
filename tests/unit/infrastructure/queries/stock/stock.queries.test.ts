@@ -35,6 +35,7 @@ function createArrival(
     categoryName: null,
     createdAt: '2026-01-01T00:00:00.000Z',
     currency: null,
+    quantity: null,
     description: null,
     id,
     kind: 'arrival',
@@ -53,6 +54,8 @@ function createArrival(
     supplierId: null,
     supplierName: null,
     title,
+    totalCost: null,
+    unitCost: null,
     updatedAt: '2026-01-01T00:00:00.000Z',
   };
 
@@ -71,6 +74,7 @@ function createDeparture(
     categoryName: null,
     createdAt: '2026-01-01T00:00:00.000Z',
     currency: null,
+    quantity: null,
     description: null,
     direction: null,
     id,
@@ -90,6 +94,8 @@ function createDeparture(
     supplierId: null,
     supplierName: null,
     title,
+    totalCost: null,
+    unitCost: null,
     updatedAt: '2026-01-01T00:00:00.000Z',
   };
 
@@ -128,12 +134,13 @@ function createStockQueries(input: {
 }
 
 describe('StockQueries.list', () => {
-  it('uses record codes as movement units before amount fallback', async () => {
+  it('uses quantity before record-code units and amount fallback', async () => {
     const queries = createStockQueries({
       arrivals: [
         createArrival({
           amount: 10,
           id: 'arrival-1',
+          quantity: 4,
           title: 'Adapter',
         }),
       ],
@@ -141,6 +148,7 @@ describe('StockQueries.list', () => {
         createDeparture({
           amount: 5,
           id: 'departure-1',
+          quantity: 2,
           title: 'Adapter',
         }),
       ],
@@ -166,10 +174,10 @@ describe('StockQueries.list', () => {
     const [item] = await queries.list(baseQuery);
 
     expect(item).toMatchObject({
-      arrivalCount: 2,
+      arrivalCount: 4,
       availableCodes: ['A-002'],
-      balance: 1,
-      departureCount: 1,
+      balance: 2,
+      departureCount: 2,
       title: 'Adapter',
     });
   });

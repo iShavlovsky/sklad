@@ -152,6 +152,7 @@ export function SerialTokensInput({
             </Pill>
           ))}
           <PillsInput.Field
+            data-testid="serial-codes-input"
             disabled={disabled}
             onBlur={handleBlur}
             onChange={(event) => setInputValue(event.currentTarget.value)}

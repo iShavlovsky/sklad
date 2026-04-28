@@ -6,6 +6,7 @@ import { createArrivalComposition } from '@/infrastructure/services/journals/arr
 import { createDepartureComposition } from '@/infrastructure/services/journals/departure.services.ts';
 import { createDraftComposition } from '@/infrastructure/services/journals/draft.services.ts';
 
+export { updateProductService } from './directories/product.services.ts';
 export {
   deleteFavoriteService,
   deleteProfileService,

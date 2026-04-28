@@ -1,4 +1,4 @@
-import type { ComponentType, ReactElement } from 'react';
+﻿import type { ComponentType, ReactElement } from 'react';
 import { ThemeIcon } from '@mantine/core';
 import {
   IconArrowDown,
@@ -83,7 +83,7 @@ const FIELD_VISUALS: Record<FieldVisualKey, FieldVisualDefinition> = {
   departureMode: {
     color: 'orange',
     icon: IconArrowUp,
-    label: 'Режим расхода',
+    label: 'Режим отгрузки',
   },
   description: {
     color: 'cyan',

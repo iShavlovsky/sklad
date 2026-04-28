@@ -96,10 +96,13 @@ async function seedMovements(
               originKind: 'manual',
               productId,
               productName: record.productName,
+              quantity: record.amount,
               subjectKind: 'product',
               supplierId: 'supplier-e2e',
               supplierName: 'E2E Supplier',
               title: record.title,
+              totalCost: null,
+              unitCost: null,
               updatedAt: timestamp,
             };
 

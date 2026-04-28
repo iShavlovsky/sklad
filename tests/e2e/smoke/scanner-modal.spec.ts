@@ -191,7 +191,7 @@ test.describe('scanner modal UI', () => {
       shellHeader.getByRole('button', { name: 'Сканер' })
     ).toBeVisible();
     await expect(
-      shellHeader.getByRole('link', { name: 'Настройки' })
+      shellHeader.getByRole('button', { name: 'Меню' })
     ).toBeVisible();
 
     await shellHeader.getByRole('link', { name: 'Буфер' }).click();
@@ -203,7 +203,10 @@ test.describe('scanner modal UI', () => {
       page.getByRole('main').getByLabel('Список буфера')
     ).toBeVisible();
 
-    await shellHeader.getByRole('link', { name: 'Настройки' }).click();
+    await shellHeader.getByRole('button', { name: 'Меню' }).click();
+    const shellMenu = page.getByRole('dialog', { name: 'Меню' });
+    await expect(shellMenu).toBeVisible();
+    await shellMenu.getByRole('link', { name: /Настройки/ }).click();
     await expect(page).toHaveURL(/#\/settings$/);
     await expect(
       page.getByRole('banner').getByText('Настройки', { exact: true })
@@ -407,7 +410,11 @@ test.describe('scanner modal UI', () => {
     await expect(
       page.getByRole('button', { name: 'Сканировать' })
     ).toBeEnabled();
-    await page.getByRole('button', { name: 'Сканировать' }).click();
+    const duplicateScanButton = page.getByRole('button', {
+      name: 'Сканировать',
+    });
+    await expect(duplicateScanButton).toBeEnabled();
+    await duplicateScanButton.click();
 
     await expect(
       page
@@ -416,6 +423,8 @@ test.describe('scanner modal UI', () => {
     ).toBeVisible({
       timeout: 10_000,
     });
+    await expect(page.locator('.scanner-modal__inline-state')).toHaveCount(1);
+    await expect(page.locator('.mantine-Notification-root')).toHaveCount(0);
     const persistedBuffer = await page.evaluate(() => {
       const rawValue = localStorage.getItem('sklad-buffer');
       if (rawValue === null) {
@@ -432,7 +441,7 @@ test.describe('scanner modal UI', () => {
   test('duplicate decoded code stays warning-only and shows existing buffer item details', async ({
     page,
   }) => {
-    const expectedCode = 'ZXING-DUPLICATE-001';
+    const expectedCode = `ZXING-DUPLICATE-${Date.now()}`;
 
     await page.goto('/#/');
     await page.waitForLoadState('networkidle');
@@ -450,7 +459,11 @@ test.describe('scanner modal UI', () => {
       buffer: pngBuffer,
     });
 
-    await page.getByRole('button', { name: 'Сканировать' }).click();
+    const duplicateScanButton = page.getByRole('button', {
+      name: 'Сканировать',
+    });
+    await expect(duplicateScanButton).toBeEnabled();
+    await duplicateScanButton.click();
     await expect(
       page
         .locator('.scanner-modal__inline-state--success')
@@ -459,14 +472,15 @@ test.describe('scanner modal UI', () => {
       timeout: 10_000,
     });
 
-    await page.getByRole('button', { name: 'Сканировать' }).click();
+    await expect(duplicateScanButton).toBeEnabled();
+    await duplicateScanButton.click();
 
-    await expect(page.getByText('Дубликат')).toBeVisible();
-    await expect(page.locator('.scanner-modal__status-message')).toHaveCount(0);
+    await expect(page.locator('.scanner-modal__inline-state')).toHaveCount(1);
+    await expect(page.locator('.mantine-Notification-root')).toHaveCount(0);
     await expect(
       page
-        .locator('.mantine-Notification-root')
-        .getByText(/Код ZXING-DUPLICATE-001 уже есть в буфере\./)
+        .locator('.scanner-modal__inline-state--warning')
+        .getByText(expectedCode)
     ).toBeVisible();
     await expect(
       page.getByText(
@@ -508,6 +522,8 @@ test.describe('scanner modal UI', () => {
     await expect(
       page.getByText('Файл превышает допустимый размер для фото-сканирования.')
     ).toBeVisible();
+    await expect(page.locator('.scanner-modal__inline-state')).toHaveCount(1);
+    await expect(page.locator('.mantine-Notification-root')).toHaveCount(0);
   });
 
   test('photo tab keeps tabs in one row and selected image editor fills the panel', async ({

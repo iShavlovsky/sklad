@@ -160,10 +160,20 @@ test.describe('mobile home and shell navigation flow', () => {
       shellHeader.getByRole('link', { name: 'Буфер' })
     ).toBeVisible();
     await expect(
-      shellHeader.getByRole('link', {
-        name: 'Настройки',
-      })
+      shellHeader.getByRole('button', { name: 'Меню' })
     ).toBeVisible();
+
+    await shellHeader.getByRole('button', { name: 'Меню' }).click();
+    const shellMenu = page.getByRole('dialog', { name: 'Меню' });
+    await expect(shellMenu).toBeVisible();
+    await expect(
+      shellMenu.getByRole('link', { name: /Настройки/ })
+    ).toBeVisible();
+    await expect(
+      shellMenu.getByRole('link', { name: /Все товары/ })
+    ).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(shellMenu).not.toBeVisible();
 
     await page.getByTestId('shell-network-status').click();
     await expect(page.getByTestId('shell-network-popover')).toBeVisible();

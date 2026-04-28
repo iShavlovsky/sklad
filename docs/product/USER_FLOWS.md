@@ -5,12 +5,15 @@
 ### Current implemented route-first subtree
 - `/arrivals`
 - `/departures`
+- `/products`
 - `/drafts`
 - `/buffer`
 - `/settings`
 - `/settings/profile`
 - `/settings/backup`
 - `/settings/about`
+
+User-visible copy now uses "отгрузка" for outgoing records. Internal route ids, domain types, service/query names, and URLs intentionally remain `departure` / `/departures` until a separate architecture rename is approved.
 
 ### Surface ownership rule
 - Route:
@@ -152,6 +155,29 @@ Departure is saved as a separate durable record, optionally linked to a source a
 
 ### Notes
 Lookup is driven by code and durable journal data, not by hidden page-local assumptions.
+
+---
+
+## Flow: Products list/edit
+
+### Goal
+Let the operator find and correct existing product directory cards without entering an arrival or departure form.
+
+### Entry points
+- settings hub link "Все товары";
+- stocks drawer cross-link "Все товары".
+
+### Happy path
+1. User opens `/products`.
+2. User searches by product name or note and optionally filters active/archived products.
+3. User opens a product preview and chooses edit.
+4. User updates name, supplier, category, note, or archive state.
+5. The product is saved through the directory service and remains available to existing forms and stock projections.
+
+### Important validations
+- `/products` is a route-owned surface, not a new durable inventory subsystem.
+- bottom navigation is not expanded in this iteration.
+- the page consumes product query/service boundaries; it must not write directly to Dexie.
 
 ---
 

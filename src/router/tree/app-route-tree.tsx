@@ -5,6 +5,7 @@ import {
   IconBox,
   IconHome,
   IconListCheck,
+  IconPackage,
   IconSettings,
 } from '@tabler/icons-react';
 
@@ -22,6 +23,7 @@ import { DraftDetailsPage } from '@/pages/drafts/draft-details-page.tsx';
 import { DraftEditPage } from '@/pages/drafts/draft-edit-page.tsx';
 import { DraftsPage } from '@/pages/drafts/drafts-page.tsx';
 import { NotFoundPage } from '@/pages/not-found/not-found-page.tsx';
+import { ProductsPage } from '@/pages/products';
 import { SettingsAboutPage } from '@/pages/settings/settings-about-page.tsx';
 import { SettingsBackupPage } from '@/pages/settings/settings-backup-page.tsx';
 import { SettingsPage } from '@/pages/settings/settings-page.tsx';
@@ -150,19 +152,19 @@ export const appRouteTree = {
         path: 'departures',
         element: routeOutlet,
         page: {
-          title: 'Расходы',
-          description: 'список расходов',
+          title: 'Отгрузки',
+          description: 'список отгрузок',
         },
         head: {
-          title: 'Расходы - SKLAD',
-          description: 'список расходов',
+          title: 'Отгрузки - SKLAD',
+          description: 'список отгрузок',
         },
         nav: {
-          label: 'Расходы',
+          label: 'Отгрузки',
           order: 2,
           icon: IconArrowUp,
           mobileBottom: true,
-          ariaLabel: 'Расходы',
+          ariaLabel: 'Отгрузки',
         },
         children: {
           index: {
@@ -170,48 +172,48 @@ export const appRouteTree = {
             path: '',
             Component: DeparturesPage,
             page: {
-              title: 'Расходы',
-              description: 'список расходов',
+              title: 'Отгрузки',
+              description: 'список отгрузок',
             },
             head: {
-              title: 'Расходы - SKLAD',
-              description: 'список расходов',
+              title: 'Отгрузки - SKLAD',
+              description: 'список отгрузок',
             },
           },
           create: {
             path: 'create',
             Component: DepartureCreatePage,
             page: {
-              title: 'Новый расход',
-              description: 'route-owned create surface для расходов',
+              title: 'Новая отгрузка',
+              description: 'route-owned create surface для отгрузок',
             },
             head: {
-              title: 'Новый расход - SKLAD',
-              description: 'route-owned create surface для расходов',
+              title: 'Новая отгрузка - SKLAD',
+              description: 'route-owned create surface для отгрузок',
             },
           },
           details: {
             path: ':departureId',
             Component: DepartureDetailsPage,
             page: {
-              title: 'Карточка расхода',
-              description: 'детали расхода',
+              title: 'Карточка отгрузки',
+              description: 'детали отгрузки',
             },
             head: {
-              title: 'Карточка расхода - SKLAD',
-              description: 'детали расхода',
+              title: 'Карточка отгрузки - SKLAD',
+              description: 'детали отгрузки',
             },
           },
           edit: {
             path: ':departureId/edit',
             Component: DepartureEditPage,
             page: {
-              title: 'Редактирование расхода',
-              description: 'route-owned edit surface для расходов',
+              title: 'Редактирование отгрузки',
+              description: 'route-owned edit surface для отгрузок',
             },
             head: {
-              title: 'Редактирование расхода - SKLAD',
-              description: 'route-owned edit surface для расходов',
+              title: 'Редактирование отгрузки - SKLAD',
+              description: 'route-owned edit surface для отгрузок',
             },
           },
         },
@@ -323,6 +325,24 @@ export const appRouteTree = {
               description: 'детали производной позиции остатков',
             },
           },
+        },
+      },
+      products: {
+        path: 'products',
+        Component: ProductsPage,
+        page: {
+          title: 'Все товары',
+          description: 'справочник товаров',
+        },
+        head: {
+          title: 'Все товары - SKLAD',
+          description: 'справочник товаров',
+        },
+        nav: {
+          label: 'Все товары',
+          order: 4,
+          icon: IconPackage,
+          ariaLabel: 'Все товары',
         },
       },
       buffer: {

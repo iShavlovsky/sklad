@@ -52,12 +52,15 @@ export function createEmptyArrivalEditorValues(): ArrivalEditorFormValues {
     note: '',
     occurredAt: formatIsoForDateTimePicker(nowIso()),
     product: emptyDirectoryValue(),
+    quantity: '',
     subjectKind: readRememberedFormPreference(
       ARRIVAL_FORM_PREFERENCE_KEYS.subjectKind,
       'other'
     ),
     supplier: emptyDirectoryValue(),
     title: '',
+    totalCost: '',
+    unitCost: '',
   };
 }
 
@@ -126,6 +129,8 @@ export function mapArrivalDetailsToEditorValues(
       id: details.arrival.productId ?? '',
       name: details.arrival.productName ?? '',
     },
+    quantity:
+      details.arrival.quantity === null ? '' : String(details.arrival.quantity),
     subjectKind: details.arrival.subjectKind,
     supplier: {
       createIfMissing: false,
@@ -133,6 +138,12 @@ export function mapArrivalDetailsToEditorValues(
       name: details.arrival.supplierName ?? '',
     },
     title: details.arrival.title,
+    totalCost:
+      details.arrival.totalCost === null
+        ? ''
+        : String(details.arrival.totalCost),
+    unitCost:
+      details.arrival.unitCost === null ? '' : String(details.arrival.unitCost),
   };
 }
 
@@ -151,6 +162,18 @@ export function parseArrivalAmount(raw: string): number | null {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
+export function parseArrivalDecimal(raw: string): number | null {
+  const trimmed = raw.trim();
+  if (trimmed === '') return null;
+
+  const parsed = Number(trimmed.replace(',', '.'));
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+export function formatArrivalDecimal(value: number): string {
+  return Number.isInteger(value) ? String(value) : value.toFixed(2);
+}
+
 function buildArrivalDirectoryInput(
   field: ArrivalEditorDirectoryValue
 ): CreateArrivalDirectoryInput {
@@ -162,6 +185,10 @@ function buildArrivalDirectoryInput(
 }
 
 function buildCommonArrivalInput(values: ArrivalEditorFormValues) {
+  const quantity = parseArrivalDecimal(values.quantity);
+  const totalCost = parseArrivalDecimal(values.totalCost);
+  const unitCost = parseArrivalDecimal(values.unitCost);
+
   return {
     category: buildArrivalDirectoryInput(values.category),
     codes: splitArrivalCodes(values.codes).map((value) => ({
@@ -171,8 +198,13 @@ function buildCommonArrivalInput(values: ArrivalEditorFormValues) {
     description: normalizeString(values.description),
     linkUrl: normalizeString(values.linkUrl),
     money: {
-      amount: parseArrivalAmount(values.amount),
+      amount: totalCost ?? quantity ?? parseArrivalAmount(values.amount),
       currency: normalizeString(values.currency),
+    },
+    quantityCost: {
+      quantity,
+      totalCost,
+      unitCost,
     },
     note: normalizeString(values.note),
     occurredAt: normalizeOccurredAtValue(values.occurredAt),
@@ -206,6 +238,7 @@ export function buildArrivalDraftPayload(
     description: common.description,
     linkUrl: common.linkUrl,
     money: common.money,
+    quantityCost: common.quantityCost,
     note: common.note,
     occurredAt: common.occurredAt,
     product: {

@@ -210,7 +210,6 @@ export function ArrivalEditorForm({
             params: { arrivalId: result.record.id },
             replace: true,
           });
-          showFormSuccess('Приход создан.');
           return;
         }
 

@@ -6,6 +6,7 @@ import type {
 import type {
   DirectoryRefSnapshot,
   MoneyValue,
+  QuantityCostValue,
 } from '../../../common/value-objects.ts';
 
 export interface CreateDepartureDirectoryInput extends DirectoryRefSnapshot {
@@ -19,6 +20,7 @@ export interface CreateDepartureInput {
   occurredAt: string;
 
   money: MoneyValue;
+  quantityCost: QuantityCostValue;
   note: string | null;
   direction: string | null;
 

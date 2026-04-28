@@ -63,6 +63,84 @@ function countRecords(payload: AppBackupPayload): BackupImportCounts {
   };
 }
 
+function normalizeQuantityCostRecord<TRecord extends Record<string, unknown>>(
+  record: TRecord
+): TRecord {
+  const amount = typeof record.amount === 'number' ? record.amount : null;
+  const currency = typeof record.currency === 'string' ? record.currency : null;
+  const hasCurrency = currency !== null && currency.trim() !== '';
+  const quantity =
+    typeof record.quantity === 'number'
+      ? record.quantity
+      : !hasCurrency && amount !== null
+        ? amount
+        : null;
+  const totalCost =
+    typeof record.totalCost === 'number'
+      ? record.totalCost
+      : hasCurrency
+        ? amount
+        : null;
+  const unitCost =
+    typeof record.unitCost === 'number'
+      ? record.unitCost
+      : quantity !== null && quantity > 0 && totalCost !== null
+        ? totalCost / quantity
+        : null;
+
+  return {
+    ...record,
+    quantity,
+    totalCost,
+    unitCost,
+  };
+}
+
+function normalizeDraftPayload(payload: unknown): unknown {
+  if (!isObject(payload)) {
+    return payload;
+  }
+
+  if (isObject(payload.quantityCost)) {
+    return payload;
+  }
+
+  const money = isObject(payload.money) ? payload.money : {};
+  const amount = typeof money.amount === 'number' ? money.amount : null;
+  const currency = typeof money.currency === 'string' ? money.currency : null;
+  const hasCurrency = currency !== null && currency.trim() !== '';
+  const quantity = !hasCurrency && amount !== null ? amount : null;
+  const totalCost = hasCurrency ? amount : null;
+
+  return {
+    ...payload,
+    quantityCost: {
+      quantity,
+      totalCost,
+      unitCost:
+        quantity !== null && quantity > 0 && totalCost !== null
+          ? totalCost / quantity
+          : null,
+    },
+  };
+}
+
+function normalizeBackupPayload(payload: AppBackupPayload): AppBackupPayload {
+  return {
+    ...payload,
+    arrivals: payload.arrivals.map((record) =>
+      normalizeQuantityCostRecord(record as unknown as Record<string, unknown>)
+    ) as unknown as AppBackupPayload['arrivals'],
+    departures: payload.departures.map((record) =>
+      normalizeQuantityCostRecord(record as unknown as Record<string, unknown>)
+    ) as unknown as AppBackupPayload['departures'],
+    drafts: payload.drafts.map((record) => ({
+      ...record,
+      payload: normalizeDraftPayload(record.payload),
+    })) as AppBackupPayload['drafts'],
+  };
+}
+
 function createIssue(
   path: string,
   code: ValidationIssue['code'],
@@ -154,12 +232,13 @@ export class BackupImportValidationService {
       };
     }
 
-    const counts = countRecords(input);
+    const payload = normalizeBackupPayload(input);
+    const counts = countRecords(payload);
 
     return {
       ok: true,
-      payload: input,
-      report: createSuccessReport(input, counts),
+      payload,
+      report: createSuccessReport(payload, counts),
     };
   }
 }

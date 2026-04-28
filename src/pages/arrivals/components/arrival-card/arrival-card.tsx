@@ -30,7 +30,13 @@ function buildArrivalCardMetrics(item: ArrivalListItem): RecordMetric[] {
     {
       field: 'amount',
       label: 'Сумма',
-      value: formatArrivalAmount(item.amount, item.currency),
+      value: formatArrivalAmount(
+        item.amount,
+        item.currency,
+        item.quantity,
+        item.totalCost,
+        item.unitCost
+      ),
     },
     {
       field: 'subjectKind',
@@ -65,7 +71,13 @@ export function ArrivalCard({
       metrics={buildArrivalCardMetrics(item)}
       onOpen={onOpen}
       openLabel={`Открыть приход ${item.title}`}
-      primaryValue={formatArrivalAmount(item.amount, item.currency)}
+      primaryValue={formatArrivalAmount(
+        item.amount,
+        item.currency,
+        item.quantity,
+        item.totalCost,
+        item.unitCost
+      )}
       subtitle={formatArrivalOccurredAt(item.occurredAt)}
       title={item.title}
     />

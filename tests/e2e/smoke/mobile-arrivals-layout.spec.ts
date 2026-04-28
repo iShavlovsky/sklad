@@ -33,7 +33,7 @@ async function openArrivals(
 ): Promise<void> {
   await page.goto('/#/arrivals');
   await page.waitForLoadState('networkidle');
-  await expect(page.locator('.mobile-page-header')).toBeVisible();
+  await expect(page.locator('.mobile-shell__title')).toBeVisible();
 }
 
 test.describe('arrivals list page mobile composition (mobile viewport)', () => {
@@ -78,7 +78,7 @@ test.describe('arrivals list page mobile composition (mobile viewport)', () => {
       );
 
       return {
-        h1Count: document.querySelectorAll('.mobile-page-header h1').length,
+        h1Count: document.querySelectorAll('.mobile-shell__title').length,
         sectionCount: sections.length,
         footerCreateButtonCount: footerCreateButtons.length,
         topActionMinWidth: Number.isFinite(topMinWidth) ? topMinWidth : 0,
@@ -113,7 +113,7 @@ test.describe('arrivals list page mobile composition (mobile viewport)', () => {
     await expect(
       page.locator('.mobile-page-sections .page-section')
     ).toHaveCount(1);
-    await expect(page.locator('.mobile-page-header h1')).toHaveCount(1);
+    await expect(page.locator('.mobile-shell__title')).toHaveCount(1);
 
     expect(geometry.h1Count).toBe(1);
     expect(geometry.sectionCount).toBe(1);
@@ -130,7 +130,7 @@ test.describe('arrivals list page mobile composition (mobile viewport)', () => {
     expect(geometry.footerRailRight).toBeCloseTo(geometry.mainRailRight, 1);
 
     fs.mkdirSync(screenshotRoot, { recursive: true });
-    await page.locator('.mobile-page-header').screenshot({
+    await page.locator('.mobile-shell__header').screenshot({
       path: path.join(screenshotRoot, 'arrivals-top.png'),
     });
     await page.locator('.mobile-page-sections').screenshot({
@@ -147,11 +147,10 @@ test.describe('arrivals list page mobile composition (mobile viewport)', () => {
   }) => {
     await page.goto('/#/arrivals/demo-id');
     await page.waitForLoadState('networkidle');
-    await expect(page.locator('.mobile-page-header')).toBeVisible();
-    await expect(page.locator('.mobile-page-header h1')).toBeVisible();
+    await expect(page.locator('.mobile-shell__title')).toBeVisible();
     await expect(
       page.locator('.mobile-page-sections .page-section')
-    ).toHaveCount(2);
+    ).toHaveCount(1);
     await page.screenshot({
       path: path.join(screenshotRoot, 'arrivals-details-full.png'),
       fullPage: true,
@@ -159,11 +158,8 @@ test.describe('arrivals list page mobile composition (mobile viewport)', () => {
 
     await page.goto('/#/arrivals/demo-id/edit');
     await page.waitForLoadState('networkidle');
-    await expect(page.locator('.mobile-page-header')).toBeVisible();
-    await expect(page.locator('.mobile-page-header h1')).toBeVisible();
-    await expect(
-      page.locator('.mobile-page-sections .page-section')
-    ).toBeVisible();
+    await expect(page.locator('.mobile-shell__title')).toBeVisible();
+    await expect(page.locator('.mobile-page-container')).toBeVisible();
 
     await page.screenshot({
       path: path.join(screenshotRoot, 'arrivals-edit-surface-full.png'),
@@ -172,8 +168,7 @@ test.describe('arrivals list page mobile composition (mobile viewport)', () => {
 
     await page.goto('/#/does-not-exist-route');
     await page.waitForLoadState('networkidle');
-    await expect(page.locator('.mobile-page-header')).toBeVisible();
-    await expect(page.locator('.mobile-page-header h1')).toHaveText('404');
+    await expect(page.locator('.mobile-shell__title')).toHaveText('404');
     await page.screenshot({
       path: path.join(screenshotRoot, 'arrivals-not-found-full.png'),
       fullPage: true,

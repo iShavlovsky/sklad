@@ -6,7 +6,7 @@ async function createArrivalFixture(
   id: string;
   title: string;
 }> {
-  const title = 'Приход для расхода';
+  const title = 'Приход для отгрузки';
 
   await page.goto('/#/arrivals/create');
   await page.waitForLoadState('networkidle');
@@ -61,12 +61,12 @@ test.describe('route-first navigation ownership', () => {
     await page.waitForLoadState('networkidle');
 
     await expect(
-      page.getByRole('banner').getByText('Расходы', { exact: true })
+      page.getByRole('banner').getByText('Отгрузки', { exact: true })
     ).toBeVisible();
     await page.getByTestId('departures-create-button').click();
     await expect(page).toHaveURL(/#\/departures\/create$/);
     await expect(
-      page.getByRole('banner').getByText('Новый расход', { exact: true })
+      page.getByRole('banner').getByText('Новая отгрузка', { exact: true })
     ).toBeVisible();
 
     await page.goto('/#/settings');
@@ -108,7 +108,7 @@ test.describe('route-first navigation ownership', () => {
     await page.getByTestId('departures-create-button').click();
     await expect(page).toHaveURL(/#\/departures\/create$/);
     await expect(
-      page.getByRole('banner').getByText('Новый расход', { exact: true })
+      page.getByRole('banner').getByText('Новая отгрузка', { exact: true })
     ).toBeVisible();
 
     await page.getByRole('button', { name: /Связь с приходом/ }).click();
@@ -118,9 +118,9 @@ test.describe('route-first navigation ownership', () => {
       'departure-linked-arrival-preview'
     );
     await expect(linkedArrivalPreview).toBeVisible();
-    await expect(linkedArrivalPreview).toContainText('Приход для расхода');
+    await expect(linkedArrivalPreview).toContainText('Приход для отгрузки');
 
-    await page.getByRole('textbox').nth(0).fill('Расход на выдачу');
+    await page.getByRole('textbox').nth(0).fill('Отгрузка на выдачу');
 
     await page.getByTestId('departure-occurred-at-picker').click();
     const timeInputs = page.locator(
@@ -129,7 +129,7 @@ test.describe('route-first navigation ownership', () => {
     await timeInputs.nth(0).fill('10');
     await page
       .getByRole('banner')
-      .getByText('Новый расход', { exact: true })
+      .getByText('Новая отгрузка', { exact: true })
       .click();
     await expect(
       page.getByTestId('departure-occurred-at-picker')
@@ -152,9 +152,9 @@ test.describe('route-first navigation ownership', () => {
     await page.getByRole('button', { name: 'Создать' }).click();
 
     await expect(page).toHaveURL(/#\/departures$/);
-    await expect(page.getByText('Расход создан.')).toBeVisible();
+    await expect(page.getByText('Отгрузка создана.')).toBeVisible();
     await expect(
-      page.getByRole('banner').getByText('Расходы', { exact: true })
+      page.getByRole('banner').getByText('Отгрузки', { exact: true })
     ).toBeVisible();
 
     const storedDeparture = await page.evaluate(async () => {
@@ -190,7 +190,7 @@ test.describe('route-first navigation ownership', () => {
                   basedOnArrivalId: string | null;
                   title: string;
                 }>
-              ).find((item) => item.title === 'Расход на выдачу') ?? null;
+              ).find((item) => item.title === 'Отгрузка на выдачу') ?? null;
             db.close();
             resolve(match);
           };

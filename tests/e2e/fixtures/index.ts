@@ -10,7 +10,7 @@ type AutoFixtures = { _reset: undefined };
  * Before each test the fixture:
  * 1. Navigates to the app root.
  * 2. Deletes IndexedDB and clears localStorage.
- * 3. Reloads — Dexie populate hook seeds default suppliers.
+ * 3. Reloads; Dexie populate hook seeds default suppliers.
  *
  * Every test starts from a clean, deterministic state with 3 default suppliers.
  */

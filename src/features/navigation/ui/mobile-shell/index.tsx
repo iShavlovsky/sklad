@@ -1,4 +1,4 @@
-import { type PropsWithChildren, type ReactElement } from 'react';
+import { type PropsWithChildren, type ReactElement, useState } from 'react';
 import {
   ActionIcon,
   AppShell,
@@ -8,7 +8,7 @@ import {
   RemoveScroll,
   Text,
 } from '@mantine/core';
-import { IconListCheck, IconQrcode, IconSettings } from '@tabler/icons-react';
+import { IconListCheck, IconMenu2, IconQrcode } from '@tabler/icons-react';
 import { useStore } from 'zustand';
 
 import { bufferStore } from '@/features/buffer/core/buffer-core.public.ts';
@@ -21,6 +21,7 @@ import { getEntityAccentSurfaceStyle } from '@/shared/ui/entity-icon-tones';
 import { ShellInner } from '@/shared/ui/page-primitives';
 
 import { MobileShellNetworkStatus } from './network-status';
+import { ShellMenuDrawer } from './shell-menu-drawer';
 
 import styles from './styles.module.css';
 
@@ -28,6 +29,7 @@ export function MobileShell({
   children,
 }: Readonly<PropsWithChildren>): ReactElement {
   const meta = useRouteMeta();
+  const [menuOpened, setMenuOpened] = useState(false);
   const isFullscreenLayout = meta?.layout?.kind === 'fullscreen';
   const totalBufferCount = useStore(bufferStore, (state) => state.items.length);
   const haptics = useHaptics();
@@ -37,12 +39,12 @@ export function MobileShell({
   return (
     <AppShell
       className="mobile-shell"
-      header={{
-        height: 'var(--sl-shell-header-height)',
-        offset: false,
-      }}
       footer={{
         height: footerHeight,
+        offset: false,
+      }}
+      header={{
+        height: 'var(--sl-shell-header-height)',
         offset: false,
       }}
     >
@@ -53,9 +55,9 @@ export function MobileShell({
           <Group
             align="center"
             className={`${styles.headerContent} mobile-shell__header-content`}
+            gap="xs"
             h="100%"
             justify="space-between"
-            gap="xs"
             px={0}
             wrap="nowrap"
           >
@@ -86,6 +88,7 @@ export function MobileShell({
               <ActionIcon
                 aria-label="Сканер"
                 className="mobile-shell__utility"
+                color="brand"
                 h="var(--sl-mobile-control-height)"
                 mih="var(--sl-mobile-control-height)"
                 miw="var(--sl-mobile-control-height)"
@@ -95,7 +98,6 @@ export function MobileShell({
                     entrypoint: 'global',
                   });
                 }}
-                color="brand"
                 size="md"
                 style={getEntityAccentSurfaceStyle('scanner')}
                 variant="light"
@@ -147,26 +149,23 @@ export function MobileShell({
                   </AppLink>
                 </Indicator>
               </Box>
-              <AppLink
-                aria-label="Настройки"
-                className="mobile-shell__utility-link"
-                routeId="root.settings"
-                style={{ display: 'inline-flex' }}
+              <ActionIcon
+                aria-label="Меню"
+                className="mobile-shell__utility"
+                color="brand"
+                h="var(--sl-mobile-control-height)"
+                mih="var(--sl-mobile-control-height)"
+                miw="var(--sl-mobile-control-height)"
+                onClick={() => {
+                  void haptics.trigger('tap');
+                  setMenuOpened(true);
+                }}
+                size="md"
+                style={getEntityAccentSurfaceStyle('settings')}
+                variant="light"
               >
-                <ActionIcon
-                  className="mobile-shell__utility"
-                  color="brand"
-                  component="span"
-                  h="var(--sl-mobile-control-height)"
-                  mih="var(--sl-mobile-control-height)"
-                  miw="var(--sl-mobile-control-height)"
-                  size="md"
-                  style={getEntityAccentSurfaceStyle('settings')}
-                  variant="light"
-                >
-                  <IconSettings size={16} stroke={1.75} />
-                </ActionIcon>
-              </AppLink>
+                <IconMenu2 size={16} stroke={1.75} />
+              </ActionIcon>
             </Group>
           </Group>
         </ShellInner>
@@ -195,6 +194,10 @@ export function MobileShell({
           <MobileBottomNav />
         </ShellInner>
       </AppShell.Footer>
+      <ShellMenuDrawer
+        onClose={() => setMenuOpened(false)}
+        opened={menuOpened}
+      />
     </AppShell>
   );
 }

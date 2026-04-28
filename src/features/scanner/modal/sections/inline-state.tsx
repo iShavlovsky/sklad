@@ -1,5 +1,10 @@
 import type { ReactElement } from 'react';
-import { Button, Paper, Text } from '@mantine/core';
+import { Alert, Button, Text } from '@mantine/core';
+import {
+  IconAlertCircle,
+  IconAlertTriangle,
+  IconCheck,
+} from '@tabler/icons-react';
 
 import styles from '../styles.module.css';
 
@@ -20,59 +25,54 @@ export function ScannerModalInlineState({
   visibleErrorMessage,
   onDismissError,
 }: Readonly<ScannerModalInlineStateProps>): ReactElement {
-  return (
-    <>
-      {visibleErrorMessage && (
-        <Paper
-          className={`${styles.inlineState} scanner-modal__inline-state scanner-modal__inline-state--error`}
-          component="div"
-          data-tone="error"
-          p="xs"
-          radius="md"
-          withBorder
+  if (visibleErrorMessage) {
+    return (
+      <Alert
+        className={`${styles.inlineState} scanner-modal__inline-state scanner-modal__inline-state--error`}
+        color="red"
+        icon={<IconAlertCircle size={16} />}
+        title={visibleErrorMessage}
+        variant="light"
+      >
+        <Button
+          color="red"
+          onClick={onDismissError}
+          size="compact-xs"
+          variant="subtle"
         >
-          <div>
-            <Text fw={700} size="sm">
-              {visibleErrorMessage}
-            </Text>
-          </div>
-          <Button
-            color="red"
-            onClick={onDismissError}
-            size="compact-xs"
-            variant="subtle"
-          >
-            Закрыть предупреждение
-          </Button>
-        </Paper>
-      )}
+          Закрыть предупреждение
+        </Button>
+      </Alert>
+    );
+  }
 
-      {shouldRenderSuccessState && latestBufferItem !== null && (
-        <Paper
-          className={`${styles.inlineState} scanner-modal__inline-state scanner-modal__inline-state--success`}
-          component="div"
-          data-tone="success"
-          p="xs"
-          radius="md"
-          withBorder
-        >
-          <div>
-            <Text fw={700} size="sm">
-              Код добавлен в буфер
-            </Text>
-            <Text size="sm">{latestBufferItem.value}</Text>
-          </div>
-        </Paper>
-      )}
+  if (shouldRenderSuccessState && latestBufferItem !== null) {
+    return (
+      <Alert
+        className={`${styles.inlineState} scanner-modal__inline-state scanner-modal__inline-state--success`}
+        color="green"
+        icon={<IconCheck size={16} />}
+        title="Код добавлен в буфер"
+        variant="light"
+      >
+        <Text size="sm">{latestBufferItem.value}</Text>
+      </Alert>
+    );
+  }
 
-      {shouldRenderInlineStatusMessage && (
-        <Text
-          className={`${styles.statusMessage} scanner-modal__status-message`}
-          size="sm"
-        >
-          {statusMessage}
-        </Text>
-      )}
-    </>
-  );
+  if (shouldRenderInlineStatusMessage && statusMessage !== null) {
+    return (
+      <Alert
+        className={`${styles.inlineState} scanner-modal__inline-state scanner-modal__inline-state--warning scanner-modal__status-message`}
+        color="yellow"
+        icon={<IconAlertTriangle size={16} />}
+        title="Дубликат"
+        variant="light"
+      >
+        {statusMessage}
+      </Alert>
+    );
+  }
+
+  return <></>;
 }

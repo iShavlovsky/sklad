@@ -45,10 +45,7 @@ async function createSerialArrival(
 
 test.describe('adjustments', () => {
   test('creates a quantity adjustment', async ({ page }) => {
-    await createQuantityArrival(
-      page,
-      'РўРµСЃС‚РѕРІР°СЏ РєРѕСЂСЂРµРєС‚РёСЂРѕРІРєР°'
-    );
+    await createQuantityArrival(page, 'Тестовая корректировка');
 
     await page.goto('/#/stocks');
     await page.waitForLoadState('networkidle');
@@ -69,7 +66,7 @@ test.describe('adjustments', () => {
     await adjustmentDialog
       .getByRole('textbox')
       .nth(1)
-      .fill('РўРµСЃС‚ РєРѕСЂСЂРµРєС‚РёСЂРѕРІРєРё e2e');
+      .fill('Тест корректировки e2e');
 
     await adjustmentDialog.getByRole('button').last().click();
     await expect(adjustmentDialog).not.toBeVisible({ timeout: 6000 });
@@ -78,11 +75,7 @@ test.describe('adjustments', () => {
 
 test.describe('serial adjustments', () => {
   test('disables adjustments for serial stock', async ({ page }) => {
-    await createSerialArrival(
-      page,
-      'РЎРµСЂРёР№РЅР°СЏ РїРѕР·РёС†РёСЏ',
-      'SN-ADJ-SER-E2E-001'
-    );
+    await createSerialArrival(page, 'Серийная позиция', 'SN-ADJ-SER-E2E-001');
 
     await page.goto('/#/stocks');
     await page.waitForLoadState('networkidle');

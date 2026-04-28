@@ -117,6 +117,7 @@ export class CreateDepartureService {
         description: data.description,
         occurredAt: data.occurredAt,
         money: data.money,
+        quantityCost: data.quantityCost,
         note: data.note,
         direction: data.direction,
         supplier: {

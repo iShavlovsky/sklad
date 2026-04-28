@@ -1,21 +1,22 @@
-import { FORM_PREFERENCE_KEYS } from '@/features/form-preferences/model/form-preferences.keys.ts';
+﻿import { FORM_PREFERENCE_KEYS } from '@/features/form-preferences/model/form-preferences.keys.ts';
 
 import type { DepartureEditorSectionName } from './departure-editor.form-values.ts';
 
 export const DEPARTURE_EDITOR_COPY = {
-  created: 'Расход создан.',
+  created: 'Отгрузка создана.',
   operation: {
     bufferUnavailable:
       'Не удалось открыть буфер. Проверьте, что верхняя панель доступна, и попробуйте ещё раз.',
-    draftFailed: 'Не удалось сохранить расход в черновик.',
+    draftFailed: 'Не удалось сохранить отгрузку в черновик.',
     scannerUnavailable:
       'Не удалось открыть сканер. Проверьте, что верхняя панель доступна, и попробуйте ещё раз.',
     validationError: 'Проверьте заполнение формы.',
   },
   validation: {
-    amountInvalid: 'Сумма должна быть числом.',
-    occurredAtRequired: 'Укажите дату и время расхода.',
-    titleRequired: 'Укажите название расхода.',
+    costInvalid: 'Стоимость должна быть числом.',
+    occurredAtRequired: 'Укажите дату и время отгрузки.',
+    quantityInvalid: 'Количество должно быть числом.',
+    titleRequired: 'Укажите название отгрузки.',
   },
 } as const;
 

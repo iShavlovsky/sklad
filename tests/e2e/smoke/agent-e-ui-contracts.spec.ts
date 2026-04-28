@@ -54,7 +54,9 @@ test.describe('Agent E approved UI contracts', () => {
     await page.waitForLoadState('networkidle');
 
     await expect(
-      page.getByRole('banner').getByText('РќР°СЃС‚СЂРѕР№РєРё', { exact: true })
+      page.locator('.mobile-shell__title').getByText('Настройки', {
+        exact: true,
+      })
     ).toBeVisible();
     await expect(
       page.locator('.mobile-page-sections .page-section')
@@ -67,7 +69,7 @@ test.describe('Agent E approved UI contracts', () => {
     await expect(page.getByTestId('settings-nav-about')).toBeVisible();
 
     const infoButtons = page.getByRole('button', {
-      name: /РљР°Рє СЌС‚Рѕ СЂР°Р±РѕС‚Р°РµС‚|Рћ СЂР°Р·РґРµР»Рµ/,
+      name: /Как это работает|О разделе/,
     });
     await expect(infoButtons).toHaveCount(2);
 

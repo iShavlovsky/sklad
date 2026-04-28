@@ -30,6 +30,11 @@ export function buildStockIncreaseAdjustmentInput(
       amount,
       currency: null,
     },
+    quantityCost: {
+      quantity: amount,
+      totalCost: null,
+      unitCost: null,
+    },
     linkUrl: null,
     note: normalizeAdjustmentReason(reason),
     supplier: buildDirectoryInput(item.supplierId, item.supplierName),
@@ -53,6 +58,11 @@ export function buildStockDecreaseAdjustmentInput(
     money: {
       amount,
       currency: null,
+    },
+    quantityCost: {
+      quantity: amount,
+      totalCost: null,
+      unitCost: null,
     },
     note: normalizeAdjustmentReason(reason),
     direction: 'adjustment',

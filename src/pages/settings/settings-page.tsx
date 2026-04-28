@@ -1,5 +1,10 @@
 import { type ReactElement } from 'react';
-import { IconCloudUpload, IconInfoCircle, IconUser } from '@tabler/icons-react';
+import {
+  IconCloudUpload,
+  IconInfoCircle,
+  IconPackage,
+  IconUser,
+} from '@tabler/icons-react';
 
 import { APP_ROUTES } from '@/shared/config/routes.ts';
 import { InfoAction } from '@/shared/ui/info-action';
@@ -23,7 +28,7 @@ export function SettingsPage(): ReactElement {
           badge="Разделы"
           description="Быстрый переход к связанным системным экранам."
           trailing={
-            <InfoAction description="Эти разделы ведут к профилю, backup-центру и сведениям о приложении. Они не меняют журналы сами по себе." />
+            <InfoAction description="Эти разделы ведут к профилю, backup-центру, справочнику товаров и сведениям о приложении. Они не меняют журналы сами по себе." />
           }
         >
           <SettingsHubLink
@@ -31,6 +36,12 @@ export function SettingsPage(): ReactElement {
             icon={<IconUser size={16} />}
             label="Профиль"
             to={APP_ROUTES.settingsProfile}
+          />
+          <SettingsHubLink
+            description="Справочник товаров, быстрый поиск и редактирование карточек"
+            icon={<IconPackage size={16} />}
+            label="Все товары"
+            to={APP_ROUTES.products}
           />
           <SettingsHubLink
             description="Резервные копии и журнал операций с данными"

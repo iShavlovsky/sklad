@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+﻿import { useMemo } from 'react';
 import { useStore } from 'zustand';
 
 import type { ArrivalListQuery } from '@/domain/queries/arrival/arrival-list.query.ts';
@@ -116,7 +116,7 @@ export function useTelemetry(): TelemetryItem[] {
       },
       {
         id: 'departures',
-        label: 'Расходы',
+        label: 'Отгрузки',
         value: departures.length,
         icon: 'departures',
       },

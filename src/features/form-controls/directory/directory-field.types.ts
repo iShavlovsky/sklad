@@ -13,9 +13,9 @@ export interface DirectoryFieldControlProps {
   onManualNameChange: (value: string) => void;
   onSearchChange: (value: string) => void;
   onSelectChange: (value: string | null) => void;
+  manualNameValue: string;
   options: DirectoryFieldOption[];
   searchValue: string;
   selectedId: string;
-  selectedName: string;
   supportsCreateIfMissing: boolean;
 }

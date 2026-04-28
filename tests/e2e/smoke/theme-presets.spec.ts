@@ -75,7 +75,9 @@ test.describe('theme foundation modes', () => {
 
     await openRoute(page, '/settings');
     await expect(
-      page.getByRole('heading', { name: 'Настройки' })
+      page.locator('.mobile-shell__title').getByText('Настройки', {
+        exact: true,
+      })
     ).toBeVisible();
     await expect(page.getByRole('button', { name: 'Сканер' })).toBeVisible();
 

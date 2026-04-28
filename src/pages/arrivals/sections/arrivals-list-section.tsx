@@ -1,4 +1,4 @@
-import { type ReactElement, useState } from 'react';
+﻿import { type ReactElement, useState } from 'react';
 import { Box, Button, Group, Stack, Text } from '@mantine/core';
 
 import { useDeleteArrival } from '@/features/arrivals/editor/hooks/use-delete-arrival.ts';
@@ -72,7 +72,7 @@ export function ArrivalsListSection(): ReactElement {
 
       const message =
         result.code === 'ARRIVAL_HAS_DEPENDENT_DEPARTURES'
-          ? `Нельзя удалить: есть связанные расходы (${result.departureCount}).`
+          ? `Нельзя удалить: есть связанные отгрузки (${result.departureCount}).`
           : 'Не удалось удалить приход. Проверьте запись и повторите действие.';
       setDeleteError(message);
       actionFeedback.notify({

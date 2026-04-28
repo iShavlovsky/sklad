@@ -3,6 +3,7 @@ import type { SubjectKind } from '../../../common/record-kinds.ts';
 import type {
   DirectoryRefSnapshot,
   MoneyValue,
+  QuantityCostValue,
 } from '../../../common/value-objects.ts';
 
 export interface CreateArrivalDirectoryInput extends DirectoryRefSnapshot {
@@ -16,6 +17,7 @@ export interface CreateArrivalInput {
   occurredAt: string;
 
   money: MoneyValue;
+  quantityCost: QuantityCostValue;
   linkUrl: string | null;
   note: string | null;
 

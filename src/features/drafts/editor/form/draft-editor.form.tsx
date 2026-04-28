@@ -1,4 +1,4 @@
-import { type ReactElement, useState } from 'react';
+﻿import { type ReactElement, useState } from 'react';
 import { Alert, Text } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import { IconAlertCircle } from '@tabler/icons-react';
@@ -199,7 +199,7 @@ export function DraftEditor({
         return;
       }
 
-      showSuccess('Черновик опубликован в расход.');
+      showSuccess('Черновик опубликован в отгрузка.');
       navigate.to('root.departures.details', {
         params: { departureId: result.record.id },
         replace: true,

@@ -1,3 +1,4 @@
+﻿import type { RecordCodeKind } from '@/domain/common/record-kinds.ts';
 import type { DepartureDraftPayload } from '@/domain/drafts/departure-draft.payload.ts';
 import type { CreateDepartureInput } from '@/domain/entries/departure/create/create-departure.input.ts';
 import type { CreateDepartureResult } from '@/domain/entries/departure/create/create-departure.result.ts';
@@ -63,12 +64,15 @@ export function createEmptyDepartureEditorValues(): DepartureEditorFormValues {
     note: '',
     occurredAt: formatIsoForDateTimePicker(nowIso()),
     product: emptyDirectoryValue(),
+    quantity: '',
     subjectKind: readRememberedFormPreference(
       DEPARTURE_FORM_PREFERENCE_KEYS.subjectKind,
       'other'
     ),
     supplier: emptyDirectoryValue(),
     title: '',
+    totalCost: '',
+    unitCost: '',
   };
 }
 
@@ -128,7 +132,23 @@ export function parseDepartureAmount(raw: string): number | null {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
+export function parseDepartureDecimal(raw: string): number | null {
+  const trimmed = raw.trim();
+  if (trimmed === '') return null;
+
+  const parsed = Number(trimmed.replace(',', '.'));
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+export function formatDepartureDecimal(value: number): string {
+  return Number.isInteger(value) ? String(value) : value.toFixed(2);
+}
+
 function buildCommonDepartureInput(values: DepartureEditorFormValues) {
+  const quantity = parseDepartureDecimal(values.quantity);
+  const totalCost = parseDepartureDecimal(values.totalCost);
+  const unitCost = parseDepartureDecimal(values.unitCost);
+
   return {
     basedOnArrivalId: normalizeString(values.basedOnArrivalId),
     category: buildDirectoryInput(values.category),
@@ -140,8 +160,13 @@ function buildCommonDepartureInput(values: DepartureEditorFormValues) {
     direction: normalizeString(values.direction),
     mode: values.mode,
     money: {
-      amount: parseDepartureAmount(values.amount),
+      amount: totalCost ?? quantity ?? parseDepartureAmount(values.amount),
       currency: normalizeString(values.currency),
+    },
+    quantityCost: {
+      quantity,
+      totalCost,
+      unitCost,
     },
     note: normalizeString(values.note),
     occurredAt: normalizeOccurredAtValue(values.occurredAt),
@@ -150,6 +175,48 @@ function buildCommonDepartureInput(values: DepartureEditorFormValues) {
     supplier: buildDirectoryInput(values.supplier),
     title: values.title.trim(),
   };
+}
+
+function appendLinkedArrivalCodes(
+  currentCodesRaw: string,
+  linkedCodes: ArrivalDetails['codes']
+): string {
+  const currentCodes = splitDepartureCodes(currentCodesRaw);
+  const seen = new Set(currentCodes);
+  const nextCodes = [...currentCodes];
+
+  for (const linkedCode of linkedCodes) {
+    const value = linkedCode.value.trim();
+    if (value === '' || seen.has(value)) {
+      continue;
+    }
+
+    seen.add(value);
+    nextCodes.push(value);
+  }
+
+  return nextCodes.join('\n');
+}
+
+function resolveLinkedArrivalCodeKind(
+  current: DepartureEditorFormValues,
+  linkedCodes: ArrivalDetails['codes']
+): RecordCodeKind {
+  if (
+    splitDepartureCodes(current.codes).length > 0 ||
+    linkedCodes.length === 0
+  ) {
+    return current.codeKind;
+  }
+
+  const [firstCode] = linkedCodes;
+  if (!firstCode) {
+    return current.codeKind;
+  }
+
+  return linkedCodes.every((code) => code.kind === firstCode.kind)
+    ? firstCode.kind
+    : current.codeKind;
 }
 
 export function buildCreateDepartureInput(
@@ -177,6 +244,7 @@ export function buildDepartureDraftPayload(
     direction: common.direction,
     mode: common.mode,
     money: common.money,
+    quantityCost: common.quantityCost,
     note: common.note,
     occurredAt: common.occurredAt,
     product: {
@@ -196,6 +264,8 @@ export function applyLinkedArrivalToDepartureValues(
   current: DepartureEditorFormValues,
   details: ArrivalDetails
 ): DepartureEditorFormValues {
+  const nextCodes = appendLinkedArrivalCodes(current.codes, details.codes);
+
   return {
     ...current,
     amount:
@@ -207,12 +277,18 @@ export function applyLinkedArrivalToDepartureValues(
       id: details.arrival.categoryId ?? '',
       name: details.arrival.categoryName ?? '',
     },
+    codeKind: resolveLinkedArrivalCodeKind(current, details.codes),
+    codes: nextCodes,
     description: details.arrival.description ?? '',
     product: {
       createIfMissing: false,
       id: details.arrival.productId ?? '',
       name: details.arrival.productName ?? '',
     },
+    quantity:
+      details.arrival.quantity === null
+        ? current.quantity
+        : String(details.arrival.quantity),
     subjectKind: details.arrival.subjectKind,
     supplier: {
       createIfMissing: false,
@@ -220,6 +296,14 @@ export function applyLinkedArrivalToDepartureValues(
       name: details.arrival.supplierName ?? '',
     },
     title: details.arrival.title,
+    totalCost:
+      details.arrival.totalCost === null
+        ? current.totalCost
+        : String(details.arrival.totalCost),
+    unitCost:
+      details.arrival.unitCost === null
+        ? current.unitCost
+        : String(details.arrival.unitCost),
   };
 }
 
@@ -245,6 +329,6 @@ export function getCreateDepartureOperationMessage(
         : 'Не удалось определить категорию.';
     case 'DB_WRITE_FAILED':
     default:
-      return 'Не удалось сохранить расход. Попробуйте ещё раз.';
+      return 'Не удалось сохранить отгрузку. Попробуйте ещё раз.';
   }
 }

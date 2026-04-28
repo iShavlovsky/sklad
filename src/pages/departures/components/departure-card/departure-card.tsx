@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+﻿import type { ReactElement } from 'react';
 import { Stack, Text } from '@mantine/core';
 
 import type { DepartureListItem } from '@/domain/queries/departure/departure-list.item.ts';
@@ -31,7 +31,13 @@ function buildDepartureCardMetrics(item: DepartureListItem): RecordMetric[] {
     {
       field: 'amount',
       label: 'Сумма',
-      value: formatDepartureAmount(item.amount, item.currency),
+      value: formatDepartureAmount(
+        item.amount,
+        item.currency,
+        item.quantity,
+        item.totalCost,
+        item.unitCost
+      ),
     },
     {
       field: 'departureMode',
@@ -68,8 +74,14 @@ export function DepartureCard({
       description={item.description}
       metrics={buildDepartureCardMetrics(item)}
       onOpen={onOpen}
-      openLabel={`Открыть расход ${item.title}`}
-      primaryValue={formatDepartureAmount(item.amount, item.currency)}
+      openLabel={`Открыть отгрузку ${item.title}`}
+      primaryValue={formatDepartureAmount(
+        item.amount,
+        item.currency,
+        item.quantity,
+        item.totalCost,
+        item.unitCost
+      )}
       subtitle={formatDepartureOccurredAt(item.occurredAt)}
       title={item.title}
     />

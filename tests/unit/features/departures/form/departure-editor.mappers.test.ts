@@ -11,7 +11,7 @@ describe('departure-form.mappers', () => {
   it('builds create input from editor values', () => {
     const values = {
       ...createEmptyDepartureEditorValues(),
-      title: 'Расход на доставку',
+      title: 'Отгрузка на доставку',
       occurredAt: '2026-04-21T12:30:00.000Z',
       amount: '1250,50',
       note: '  оплата  ',
@@ -26,13 +26,18 @@ describe('departure-form.mappers', () => {
     };
 
     expect(buildCreateDepartureInput(values)).toEqual({
-      title: 'Расход на доставку',
+      title: 'Отгрузка на доставку',
       subjectKind: 'other',
       description: null,
       occurredAt: '2026-04-21T12:30:00.000Z',
       money: {
         amount: 1250.5,
         currency: 'RUB',
+      },
+      quantityCost: {
+        quantity: null,
+        totalCost: null,
+        unitCost: null,
       },
       note: 'оплата',
       direction: 'склад',
@@ -80,6 +85,9 @@ describe('departure-form.mappers', () => {
         description: 'Описание прихода',
         amount: 2500,
         currency: 'EUR',
+        quantity: null,
+        totalCost: 2500,
+        unitCost: null,
         occurredAt: '2026-04-20T09:00:00.000Z',
         linkUrl: null,
         note: null,
@@ -128,5 +136,101 @@ describe('departure-form.mappers', () => {
         direction: 'магазин',
       }
     );
+  });
+
+  it('appends linked arrival codes without duplicates and keeps manual code kind', () => {
+    const current = {
+      ...createEmptyDepartureEditorValues(),
+      codeKind: 'custom' as const,
+      codes: 'DEP-LOCAL-001\nARR-001',
+    };
+    const details: ArrivalDetails = {
+      arrival: {
+        id: 'arrival-1',
+        kind: 'arrival',
+        title: 'Поставка оборудования',
+        normalizedTitle: 'поставка оборудования',
+        subjectKind: 'product',
+        description: null,
+        amount: null,
+        currency: 'RUB',
+        quantity: null,
+        totalCost: null,
+        unitCost: null,
+        occurredAt: '2026-04-20T09:00:00.000Z',
+        linkUrl: null,
+        note: null,
+        supplierId: null,
+        supplierName: null,
+        normalizedSupplierName: null,
+        productId: null,
+        productName: null,
+        normalizedProductName: null,
+        categoryId: null,
+        categoryName: null,
+        normalizedCategoryName: null,
+        originDraftId: null,
+        originKind: 'manual',
+        createdAt: '2026-04-20T09:00:00.000Z',
+        updatedAt: '2026-04-20T09:00:00.000Z',
+      },
+      codes: [
+        { id: 'code-1', kind: 'qr', value: 'ARR-001' },
+        { id: 'code-2', kind: 'qr', value: 'ARR-002' },
+      ],
+    };
+
+    const next = applyLinkedArrivalToDepartureValues(current, details);
+
+    expect(next.codes).toBe('DEP-LOCAL-001\nARR-001\nARR-002');
+    expect(next.codeKind).toBe('custom');
+  });
+
+  it('uses linked arrival code kind when empty departure codes share one kind', () => {
+    const current = {
+      ...createEmptyDepartureEditorValues(),
+      codeKind: 'custom' as const,
+      codes: '',
+    };
+    const details: ArrivalDetails = {
+      arrival: {
+        id: 'arrival-1',
+        kind: 'arrival',
+        title: 'Поставка оборудования',
+        normalizedTitle: 'поставка оборудования',
+        subjectKind: 'product',
+        description: null,
+        amount: null,
+        currency: 'RUB',
+        quantity: null,
+        totalCost: null,
+        unitCost: null,
+        occurredAt: '2026-04-20T09:00:00.000Z',
+        linkUrl: null,
+        note: null,
+        supplierId: null,
+        supplierName: null,
+        normalizedSupplierName: null,
+        productId: null,
+        productName: null,
+        normalizedProductName: null,
+        categoryId: null,
+        categoryName: null,
+        normalizedCategoryName: null,
+        originDraftId: null,
+        originKind: 'manual',
+        createdAt: '2026-04-20T09:00:00.000Z',
+        updatedAt: '2026-04-20T09:00:00.000Z',
+      },
+      codes: [
+        { id: 'code-1', kind: 'vendor', value: 'ARR-001' },
+        { id: 'code-2', kind: 'vendor', value: 'ARR-002' },
+      ],
+    };
+
+    const next = applyLinkedArrivalToDepartureValues(current, details);
+
+    expect(next.codes).toBe('ARR-001\nARR-002');
+    expect(next.codeKind).toBe('vendor');
   });
 });

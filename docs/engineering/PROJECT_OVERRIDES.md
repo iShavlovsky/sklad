@@ -27,6 +27,7 @@ This file records project-specific deviations from the reusable baseline.
 - Scope:
   - route-first subtree: `arrivals`, `departures`, `drafts`, `buffer`, `settings`
   - settings subtree: `/settings`, `/settings/profile`, `/settings/backup`, `/settings/about`
+  - shell menu drawer: app-level navigation surface for secondary route links that should not crowd the bottom dock
   - global overlay surfaces rendered from the root overlay host
   - contextual modal/picker surfaces that serve one active requester without becoming route roots
 - Why: the project needs one stable answer to "is this route-owned, global, or contextual?" before UI work scales.

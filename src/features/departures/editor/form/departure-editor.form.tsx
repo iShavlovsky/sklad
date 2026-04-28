@@ -1,4 +1,4 @@
-import { type ReactElement, useEffect, useMemo, useRef, useState } from 'react';
+﻿import { type ReactElement, useEffect, useMemo, useRef, useState } from 'react';
 import { useDebouncedValue } from '@mantine/hooks';
 import { useStore } from 'zustand';
 
@@ -107,6 +107,7 @@ export function DepartureEditorForm({
               id: prefill.productId,
               name: prefill.productName,
             },
+            quantity: prefill.amount,
             subjectKind: prefill.subjectKind,
             supplier: {
               createIfMissing: false,
@@ -178,7 +179,7 @@ export function DepartureEditorForm({
     actionFeedback.notify({
       kind: 'error',
       message,
-      title: 'Расход',
+      title: 'Отгрузка',
     });
   }
 
@@ -186,7 +187,7 @@ export function DepartureEditorForm({
     actionFeedback.notify({
       kind: 'success',
       message,
-      title: 'Расход',
+      title: 'Отгрузка',
     });
   }
 
@@ -273,7 +274,7 @@ export function DepartureEditorForm({
         return;
       }
 
-      showFormSuccess('Расход сохранён в черновик.');
+      showFormSuccess('Отгрузка сохранена в черновик.');
       navigate.to('root.drafts.edit', {
         params: { draftId: result.record.id },
       });
@@ -300,7 +301,6 @@ export function DepartureEditorForm({
           return;
         }
 
-        showFormSuccess(DEPARTURE_EDITOR_COPY.created);
         onCreated(result.record);
       } finally {
         setPendingAction(null);

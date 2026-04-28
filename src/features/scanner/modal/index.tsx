@@ -19,7 +19,6 @@ import { scannerRuntimeController } from '@/features/scanner/runtime/scanner-run
 import { resolveSelectedCameraId } from './helpers/resolve-selected-camera-id.ts';
 import { useScannerCapabilities } from './hooks/use-scanner-capabilities.ts';
 import { useScannerLiveOrchestration } from './hooks/use-scanner-live-orchestration.ts';
-import { useScannerModalNotifications } from './hooks/use-scanner-modal-notifications.ts';
 import { useScannerPhotoDecode } from './hooks/use-scanner-photo-decode.ts';
 import { useScannerPhotoEditor } from './hooks/use-scanner-photo-editor.ts';
 import { ScannerModalBody } from './sections/body.tsx';
@@ -46,10 +45,6 @@ export function ScannerModal(): ReactElement {
   );
   const activeTab = useStore(scannerSessionStore, (state) => state.activeTab);
   const errorCode = useStore(scannerSessionStore, (state) => state.errorCode);
-  const errorMessage = useStore(
-    scannerSessionStore,
-    (state) => state.errorMessage
-  );
   const isOpen = useStore(scannerSessionStore, (state) => state.isOpen);
   const permissionStatus = useStore(
     scannerSessionStore,
@@ -150,8 +145,9 @@ export function ScannerModal(): ReactElement {
     scanningStatus === 'stopping';
   const shouldRenderInlineStatusMessage =
     statusMessage !== null &&
-    scanningStatus !== 'warning' &&
-    (pendingTab !== 'photo' || selectedFile === null);
+    (scanningStatus === 'warning' ||
+      pendingTab !== 'photo' ||
+      selectedFile === null);
   const shouldRenderSuccessState =
     scanningStatus === 'success' &&
     latestBufferItem !== null &&
@@ -167,19 +163,6 @@ export function ScannerModal(): ReactElement {
     scanningStatus,
     selectedFile,
     visibleErrorMessage,
-  });
-
-  useScannerModalNotifications({
-    clearError: () => {
-      scannerSessionStore.getState().clearError();
-    },
-    errorCode,
-    errorMessage,
-    latestBufferItem,
-    opened,
-    scanningStatus,
-    statusMessage,
-    visibleTab,
   });
 
   useEffect(() => {

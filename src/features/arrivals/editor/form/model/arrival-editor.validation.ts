@@ -1,14 +1,25 @@
 import { ARRIVAL_EDITOR_COPY } from './arrival-editor.form-constants.ts';
-import { parseArrivalAmount } from './arrival-editor.form-mappers.ts';
+import { parseArrivalDecimal } from './arrival-editor.form-mappers.ts';
 import type { ArrivalEditorFormValues } from './arrival-editor.form-values.ts';
 
 export function validateArrivalForm(
   values: ArrivalEditorFormValues
 ): Record<string, string | null> {
   return {
-    amount:
-      values.amount.trim() !== '' && parseArrivalAmount(values.amount) === null
-        ? ARRIVAL_EDITOR_COPY.validation.amountInvalid
+    quantity:
+      values.quantity.trim() !== '' &&
+      parseArrivalDecimal(values.quantity) === null
+        ? ARRIVAL_EDITOR_COPY.validation.quantityInvalid
+        : null,
+    totalCost:
+      values.totalCost.trim() !== '' &&
+      parseArrivalDecimal(values.totalCost) === null
+        ? ARRIVAL_EDITOR_COPY.validation.costInvalid
+        : null,
+    unitCost:
+      values.unitCost.trim() !== '' &&
+      parseArrivalDecimal(values.unitCost) === null
+        ? ARRIVAL_EDITOR_COPY.validation.costInvalid
         : null,
     occurredAt:
       values.occurredAt.trim() === ''

@@ -23,9 +23,12 @@ export interface DepartureEditorFormValues {
   note: string;
   occurredAt: string;
   product: DepartureEditorDirectoryValue;
+  quantity: string;
   subjectKind: SubjectKind;
   supplier: DepartureEditorDirectoryValue;
   title: string;
+  totalCost: string;
+  unitCost: string;
 }
 
 export type DepartureEditorSectionName =

@@ -22,9 +22,12 @@ export interface ArrivalEditorFormValues {
   note: string;
   occurredAt: string;
   product: ArrivalEditorDirectoryValue;
+  quantity: string;
   subjectKind: SubjectKind;
   supplier: ArrivalEditorDirectoryValue;
   title: string;
+  totalCost: string;
+  unitCost: string;
 }
 
 export type ArrivalEditorSectionName = 'additional' | 'directories' | 'main';

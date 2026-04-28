@@ -12,7 +12,8 @@ type SettingsHubLinkProps = {
   to:
     | typeof APP_ROUTES.settingsProfile
     | typeof APP_ROUTES.settingsBackup
-    | typeof APP_ROUTES.settingsAbout;
+    | typeof APP_ROUTES.settingsAbout
+    | typeof APP_ROUTES.products;
 };
 
 export function SettingsHubLink({

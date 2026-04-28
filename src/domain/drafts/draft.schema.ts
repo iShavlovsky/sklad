@@ -12,6 +12,12 @@ const moneyValueSchema = z.object({
   currency: z.string().trim().min(1).nullable(),
 });
 
+const quantityCostValueSchema = z.object({
+  quantity: z.number().nullable(),
+  totalCost: z.number().nullable(),
+  unitCost: z.number().nullable(),
+});
+
 const draftCodeInputArraySchema = z.array(recordCodeInputSchema);
 
 const draftBaseFieldsSchema = {
@@ -31,6 +37,7 @@ const arrivalDraftPayloadSchema = z.object({
   description: z.string().trim().nullable(),
   occurredAt: z.string().trim().min(1).nullable(),
   money: moneyValueSchema,
+  quantityCost: quantityCostValueSchema,
   linkUrl: z.string().trim().nullable(),
   note: z.string().trim().nullable(),
   supplier: directoryRefSnapshotSchema,
@@ -52,6 +59,7 @@ const departureDraftPayloadSchema = z.object({
   description: z.string().trim().nullable(),
   occurredAt: z.string().trim().min(1).nullable(),
   money: moneyValueSchema,
+  quantityCost: quantityCostValueSchema,
   note: z.string().trim().nullable(),
   direction: z.string().trim().nullable(),
   supplier: directoryRefSnapshotSchema,

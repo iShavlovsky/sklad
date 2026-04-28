@@ -1,9 +1,9 @@
-import type { RecordKind, SubjectKind } from '@/domain/common/record-kinds.ts';
+﻿import type { RecordKind, SubjectKind } from '@/domain/common/record-kinds.ts';
 import type { CollectionSortOption } from '@/shared/ui/collection-section/types.ts';
 
 export const DRAFT_KIND_LABELS: Record<RecordKind, string> = {
   arrival: 'Приход',
-  departure: 'Расход',
+  departure: 'Отгрузка',
 };
 
 export const DRAFT_SUBJECT_KIND_LABELS: Record<SubjectKind, string> = {

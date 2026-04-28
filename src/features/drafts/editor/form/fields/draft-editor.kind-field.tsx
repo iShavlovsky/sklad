@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+﻿import type { ReactElement } from 'react';
 import { Badge, Group, SegmentedControl, Stack, Text } from '@mantine/core';
 
 import type { RecordKind } from '@/domain/common/record-kinds.ts';
@@ -32,7 +32,7 @@ export function DraftKindField({
         </Text>
         <Group gap="xs">
           <Badge color="blue" variant="light">
-            {kind === 'arrival' ? 'Приход' : 'Расход'}
+            {kind === 'arrival' ? 'Приход' : 'Отгрузка'}
           </Badge>
           <Text c="dimmed" size="sm">
             Тип нельзя изменить после создания.
@@ -50,7 +50,7 @@ export function DraftKindField({
       <SegmentedControl
         data={[
           { label: 'Приход', value: 'arrival' },
-          { label: 'Расход', value: 'departure' },
+          { label: 'Отгрузка', value: 'departure' },
         ]}
         fullWidth
         onChange={(value) => {

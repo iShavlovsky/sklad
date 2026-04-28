@@ -70,10 +70,10 @@ export function DirectoryFieldFamily<TValues>({
         form.setFieldValue(paths.namePath, (next?.label ?? '') as never);
         setSearchValue(next?.label ?? '');
       }}
+      manualNameValue={searchValue}
       options={options}
       searchValue={searchValue}
       selectedId={selectedId}
-      selectedName={selectedName}
       supportsCreateIfMissing={supportsCreateIfMissing}
     />
   );

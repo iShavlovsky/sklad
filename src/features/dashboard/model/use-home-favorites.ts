@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+﻿import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { useFavoriteList } from '@/features/settings/hooks/use-favorite-list.ts';
 import { useSaveFavorite } from '@/features/settings/hooks/use-save-favorite.ts';
@@ -50,7 +50,7 @@ const HOME_FAVORITES_STARTER_SET = [
   },
   {
     id: 'favorite-home-departure-create',
-    label: 'Новый расход',
+    label: 'Новая отгрузка',
     route: APP_ROUTES.departuresCreate,
     icon: 'departure-create',
     order: 3,

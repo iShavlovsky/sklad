@@ -6,7 +6,7 @@ import { IconClipboardList, IconScan } from '@tabler/icons-react';
 import { CodesFieldFamily } from '@/features/form-controls/codes';
 import type { CodesFieldAction } from '@/features/form-controls/codes/field-family-codes.types.ts';
 import { OccurredAtFieldFamily } from '@/features/form-controls/date-time';
-import { MoneyFieldFamily } from '@/features/form-controls/money';
+import { QuantityCostFieldFamily } from '@/features/form-controls/quantity-cost';
 import { FieldInfoTrigger } from '@/features/form-controls/support/field-info-trigger';
 import { DepartureModeFieldFamily } from '@/features/form-fields/field-family-departure-mode';
 import { SubjectKindFieldFamily } from '@/features/form-fields/field-family-subject-kind';
@@ -14,7 +14,11 @@ import { TitleFieldFamily } from '@/features/form-fields/field-family-title';
 import { FormSectionCard } from '@/shared/ui/form-shell';
 
 import { DEPARTURE_FORM_PREFERENCE_KEYS } from '../model/departure-editor.form-constants.ts';
-import { countDepartureCodes } from '../model/departure-editor.form-mappers.ts';
+import {
+  countDepartureCodes,
+  formatDepartureDecimal,
+  parseDepartureDecimal,
+} from '../model/departure-editor.form-mappers.ts';
 import type { DepartureEditorFormValues } from '../model/departure-editor.form-values.ts';
 
 interface DepartureMainSectionProps {
@@ -50,6 +54,54 @@ export function DepartureMainSection({
       testId: 'departure-open-buffer-picker-button',
     },
   ];
+
+  function handleQuantityChange(value: string): void {
+    form.setFieldValue('quantity', value);
+    const quantity = parseDepartureDecimal(value);
+    const totalCost = parseDepartureDecimal(form.getValues().totalCost);
+    const unitCost = parseDepartureDecimal(form.getValues().unitCost);
+
+    if (quantity !== null && quantity > 0 && totalCost !== null) {
+      form.setFieldValue(
+        'unitCost',
+        formatDepartureDecimal(totalCost / quantity)
+      );
+      return;
+    }
+
+    if (quantity !== null && unitCost !== null) {
+      form.setFieldValue(
+        'totalCost',
+        formatDepartureDecimal(quantity * unitCost)
+      );
+    }
+  }
+
+  function handleTotalCostChange(value: string): void {
+    form.setFieldValue('totalCost', value);
+    const quantity = parseDepartureDecimal(form.getValues().quantity);
+    const totalCost = parseDepartureDecimal(value);
+
+    if (quantity !== null && quantity > 0 && totalCost !== null) {
+      form.setFieldValue(
+        'unitCost',
+        formatDepartureDecimal(totalCost / quantity)
+      );
+    }
+  }
+
+  function handleUnitCostChange(value: string): void {
+    form.setFieldValue('unitCost', value);
+    const quantity = parseDepartureDecimal(form.getValues().quantity);
+    const unitCost = parseDepartureDecimal(value);
+
+    if (quantity !== null && unitCost !== null) {
+      form.setFieldValue(
+        'totalCost',
+        formatDepartureDecimal(quantity * unitCost)
+      );
+    }
+  }
 
   return (
     <FormSectionCard
@@ -87,10 +139,15 @@ export function DepartureMainSection({
           path="mode"
           preferenceKey={DEPARTURE_FORM_PREFERENCE_KEYS.mode}
         />
-        <MoneyFieldFamily
-          amountPath="amount"
+        <QuantityCostFieldFamily
           currencyPath="currency"
           form={form}
+          onQuantityChange={handleQuantityChange}
+          onTotalCostChange={handleTotalCostChange}
+          onUnitCostChange={handleUnitCostChange}
+          quantityPath="quantity"
+          totalCostPath="totalCost"
+          unitCostPath="unitCost"
         />
       </Stack>
     </FormSectionCard>

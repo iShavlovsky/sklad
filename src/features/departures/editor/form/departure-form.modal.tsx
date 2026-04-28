@@ -1,4 +1,4 @@
-import { type ReactElement } from 'react';
+﻿import { type ReactElement } from 'react';
 import { Modal } from '@mantine/core';
 
 import type { DepartureRecord } from '@/domain/entries/departure.record.ts';
@@ -22,7 +22,7 @@ export function DepartureFormModal({
       fullScreen
       onClose={onClose}
       opened={opened}
-      title="Новый расход"
+      title="Новая отгрузка"
     >
       {opened && (
         <DepartureEditorForm onCancel={onClose} onCreated={onCreated} />

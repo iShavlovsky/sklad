@@ -31,7 +31,7 @@ export const DEPARTURES_SORT_OPTIONS: CollectionSortOption[] = [
   { label: 'Сначала новые', value: 'occurredAt-desc' },
   { label: 'Сначала старые', value: 'occurredAt-asc' },
   { label: 'По названию', value: 'title-asc' },
-  { label: 'По сумме', value: 'amount-desc' },
+  { label: 'По количеству', value: 'amount-desc' },
 ];
 
 export function formatDepartureOccurredAt(value: string): string {
@@ -50,11 +50,25 @@ export function formatDepartureOccurredAt(value: string): string {
 
 export function formatDepartureAmount(
   amount: number | null,
-  currency: string | null
+  currency: string | null,
+  quantity: number | null = null,
+  totalCost: number | null = null,
+  unitCost: number | null = null
 ): string {
-  if (amount === null) {
+  const resolvedQuantity = quantity ?? (currency ? null : amount);
+  const resolvedTotalCost = totalCost ?? (currency ? amount : null);
+
+  if (resolvedQuantity === null && resolvedTotalCost === null) {
     return 'Количество не указано';
   }
 
-  return currency ? `${amount} ${currency}` : `${amount} ед.`;
+  const parts = [
+    resolvedQuantity !== null ? `${resolvedQuantity} ед.` : null,
+    resolvedTotalCost !== null
+      ? `${resolvedTotalCost} ${currency ?? 'RUB'}`
+      : null,
+    unitCost !== null ? `${unitCost} ${currency ?? 'RUB'}/ед.` : null,
+  ].filter(Boolean);
+
+  return parts.join(' · ');
 }

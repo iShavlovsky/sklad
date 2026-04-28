@@ -35,7 +35,8 @@
   - `title`
   - `description`
   - `occurredAt`
-  - `amount`, `currency`
+  - `quantity`, `totalCost`, `unitCost`
+  - legacy `amount`, `currency` for backward compatibility
   - `linkUrl`
   - `note`
   - `supplierId` / snapshot name
@@ -57,7 +58,8 @@
   - `title`
   - `description`
   - `occurredAt`
-  - `amount`, `currency`
+  - `quantity`, `totalCost`, `unitCost`
+  - legacy `amount`, `currency` for backward compatibility
   - `note`
   - `direction`
   - `supplierId` / snapshot name
@@ -118,6 +120,7 @@
 - lifecycle notes:
   - optional to use;
   - forms must still work with free text when the directory is empty or incomplete.
+  - products now have a route-owned `/products` list/edit surface for search, archive filtering, supplier/category labels, and minimal card editing.
 
 ### Settings and personalization
 - name: `SettingRecord`, `FavoriteRecord`, `ProfileRecord`
@@ -167,6 +170,7 @@
   - file naming, blob creation, and save-dialog behavior stay out of the payload contract.
 - Import boundary:
   - import first validates envelope shape and version;
+  - import normalizes legacy arrival/departure/draft payloads that still carry only `amount` into the newer quantity/cost fields without dropping the legacy value;
   - if validation passes, restore orchestration produces a machine-readable report and commit plan before commit;
   - no write happens until the caller explicitly chooses the supported commit mode.
   - supported commit strategies are `overwrite`, `merge`, and `rebase`.

@@ -20,6 +20,7 @@ import {
 interface StockMovement {
   id: string;
   amount: number | null;
+  quantity: number | null;
   subjectKind: ArrivalRecord['subjectKind'];
   title: string;
   supplierId: string | null;
@@ -156,6 +157,7 @@ export class StockQueries {
       ({
         id,
         amount: movement.amount,
+        quantity: movement.quantity,
         title: movement.title,
         subjectKind: movement.subjectKind,
         supplierId: movement.supplierId,
@@ -199,6 +201,14 @@ export class StockQueries {
     ownerKind: 'arrival' | 'departure',
     codeCountsByOwner: Map<string, number>
   ): number {
+    if (
+      movement.quantity !== null &&
+      Number.isFinite(movement.quantity) &&
+      movement.quantity > 0
+    ) {
+      return movement.quantity;
+    }
+
     const codeUnits =
       codeCountsByOwner.get(this.createOwnerKey(ownerKind, movement.id)) ?? 0;
 

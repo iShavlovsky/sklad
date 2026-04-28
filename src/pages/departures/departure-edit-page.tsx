@@ -38,14 +38,14 @@ export function DepartureEditPage(): ReactElement {
       </PrimaryActionRow>
 
       <SectionStack>
-        <PageSection badge="Маршрут" title="Идентификатор расхода">
+        <PageSection badge="Маршрут" title="Идентификатор отгрузки">
           <Text size="sm">{departureId}</Text>
         </PageSection>
 
         <PageSection
           badge="Заготовка"
-          description="Здесь позже появится редактор расхода без изменения бизнес-логики."
-          title="Поверхность редактирования расхода"
+          description="Здесь позже появится редактор отгрузки без изменения бизнес-логики."
+          title="Поверхность редактирования отгрузки"
         />
       </SectionStack>
 

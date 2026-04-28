@@ -1,4 +1,4 @@
-import { type ReactElement } from 'react';
+﻿import { type ReactElement } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import type { DepartureRecord } from '@/domain/entries/departure.record.ts';
@@ -35,7 +35,7 @@ export function DepartureCreatePage(): ReactElement {
       replace: true,
       state: {
         departureCreated: {
-          message: 'Расход создан.',
+          message: 'Отгрузка создана.',
           recordId: record.id,
         },
       } satisfies DepartureSuccessState,

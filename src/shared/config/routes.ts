@@ -13,6 +13,7 @@ export const APP_ROUTES = {
   draftDetails: '/drafts/:draftId',
   draftEdit: '/drafts/:draftId/edit',
   buffer: '/buffer',
+  products: '/products',
   stocks: '/stocks',
   stockDetails: '/stocks/:stockId',
   uiKit: '/ui-kit',

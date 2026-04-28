@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+﻿import type { ReactElement } from 'react';
 import { useState } from 'react';
 import {
   Avatar,
@@ -69,10 +69,10 @@ const bottomNavigationBaseItems: BottomNavigationItemConfig[] = [
     label: 'Приход',
   },
   {
-    ariaLabel: 'Расход',
+    ariaLabel: 'Отгрузка',
     icon: IconArrowUp,
     id: 'departures',
-    label: 'Расход',
+    label: 'Отгрузка',
   },
   {
     ariaLabel: 'Остатки',
@@ -244,7 +244,7 @@ function BottomNavigationContextCard(): ReactElement {
                 </Paper>
                 <Paper p="xs" radius="md" withBorder>
                   <Group justify="space-between" wrap="nowrap">
-                    <Text size="sm">Расход, Розница №23</Text>
+                    <Text size="sm">Отгрузка, Розница №23</Text>
                     <Text fw={700} size="sm">
                       2 600 ₽
                     </Text>
@@ -823,7 +823,7 @@ function DataCard(): ReactElement {
           data={{
             body: [
               ['INV-1042', 'Приход', '12', 'Готово'],
-              ['INV-1043', 'Расход', '4', 'Проверка'],
+              ['INV-1043', 'Отгрузка', '4', 'Проверка'],
               ['INV-1044', 'Черновик', '7', 'Ожидает'],
             ],
             head: ['Документ', 'Тип', 'Количество', 'Статус'],

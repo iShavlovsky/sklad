@@ -7,7 +7,10 @@ import type {
   RecordOriginKind,
   SubjectKind,
 } from '@/domain/common/record-kinds.ts';
-import type { MoneyValue } from '@/domain/common/value-objects';
+import type {
+  MoneyValue,
+  QuantityCostValue,
+} from '@/domain/common/value-objects';
 import {
   type CategoryRecord,
   normalizeDirectoryName,
@@ -42,6 +45,7 @@ export interface BuildArrivalRecordInput {
   description: string | null;
   occurredAt: string;
   money: MoneyValue;
+  quantityCost: QuantityCostValue;
   linkUrl: string | null;
   note: string | null;
   supplier: ArrivalDirectorySnapshot;
@@ -105,6 +109,9 @@ export function buildArrivalRecord(
 
     amount: input.money.amount,
     currency: input.money.currency,
+    quantity: input.quantityCost.quantity,
+    totalCost: input.quantityCost.totalCost,
+    unitCost: input.quantityCost.unitCost,
 
     linkUrl: input.linkUrl,
     note: input.note,

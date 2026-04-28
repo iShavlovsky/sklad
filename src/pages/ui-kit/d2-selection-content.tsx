@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+﻿import type { ReactElement } from 'react';
 import { useState } from 'react';
 import {
   Badge,
@@ -25,7 +25,7 @@ import { PageSection } from '@/shared/ui/page-section';
 
 const selectData = [
   { label: 'Приход', value: 'arrival' },
-  { label: 'Расход', value: 'departure' },
+  { label: 'Отгрузка', value: 'departure' },
   { label: 'Черновик', value: 'draft' },
 ] as const;
 

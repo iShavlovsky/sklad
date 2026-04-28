@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+﻿import type { ReactElement } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { appRouteTree, useAppNavigate } from '@/router';
@@ -28,8 +28,8 @@ const mobileBottomNavCopy: Record<
     label: 'Главная',
   },
   'root.departures': {
-    ariaLabel: 'Расход',
-    label: 'Расход',
+    ariaLabel: 'Отгрузка',
+    label: 'Отгрузка',
   },
   'root.stocks': {
     ariaLabel: 'Остатки',

@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+﻿import type { ReactElement } from 'react';
 import { Box, Stack, Text } from '@mantine/core';
 
 import type { StockDeparturePrefillState } from '@/features/stocks/departure-prefill/stock-departure-prefill.ts';
@@ -82,13 +82,19 @@ export function StocksListSection({
                   } satisfies StockDeparturePrefillState)
                 }
               >
-                Расход
+                Отгрузка
               </PreviewActionButton>
               <PreviewActionButton
                 disabled={selectedStock.availableCodes.length > 0}
                 onClick={() => state.openAdjustmentModal(selectedStock.id)}
               >
                 Корректировка
+              </PreviewActionButton>
+              <PreviewActionButton
+                disabled={!selectedStock.productName}
+                onClick={() => navigate.to('root.products')}
+              >
+                Все товары
               </PreviewActionButton>
               <PreviewActionButton
                 onClick={() =>

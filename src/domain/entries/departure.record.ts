@@ -17,6 +17,9 @@ export interface DepartureRecord {
 
   amount: number | null;
   currency: string | null;
+  quantity: number | null;
+  totalCost: number | null;
+  unitCost: number | null;
 
   note: string | null;
   direction: string | null;

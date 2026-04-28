@@ -1,4 +1,4 @@
-import {
+﻿import {
   type CSSProperties,
   type ReactElement,
   useMemo,
@@ -100,8 +100,8 @@ const ROUTE_OPTIONS = [
   { value: APP_ROUTES.dashboard, label: 'Главная' },
   { value: APP_ROUTES.arrivals, label: 'Приходы' },
   { value: APP_ROUTES.arrivalsCreate, label: 'Новый приход' },
-  { value: APP_ROUTES.departures, label: 'Расходы' },
-  { value: APP_ROUTES.departuresCreate, label: 'Новый расход' },
+  { value: APP_ROUTES.departures, label: 'Отгрузки' },
+  { value: APP_ROUTES.departuresCreate, label: 'Новая отгрузка' },
   { value: APP_ROUTES.buffer, label: 'Буфер' },
   { value: APP_ROUTES.stocks, label: 'Остатки' },
   { value: APP_ROUTES.settings, label: 'Настройки' },

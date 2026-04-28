@@ -1,4 +1,4 @@
-import { type ReactElement, useState } from 'react';
+﻿import { type ReactElement, useState } from 'react';
 import { Box, Button, Group, Stack, Text } from '@mantine/core';
 
 import { useDeleteDeparture } from '@/features/departures/editor/hooks/use-delete-departure.ts';
@@ -66,19 +66,19 @@ export function DeparturesListSection(): ReactElement {
         setSelectedDepartureId(null);
         actionFeedback.notify({
           kind: 'confirm',
-          message: 'Расход удалён.',
-          title: 'Расход',
+          message: 'Отгрузка удалена.',
+          title: 'Отгрузка',
         });
         return;
       }
 
       const message =
-        'Не удалось удалить расход. Проверьте запись и повторите действие.';
+        'Не удалось удалить отгрузка. Проверьте запись и повторите действие.';
       setDeleteError(message);
       actionFeedback.notify({
         kind: 'error',
         message,
-        title: 'Расход',
+        title: 'Отгрузка',
       });
     } finally {
       setIsDeleting(false);
@@ -93,9 +93,9 @@ export function DeparturesListSection(): ReactElement {
       <CollectionSection
         emptyState={
           <Stack align="center" gap="xs">
-            <Text fw={600}>Расходов по текущим условиям нет</Text>
+            <Text fw={600}>Отгрузок по текущим условиям нет</Text>
             <Text c="dimmed" size="sm" ta="center">
-              Попробуйте снять фильтры или создайте новую расходную запись.
+              Попробуйте снять фильтры или создайте новую отгрузочную запись.
             </Text>
           </Stack>
         }
@@ -123,7 +123,7 @@ export function DeparturesListSection(): ReactElement {
         )}
         getItemId={(item) => item.id}
         items={departures}
-        listLabel="Список расходов"
+        listLabel="Список отгрузок"
         onSearchChange={setSearchValue}
         onSortChange={setSortValue}
         renderItem={(item) => (
@@ -177,7 +177,7 @@ export function DeparturesListSection(): ReactElement {
             ? formatDepartureOccurredAt(selectedDeparture.occurredAt)
             : ''
         }
-        title={selectedDeparture?.title ?? 'Карточка расхода'}
+        title={selectedDeparture?.title ?? 'Карточка отгрузки'}
       >
         {selectedDeparture ? (
           <DeparturePreviewContent item={selectedDeparture} />
@@ -187,7 +187,7 @@ export function DeparturesListSection(): ReactElement {
         confirmLabel="Удалить"
         description={
           deleteError ??
-          `Удалить расход "${deleteTarget?.title ?? ''}"? Связанные коды этой записи будут удалены вместе с ней.`
+          `Удалить отгрузку "${deleteTarget?.title ?? ''}"? Связанные коды этой записи будут удалены вместе с ней.`
         }
         loading={isDeleting}
         onClose={() => {
@@ -196,7 +196,7 @@ export function DeparturesListSection(): ReactElement {
         }}
         onConfirm={() => void confirmDelete()}
         opened={deleteTarget !== null}
-        title="Удаление расхода"
+        title="Удаление отгрузки"
       />
     </Box>
   );

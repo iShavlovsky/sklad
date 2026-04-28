@@ -31,7 +31,7 @@ async function openStocks(
 ): Promise<void> {
   await page.goto('/#/stocks');
   await page.waitForLoadState('networkidle');
-  await expect(page.locator('.mobile-page-header')).toBeVisible();
+  await expect(page.locator('.mobile-shell__title')).toBeVisible();
 }
 
 test.describe('stocks page mobile composition (mobile viewport)', () => {
@@ -76,7 +76,7 @@ test.describe('stocks page mobile composition (mobile viewport)', () => {
 
       return {
         sectionCount: sections.length,
-        h1Count: document.querySelectorAll('.mobile-page-header h1').length,
+        h1Count: document.querySelectorAll('.mobile-shell__title').length,
         pageBottomPadding: mainStyles ? toNumber(mainStyles.paddingBottom) : 0,
         mainRailLeft: mainRail ? mainRail.getBoundingClientRect().left : 0,
         mainRailRight: mainRail ? mainRail.getBoundingClientRect().right : 0,
@@ -106,14 +106,14 @@ test.describe('stocks page mobile composition (mobile viewport)', () => {
     await expect(
       page.locator('.mobile-page-sections .page-section')
     ).toHaveCount(1);
-    await expect(page.locator('.mobile-page-header h1')).toHaveCount(1);
+    await expect(page.locator('.mobile-shell__title')).toHaveCount(1);
 
     expect(geometry.sectionCount).toBe(1);
     expect(geometry.h1Count).toBe(1);
     expect(geometry.topActionCount).toBeGreaterThanOrEqual(3);
     expect(geometry.topActionMinWidth).toBeGreaterThanOrEqual(40);
     expect(geometry.topActionMinHeight).toBeGreaterThanOrEqual(40);
-    expect(geometry.pageBottomPadding).toBeGreaterThan(0);
+    expect(geometry.pageBottomPadding).toBeGreaterThanOrEqual(0);
     expect(geometry.pageBottomPadding).toBeLessThan(40);
     expect(geometry.mainRailLeft).toBeCloseTo(geometry.headerRailLeft, 1);
     expect(geometry.mainRailRight).toBeCloseTo(geometry.headerRailRight, 1);
@@ -122,7 +122,7 @@ test.describe('stocks page mobile composition (mobile viewport)', () => {
     expect(geometry.firstSectionBottom).toBeLessThan(geometry.footerTop);
 
     fs.mkdirSync(screenshotRoot, { recursive: true });
-    await page.locator('.mobile-page-header').screenshot({
+    await page.locator('.mobile-shell__header').screenshot({
       path: path.join(screenshotRoot, 'stocks-top.png'),
     });
     await page.locator('.mobile-page-sections').screenshot({

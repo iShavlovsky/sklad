@@ -1,5 +1,9 @@
 import { expect, test } from '../fixtures';
 
+function getSerialField(page: import('@playwright/test').Page) {
+  return page.getByTestId('serial-codes-input');
+}
+
 async function openNewArrivalRoute(
   page: import('@playwright/test').Page
 ): Promise<void> {
@@ -10,6 +14,7 @@ async function openNewArrivalRoute(
     page.getByRole('banner').getByText('Новый приход', { exact: true })
   ).toBeVisible();
   await expect(page.locator('form')).toBeVisible();
+  await expect(getSerialField(page)).toBeVisible();
 }
 
 async function seedBuffer(
@@ -22,12 +27,12 @@ async function seedBuffer(
       JSON.stringify({
         state: {
           items: bufferValues.map((value, index) => ({
-            id: `arrival-buffer-${index + 1}`,
-            value,
-            normalizedValue: value.toLowerCase(),
             capturedAt: `2026-04-22T08:0${index}:00.000Z`,
+            id: `arrival-buffer-${index + 1}`,
             kind: 'custom',
+            normalizedValue: value.toLowerCase(),
             source: 'scanner-photo',
+            value,
           })),
         },
         version: 1,
@@ -42,8 +47,10 @@ async function fillArrivalForm(
   title: string,
   serial: string
 ): Promise<void> {
+  await expect(page.locator('form')).toBeVisible();
   await page.getByPlaceholder('Название записи').fill(title);
-  const serialField = page.getByPlaceholder('Введите серийный код');
+  const serialField = getSerialField(page);
+  await expect(serialField).toBeVisible();
   await serialField.fill(serial);
   await serialField.press('Enter');
   await expect(page.getByText(serial, { exact: true })).toBeVisible();

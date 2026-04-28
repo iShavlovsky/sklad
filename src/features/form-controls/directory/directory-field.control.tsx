@@ -35,10 +35,10 @@ export function DirectoryFieldControl({
   onManualNameChange,
   onSearchChange,
   onSelectChange,
+  manualNameValue,
   options,
   searchValue,
   selectedId,
-  selectedName,
   supportsCreateIfMissing,
 }: Readonly<DirectoryFieldControlProps>): ReactElement {
   const metadata = supportsCreateIfMissing
@@ -69,7 +69,7 @@ export function DirectoryFieldControl({
             onManualNameChange(event.currentTarget.value);
           }}
           placeholder={`Новый ${metadata.label.toLowerCase()}`}
-          value={selectedName}
+          value={manualNameValue}
         />
       )}
 

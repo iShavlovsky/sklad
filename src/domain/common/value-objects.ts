@@ -3,6 +3,12 @@ export interface MoneyValue {
   currency: string | null;
 }
 
+export interface QuantityCostValue {
+  quantity: number | null;
+  totalCost: number | null;
+  unitCost: number | null;
+}
+
 export interface DirectoryRefSnapshot {
   id: string | null;
   name: string | null;

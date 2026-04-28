@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+﻿import type { ReactElement } from 'react';
 import {
   Alert,
   Button,
@@ -34,7 +34,7 @@ export function StockAdjustmentDialog({
               Баланс: {state.adjustmentStock.balance} шт.
             </Text>
             <Text c="dimmed" size="sm">
-              Отрицательное значение создаст расход, положительное создаст
+              Отрицательное значение создаст отгрузка, положительное создаст
               приход.
             </Text>
             {state.adjustmentError ? (

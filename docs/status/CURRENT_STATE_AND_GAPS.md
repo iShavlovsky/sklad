@@ -6,7 +6,7 @@
 - What already works:
   - app bootstrap, theme provider, notifications, and AppShell-based mobile-first shell foundation;
   - typed route system with route metadata and hash-router wiring;
-  - explicit route-first subtree for arrivals, departures, drafts, buffer, and settings;
+  - explicit route-first subtree for arrivals, departures, products, drafts, buffer, and settings;
   - explicit settings subtree for `/settings`, `/settings/profile`, `/settings/backup`, and `/settings/about`;
   - theme settings now expose one fixed light/dark mode selector, with initial fallback from the current OS light/dark preference when no persisted choice exists;
   - the shared Mantine design-system layer now exposes the current blue/slate-first visual baseline through one canonical Mantine theme factory in `src/app/theme/*`, including canonical `brandBlue` / `neutralSlate` / semantic intent palettes, typed semantic `theme.other` tokens, `primaryShade` 500/400 defaults, canonical typography families/scales/weights/line-heights, compact layout tokens, 48px touch targets, semantic status tokens, and runtime-verified light/dark switching;
@@ -14,7 +14,7 @@
   - app-level overlay host with the current scanner modal and contextual buffer picker bottom drawer;
   - important action outcomes now use one shared action-feedback hook over Mantine notifications plus the shared haptics adapter for create/save/update/delete/publish/apply/clear, stock adjustment, and scanner-buffer failure surfaces, while navigation, sorting, filters, and preview-drawer opens stay silent;
   - compact mobile-first route pages through shared page primitives and a shell-owned rail layout;
-  - route-local semantic sections, dialogs, and page-state helpers for arrivals, departures, drafts, buffer, and stocks now live under `src/pages/<route>/`, while `shared/ui/collection-section` stays the one generic list-shell primitive;
+  - route-local semantic sections, dialogs, and page-state helpers for arrivals, departures, products, drafts, buffer, and stocks now live under `src/pages/<route>/`, while `shared/ui/collection-section` stays the one generic list-shell primitive;
   - the architecture hardening wave is complete through `AR-0806`: feature owners are normalized under `src/features/arrivals/{editor,data}`, `src/features/departures/{editor,data}`, `src/features/drafts/{editor,data,publish}`, `src/features/buffer/{core,picker}`, `src/features/scanner/{runtime,modal}`, and `src/features/stocks/{data,adjustment,departure-prefill}`;
   - arrival, departure, and draft editors now share a feature-local form system: UI-only reusable controls live under `src/features/form-controls/*`, query/preference-aware or layout form seams remain under `src/features/form-fields/*`, and second-data remembered defaults stay under `src/features/form-preferences/model`;
   - IndexedDB schema for the intended durable tables;
@@ -50,7 +50,7 @@
   - current route title
   - scanner utility
   - buffer utility with count indicator
-  - settings utility
+  - menu utility that opens a right-side navigation drawer with settings, products, buffer, and route links
   - compact shell network-status control with icon-only trigger and popover details
 - The home route now uses route-owned shell/home composition instead of the old missing donor-era dashboard query reference:
   - telemetry section
@@ -67,7 +67,7 @@
   - scanner modal and backup workflow were split locally for readability without changing scanner, buffer, backup, export, import, or restore semantics;
   - selected workflow/card entrypoints are named files instead of component-folder `index.tsx`: backup workflow plus arrivals, departures, drafts, stocks, and buffer page cards.
 - Current list-surface truth on touched routes is now explicit:
-  - `arrivals`, `departures`, `drafts`, `buffer`, and `stocks` each render route-local semantic sections from `src/pages/<route>/sections/*` over the shared `CollectionSection` owner;
+  - `arrivals`, `departures`, `products`, `drafts`, `buffer`, and `stocks` each render route-local semantic sections from `src/pages/<route>/sections/*` over the shared `CollectionSection` owner;
   - `shared/ui/collection-section` stays UI-only and generic over item type;
   - query/filter/sort semantics, card markup, empty copy, page-local dialogs, and route actions stay outside `shared/`.
 - Current loading/help implementation truth is narrower than the approved policy:
@@ -305,8 +305,9 @@
   - reusable browser file selection/download should live outside backup semantics;
   - reusable merge/rebase/diff core should be shared across backup restore planning rather than implemented inside backup-specific orchestration;
   - backup-specific contracts keep payload/report/result semantics and call into those reusable roles through connectors.
-- Stocks are part of the intended milestone and now have a dedicated `src/infrastructure/queries/stock/stock.queries.ts` read implementation plus a live route-owned stocks page consumer over `useStockList()`.
-  - the current stock projection now derives unit balance from journal `amount` values with `recordCodes` as the serial-aware fallback when explicit units are absent;
+  - Products now have a route-owned `/products` surface reachable from settings and stocks; it consumes the existing product directory query/repository boundaries and edits product name/supplier/category/note/archive state through a narrow directory service rather than direct page-level Dexie access.
+  - Stocks are part of the intended milestone and now have a dedicated `src/infrastructure/queries/stock/stock.queries.ts` read implementation plus a live route-owned stocks page consumer over `useStockList()`.
+  - the current stock projection now derives unit balance from explicit journal `quantity` values first, then `recordCodes` as the serial-aware fallback, then legacy `amount` values when older records have no quantity;
   - the current stocks page now exposes stock-card actions without inventing a separate stock store: serial/code-backed rows can open a local details drawer, positive-balance rows can jump into departure create with route-state prefill, and quantity-only rows can apply a local adjustment modal that writes through the existing arrival/departure services;
   - the current stocks list chrome now also uses the shared `CollectionSection` owner, while the drawer and adjustment modal remain route-local to the stocks feature adapter;
   - serial/code-backed rows still treat adjustment as disabled rather than pretending there is quantity-style serial correction support;

@@ -1,5 +1,8 @@
+// @vitest-environment jsdom
+
 import { createElement, type ReactNode } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 interface SelectProps {
@@ -44,7 +47,13 @@ vi.mock('@mantine/core', () => ({
   Text: (props: { children?: ReactNode }) => props.children ?? null,
   TextInput: (props: TextInputProps) => {
     captured.textInputProps.push(props);
-    return null;
+    return createElement('input', {
+      'data-testid': 'directory-manual-input',
+      onChange: (event: { currentTarget: { value: string } }) => {
+        props.onChange?.(event);
+      },
+      value: props.value ?? '',
+    });
   },
 }));
 
@@ -205,6 +214,39 @@ describe('DirectoryFieldFamily UI behavior', () => {
       'supplier.name',
       'New supplier'
     );
+  });
+
+  it('keeps manual create input controlled by local field state while typing', () => {
+    const values = {
+      supplier: {
+        createIfMissing: true,
+        id: '',
+        name: '',
+      },
+    };
+    const form = createForm(values);
+
+    render(
+      createElement(DirectoryFieldFamily<DirectoryTestValues>, {
+        form: form as never,
+        kind: 'supplier',
+        paths: {
+          createIfMissingPath: 'supplier.createIfMissing',
+          idPath: 'supplier.id',
+          namePath: 'supplier.name',
+        },
+        preferenceKey: 'arrival.supplier.createIfMissing',
+      })
+    );
+
+    const input = screen.getByTestId('directory-manual-input');
+
+    fireEvent.change(input, { target: { value: 'A' } });
+    fireEvent.change(input, { target: { value: 'AB' } });
+    fireEvent.change(input, { target: { value: 'ABC' } });
+
+    expect((input as HTMLInputElement).value).toBe('ABC');
+    expect(values.supplier.name).toBe('ABC');
   });
 
   it('create-if-missing toggle clears selected id and remembers preference', () => {

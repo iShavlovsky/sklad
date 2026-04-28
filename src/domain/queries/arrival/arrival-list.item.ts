@@ -14,6 +14,9 @@ export interface ArrivalListItem {
 
   amount: number | null;
   currency: string | null;
+  quantity: number | null;
+  totalCost: number | null;
+  unitCost: number | null;
 
   linkUrl: string | null;
   note: string | null;

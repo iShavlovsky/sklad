@@ -8,11 +8,16 @@ import type { ArrivalEditorFormValues } from '@/features/arrivals/editor/form/mo
 import { CodesFieldFamily } from '@/features/form-controls/codes';
 import type { CodesFieldAction } from '@/features/form-controls/codes/field-family-codes.types.ts';
 import { OccurredAtFieldFamily } from '@/features/form-controls/date-time';
-import { MoneyFieldFamily } from '@/features/form-controls/money';
+import { QuantityCostFieldFamily } from '@/features/form-controls/quantity-cost';
 import { FieldInfoTrigger } from '@/features/form-controls/support/field-info-trigger';
 import { SubjectKindFieldFamily } from '@/features/form-fields/field-family-subject-kind';
 import { TitleFieldFamily } from '@/features/form-fields/field-family-title';
 import { FormSectionCard } from '@/shared/ui/form-shell';
+
+import {
+  formatArrivalDecimal,
+  parseArrivalDecimal,
+} from '../model/arrival-editor.form-mappers.ts';
 
 interface ArrivalMainSectionProps {
   bufferItemCount: number;
@@ -37,6 +42,54 @@ export function ArrivalMainSection({
       onClick: onOpenBufferPicker,
     },
   ];
+
+  function handleQuantityChange(value: string): void {
+    form.setFieldValue('quantity', value);
+    const quantity = parseArrivalDecimal(value);
+    const totalCost = parseArrivalDecimal(form.getValues().totalCost);
+    const unitCost = parseArrivalDecimal(form.getValues().unitCost);
+
+    if (quantity !== null && quantity > 0 && totalCost !== null) {
+      form.setFieldValue(
+        'unitCost',
+        formatArrivalDecimal(totalCost / quantity)
+      );
+      return;
+    }
+
+    if (quantity !== null && unitCost !== null) {
+      form.setFieldValue(
+        'totalCost',
+        formatArrivalDecimal(quantity * unitCost)
+      );
+    }
+  }
+
+  function handleTotalCostChange(value: string): void {
+    form.setFieldValue('totalCost', value);
+    const quantity = parseArrivalDecimal(form.getValues().quantity);
+    const totalCost = parseArrivalDecimal(value);
+
+    if (quantity !== null && quantity > 0 && totalCost !== null) {
+      form.setFieldValue(
+        'unitCost',
+        formatArrivalDecimal(totalCost / quantity)
+      );
+    }
+  }
+
+  function handleUnitCostChange(value: string): void {
+    form.setFieldValue('unitCost', value);
+    const quantity = parseArrivalDecimal(form.getValues().quantity);
+    const unitCost = parseArrivalDecimal(value);
+
+    if (quantity !== null && unitCost !== null) {
+      form.setFieldValue(
+        'totalCost',
+        formatArrivalDecimal(quantity * unitCost)
+      );
+    }
+  }
 
   return (
     <FormSectionCard
@@ -71,10 +124,15 @@ export function ArrivalMainSection({
             preferenceKey={ARRIVAL_FORM_PREFERENCE_KEYS.subjectKind}
           />
         </SimpleGrid>
-        <MoneyFieldFamily
-          amountPath="amount"
+        <QuantityCostFieldFamily
           currencyPath="currency"
           form={form}
+          onQuantityChange={handleQuantityChange}
+          onTotalCostChange={handleTotalCostChange}
+          onUnitCostChange={handleUnitCostChange}
+          quantityPath="quantity"
+          totalCostPath="totalCost"
+          unitCostPath="unitCost"
         />
       </Stack>
     </FormSectionCard>

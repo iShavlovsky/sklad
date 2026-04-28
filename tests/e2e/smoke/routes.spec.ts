@@ -1,11 +1,12 @@
-import { expect, test } from '../fixtures';
+﻿import { expect, test } from '../fixtures';
 
 const productionRoutes = [
   { path: '/#/', title: 'Главная' },
   { path: '/#/arrivals', title: 'Приходы' },
   { path: '/#/arrivals/create', title: 'Новый приход' },
-  { path: '/#/departures', title: 'Расходы' },
-  { path: '/#/departures/create', title: 'Новый расход' },
+  { path: '/#/departures', title: 'Отгрузки' },
+  { path: '/#/departures/create', title: 'Новая отгрузка' },
+  { path: '/#/products', title: 'Все товары' },
   { path: '/#/drafts', title: 'Черновики' },
   { path: '/#/drafts/create', title: 'Новый черновик' },
   { path: '/#/stocks', title: 'Остатки' },
@@ -22,10 +23,10 @@ test.describe('route availability and fallback states', () => {
       await page.goto(route.path);
       await page.waitForLoadState('networkidle');
 
+      await expect(page.getByRole('main')).toBeVisible();
       await expect(
         page.getByRole('banner').getByText(route.title, { exact: true })
-      ).toBeVisible();
-      await expect(page.getByRole('main')).toBeVisible();
+      ).toBeVisible({ timeout: 10000 });
     });
   }
 

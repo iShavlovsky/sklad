@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactElement, ReactNode } from 'react';
+﻿import type { CSSProperties, ReactElement, ReactNode } from 'react';
 import { useMemo } from 'react';
 import {
   ActionIcon,
@@ -1247,18 +1247,20 @@ function LayoutExamplesCard(): ReactElement {
             spacing="md"
             verticalSpacing="md"
           >
-            {['Новый приход', 'Новый расход', 'Буфер', 'Сканер'].map((item) => (
-              <Paper key={item} p="md" radius="lg" shadow="sm" withBorder>
-                <Stack gap="xs">
-                  <Text fw={700} size="sm">
-                    {item}
-                  </Text>
-                  <Text c="dimmed" size="xs">
-                    Gap между карточками: {appSpacingTokens.md}
-                  </Text>
-                </Stack>
-              </Paper>
-            ))}
+            {['Новый приход', 'Новая отгрузка', 'Буфер', 'Сканер'].map(
+              (item) => (
+                <Paper key={item} p="md" radius="lg" shadow="sm" withBorder>
+                  <Stack gap="xs">
+                    <Text fw={700} size="sm">
+                      {item}
+                    </Text>
+                    <Text c="dimmed" size="xs">
+                      Gap между карточками: {appSpacingTokens.md}
+                    </Text>
+                  </Stack>
+                </Paper>
+              )
+            )}
           </SimpleGrid>
         </Stack>
       </SimpleGrid>

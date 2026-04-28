@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+﻿import type { ReactElement } from 'react';
 import { useParams } from 'react-router-dom';
 import { Badge, Button, Group, Text } from '@mantine/core';
 
@@ -72,7 +72,7 @@ export function StockDetailsPage(): ReactElement {
                   },
                   {
                     field: 'departureMode',
-                    label: 'Расходов',
+                    label: 'Отгрузок',
                     value: stock.departureCount,
                   },
                   {
@@ -107,7 +107,7 @@ export function StockDetailsPage(): ReactElement {
         ) : (
           <PageSection badge="Нет данных" title="Остаток не найден">
             <Text c="dimmed" size="sm">
-              Позиция могла исчезнуть после изменения приходов или расходов.
+              Позиция могла исчезнуть после изменения приходов или отгрузок.
             </Text>
           </PageSection>
         )}

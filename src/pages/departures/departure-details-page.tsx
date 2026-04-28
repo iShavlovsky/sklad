@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react';
+﻿import type { ReactElement } from 'react';
 import { useParams } from 'react-router-dom';
 import { Badge, Button, Group, Stack, Text } from '@mantine/core';
 
@@ -65,7 +65,10 @@ export function DepartureDetailsPage(): ReactElement {
                       label: 'Сумма',
                       value: formatDepartureAmount(
                         departure.amount,
-                        departure.currency
+                        departure.currency,
+                        departure.quantity,
+                        departure.totalCost,
+                        departure.unitCost
                       ),
                     },
                     {
@@ -144,7 +147,7 @@ export function DepartureDetailsPage(): ReactElement {
             </PageSection>
           </>
         ) : (
-          <PageSection badge="Нет данных" title="Расход не найден">
+          <PageSection badge="Нет данных" title="Отгрузка не найдена">
             <Text c="dimmed" size="sm">
               Запись могла быть удалена или еще не загружена.
             </Text>
